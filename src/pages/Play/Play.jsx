@@ -1,11 +1,10 @@
 import { useMemo, Suspense } from "react";
-import { useOutletContext, Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { useWord } from "../../hooks/useWord";
 import { useStep, useSelected } from "../../hooks/useMyParam";
 
-import { shuffleArray } from "../../utils/utils";
 import { Button } from "../../components/Button";
 
 const Wrapper = styled.div`
@@ -42,23 +41,18 @@ const AllDoneDesc = styled.p`
 `;
 
 export const Play = () => {
-  const parentContext = useOutletContext();
   const { selected } = useSelected();
   const { words } = useWord(selected);
   const { step } = useStep();
   const navigate = useNavigate();
 
-  const context = useMemo(() => {
-    return {
-      ...parentContext,
-      words,
-      quizs: shuffleArray([...words]).filter((w) => w.done === false),
-    };
-  }, [parentContext, selected, words]); // Re-calculate when parent context or words change
+  const remainingQuizs = useMemo(() => {
+    return words.filter((w) => w.done === false);
+  }, [words]);
 
   // 퀴즈 진입 시 모든 단어가 이미 암기 완료인 경우
   const isQuizRoute = window.location.pathname.includes("/quiz");
-  if (isQuizRoute && words.length > 0 && context.quizs.length === 0) {
+  if (isQuizRoute && words.length > 0 && remainingQuizs.length === 0) {
     return (
       <Wrapper>
         <AllDoneWrapper>
@@ -85,8 +79,9 @@ export const Play = () => {
   return (
     <Wrapper>
       <Suspense fallback={<div>불러올 단어가 없습니다.</div>}>
-        <Outlet key={step} context={context} />
+        <Outlet key={step} />
       </Suspense>
     </Wrapper>
   );
 };
+

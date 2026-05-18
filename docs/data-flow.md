@@ -62,6 +62,7 @@ graph TD
    - **Guest**: `guest/storage.js`에서 로컬에 저장된 학습 진행도를 가져옵니다.
    - **Member**: `user/voca.js` 및 `profile.js`를 통해 DB의 실시간 데이터를 가져옵니다.
 3. **데이터 병합**: 가져온 로우 데이터들을 UI가 사용하기 쉬운 `wordMap` 형태로 변환(Processing)하여 반환합니다.
+   - **난이도 코드 매핑 브릿지**: 프론트엔드의 `"default"` 난이도는 Supabase DB 및 로컬스토리지 템플릿 내의 초급 단어 레벨 번호인 `"700"`과 1:1 매핑되어 처리됩니다. API 및 로더 레이어에서 이 매핑 관계를 엄격히 준수하여 빈 배열 리턴 버그를 방지합니다.
 
 ### B. 학습 상태 업데이트 (`updateWordStatus`)
 1. **UI 요청**: 사용자가 단어를 학습 완료하면 Facade의 `updateWordStatus`를 호출합니다.

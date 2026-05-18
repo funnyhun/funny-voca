@@ -23,7 +23,7 @@ export const postVoca = async (level) => {
     // 2. Level 및 Category별 그룹화
     words.forEach(w => {
       let levelStr = String(w.level);
-      if (levelStr === "0") levelStr = "default";
+      if (levelStr === "0" || levelStr === "700") levelStr = "default";
 
       if (!tempMaps[levelStr]) tempMaps[levelStr] = {};
 

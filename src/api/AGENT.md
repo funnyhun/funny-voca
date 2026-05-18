@@ -63,9 +63,9 @@ src/api/
     └── migration.js   migrateVoca
 
 src/hooks/
-├── useVoca.js
-├── useStats.js
-└── useProfile.js
+├── useVoca.js         useVoca 커스텀 훅 및 낙관적 업데이트 관리
+├── useStats.js        useStats 커스텀 훅 및 통계 데이터 관리
+└── useProfile.js      useProfile 커스텀 훅 및 닉네임 설정 관리
 ```
 
 ---
@@ -106,6 +106,22 @@ getVocaData, getMasterWordData, getUserProfile, fetchUserVocaData
 
 ---
 
+## 동기식 낙관적 업데이트 & 비동기 은닉 전략
+
+학습 진행 상태 갱신 시, 사용자가 느끼는 딜레이를 0ms로 극화하기 위해 낙관적 업데이트(Optimistic Update) 전략을 수행한다.
+
+1. **로컬 상태의 동기식 즉각 반영**:
+   - `updateStatus` 액션 호출 시, `useVoca` 훅 내의 `useState` 상태를 먼저 즉시 갱신한다.
+   - 갱신된 로컬 상태는 실시간 가공 함수(`processWordMap`)를 거쳐 뷰 레이어에 즉시 렌더링된다.
+2. **백그라운드 비동기 동기화 (syncStatus)**:
+   - 외부 영속성(Supabase DB 또는 로컬스토리)의 동기화는 훅 내부의 `syncStatus`가 백그라운드 비동기로 가동되어 완벽히 은닉화된다.
+   - 네트워크 지연이나 에러 발생 시 UI를 복잡하게 롤백하지 않고 `console.error`로 처리하여 소멸시킨다. (다음 진입 시 최상위 Loader가 맞춰줌)
+3. **초기화 및 리로드 은닉 (resetVoca)**:
+   - 데이터 초기화 시 컴포넌트가 직접 Supabase DB나 로컬스토리지 삭제 API를 쿼리하지 않는다.
+   - `useVoca` 훅의 `resetVoca` 비동기 액션이 내부적으로 DB 데이터 삭제, 로컬스토리지 청소 및 신규 Voca 적재(`postVoca`)를 책임지고 일괄 가동한다.
+
+---
+
 ## 커스텀 훅 패턴 (as 별칭)
 
 `guest/`와 `user/`의 동일 함수명을 훅에서 `as`로 구분하여 session 기반 라우팅을 처리한다.
@@ -136,3 +152,5 @@ export const useVoca = () => {
 3. **Supabase 응답 분리**: `{ data, error }` 구조분해 후 `error` 먼저 처리
 4. **JSDoc 필수**: 모든 함수에 파라미터와 반환값 타입 명시
 5. **`util/storage.js`는 순수 유틸만**: 비즈니스 로직 및 도메인 판단 금지
+6. **난이도 매핑 브릿지 보장**: `guest/voca.js` 및 `user/voca.js` 등의 모듈에서 데이터를 가공하거나 저장할 때, 초급 난이도 `"default"`는 로컬스토리지 템플릿 빌드 시 항상 `"default"` 키 아래로 저장되고, DB 조회 시에는 `"700"` 레벨로 변환되어 통일적으로 처리되어야 함.
+

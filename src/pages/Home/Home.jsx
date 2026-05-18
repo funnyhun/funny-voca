@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { useOutletContext } from "react-router-dom";
+import { useContext } from "react";
+import { VocaContext, StatsContext, AppContext } from "../../App";
 
 import { Calendar } from "./Calendar";
 import { StatsDashboard } from "./StatsDashboard";
@@ -14,12 +15,15 @@ const Wrapper = styled.div`
 `;
 
 export const Home = () => {
-  const { nick, userData, now, selectedDay, wordMap } = useOutletContext();
+  const { wordMap } = useContext(VocaContext);
+  const { userData } = useContext(StatsContext);
+  const { now } = useContext(AppContext);
 
   return (
     <Wrapper>
       <StatsDashboard userData={userData} wordMap={wordMap} />
-      <Calendar mode={"compact"} now={now} selectedDay={selectedDay} userData={userData} wordMap={wordMap} />
+      <Calendar mode={"compact"} now={now} userData={userData} wordMap={wordMap} />
     </Wrapper>
   );
 };
+

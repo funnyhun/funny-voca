@@ -1,10 +1,8 @@
 import styled from "styled-components";
 import { Button } from "../../components/Button";
-import { supabase } from "../../api/common/supabase";
 import { signOut } from "../../api/auth/actions";
-import { useOutletContext } from "react-router-dom";
-import { useState } from "react";
-import { useVoca } from "../../hooks/useVoca";
+import { useContext, useState } from "react";
+import { ProfileContext, StatsContext, VocaContext } from "../../App";
 import { checkIsGuest } from "../../api/auth/session";
 import { 
   getStorage, 
@@ -106,12 +104,14 @@ const ProgressFill = styled.div`
 
 
 export const Settings = () => {
-  const { nick, userData } = useOutletContext();
+  const { nick } = useContext(ProfileContext);
+  const { userData } = useContext(StatsContext);
   const [resetting, setResetting] = useState(false);
   const [resetProgress, setResetProgress] = useState(0);
-  const { postVoca } = useVoca();
+  const { resetVoca } = useContext(VocaContext);
 
   const isGuest = checkIsGuest();
+
 
   const handleLogout = async () => {
     const confirmed = window.confirm(
@@ -157,29 +157,10 @@ export const Settings = () => {
     if (!doubleConfirmed) return;
 
     setResetting(true);
-    setResetProgress(10);
+    setResetProgress(30);
 
     try {
-      // 1. DB 유저라면 Supabase Voca 테이블 데이터 삭제
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (session) {
-        await supabase
-          .from("Voca")
-          .delete()
-          .eq("user_id", session.user.id);
-      }
-      setResetProgress(30);
-
-      // 2. 로컬스토리지 학습 데이터 초기화
-      removeStorage(KEYS.WORD_MAP);
-      removeStorage(KEYS.USER_DATA);
-      setResetProgress(50);
-
-      // 3. 새로운 단어 배정
-      await postVoca(userData?.level || "default");
-
+      await resetVoca(userData?.level || "default");
       setResetProgress(100);
       window.location.href = "/";
     } catch (err) {
@@ -188,6 +169,7 @@ export const Settings = () => {
       setResetting(false);
     }
   };
+
 
   return (
     <>

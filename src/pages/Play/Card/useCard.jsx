@@ -1,13 +1,14 @@
-import { useState } from "react";
-import { useOutletContext } from "react-router-dom";
-import { useStep } from "../../../hooks/useMyParam";
-import { useVoca } from "../../../hooks/useVoca";
+import { useState, useContext } from "react";
+import { useStep, useSelected } from "../../../hooks/useMyParam";
+import { VocaContext } from "../../../App";
+import { useWord } from "../../../hooks/useWord";
 
 export const useCard = () => {
-  const { words } = useOutletContext();
+  const { selected } = useSelected();
+  const { words } = useWord(selected);
   const { step, changeStep } = useStep();
   const [mode, setMode] = useState("word");
-  const { updateVoca } = useVoca();
+  const { updateStatus } = useContext(VocaContext);
 
   const changeMode = () => {
     setMode((prev) => (prev === "word" ? "def" : "word"));
@@ -18,11 +19,11 @@ export const useCard = () => {
     changeStep(step - 1);
   };
 
-  const nextCard = async () => {
+  const nextCard = () => {
     // 현재 단어 학습 완료 처리
     const currentWord = words[step];
     if (currentWord) {
-      await updateVoca(currentWord.id, true);
+      updateStatus(currentWord.id, true);
     }
 
     if (step === words.length - 1) {
@@ -36,7 +37,6 @@ export const useCard = () => {
     changeStep(0);
   };
 
-
   return {
     mode,
     total: words.length,
@@ -45,3 +45,5 @@ export const useCard = () => {
     events: { changeMode, prevCard, nextCard, replayCard },
   };
 };
+
+

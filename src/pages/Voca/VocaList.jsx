@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { useOutletContext } from "react-router-dom";
+import { useContext } from "react";
+import { VocaContext } from "../../App";
 
 import { VocaItem } from "./VocaItem";
 
@@ -22,7 +23,7 @@ const Wrapper = styled.ul`
 `;
 
 export const VocaList = () => {
-  const { wordMap } = useOutletContext();
+  const { wordMap } = useContext(VocaContext);
 
   return (
     <Wrapper>
@@ -30,6 +31,6 @@ export const VocaList = () => {
         return <VocaItem item={item} key={i} />;
       })}
     </Wrapper>
-
   );
 };
+

@@ -1,30 +1,38 @@
+import { useState } from 'react';
 import { getProfile as gGet, updateProfile as gUpdate } from '../api/guest/profile';
 import { getProfile as uGet, updateProfile as uUpdate } from '../api/user/profile';
 import { getSession } from '../api/auth/session';
 
 /**
- * 사용자 프로필(닉네임 등) 조작을 위한 커스텀 훅
- * - 세션 상태를 동적으로 확인하여 Guest(LocalStorage)와 User(Supabase) API로 안전하게 라우팅합니다.
+ * 사용자 프로필(닉네임 등) 조작 및 상태 관리를 위한 커스텀 훅
+ * - 상태(nick)를 소유합니다.
+ * - updateNick 액션을 호출할 때 즉시 로컬 상태를 변경하고, 비동기 영속성 동기화는 백그라운드에서 실행합니다.
  */
-export const useProfile = () => {
-  const getProfile = async () => {
-    const session = await getSession();
-    if (session) {
-      return await uGet(session.user.id);
-    }
-    return gGet();
-  };
+export const useProfile = (initialNick = '') => {
+  const [nick, setNick] = useState(initialNick);
 
-  const updateProfile = async (data) => {
-    const session = await getSession();
-    if (session) {
-      return await uUpdate(session.user.id, data);
-    }
-    return gUpdate(data);
+  const updateNick = (newNick) => {
+    // 1. 즉시 로컬 상태 갱신 (낙관적 업데이트)
+    setNick(newNick);
+
+    // 2. 백그라운드 영속성 동기화 (fire-and-forget)
+    syncProfile(newNick).catch(err => {
+      console.error('[useProfile] sync failed:', err);
+    });
   };
 
   return {
-    getProfile,
-    updateProfile,
+    nick,
+    updateNick,
   };
 };
+
+async function syncProfile(newNick) {
+  const session = await getSession();
+  if (session) {
+    await uUpdate(session.user.id, { nick: newNick });
+  } else {
+    gUpdate({ nick: newNick });
+  }
+}
+

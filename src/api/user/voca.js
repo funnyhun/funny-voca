@@ -26,7 +26,7 @@ export const postVoca = async (userId, level) => {
     // 2. Level 및 Category별 그룹화
     words.forEach(w => {
       let levelStr = String(w.level);
-      if (levelStr === "0") levelStr = "default";
+      if (levelStr === "0" || levelStr === "700") levelStr = "default";
 
       if (!tempMaps[levelStr]) tempMaps[levelStr] = {};
 
@@ -124,8 +124,8 @@ export const getVoca = async (userId, level) => {
     targetLevel = userData?.level || "default";
   }
 
-  // level이 숫자로 DB에 저장될 수도 있어 (예: default -> 0) 매핑 필요
-  let dbLevel = 0;
+  // level이 숫자로 DB에 저장될 수도 있어 (예: default -> 700) 매핑 필요
+  let dbLevel = 700;
   if (targetLevel === "800") dbLevel = 800;
   if (targetLevel === "900") dbLevel = 900;
 
@@ -170,7 +170,7 @@ export const getVoca = async (userId, level) => {
 
     words.forEach(w => {
       let levelStr = String(w.level);
-      if (levelStr === "0") levelStr = "default";
+      if (levelStr === "0" || levelStr === "700") levelStr = "default";
 
       if (!tempMaps[levelStr]) tempMaps[levelStr] = {};
 

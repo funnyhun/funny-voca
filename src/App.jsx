@@ -1,9 +1,11 @@
-import { Suspense, useMemo } from "react";
+import { Suspense, useMemo, createContext } from "react";
 import { Outlet, useLoaderData } from "react-router-dom";
 import styled from "styled-components";
 
 import { Header, Navigation } from "./layout";
-import { supabase } from "./api/common/supabase";
+import { useVoca } from "./hooks/useVoca";
+import { useProfile } from "./hooks/useProfile";
+import { useStats } from "./hooks/useStats";
 
 const Layout = styled.div`
   min-width: ${({ theme }) => theme.min_width};
@@ -27,34 +29,44 @@ const Wrapper = styled.div`
   overflow-y: auto;
 `;
 
+// 도메인별 Context 정의 및 export
+export const VocaContext = createContext(null);
+export const ProfileContext = createContext(null);
+export const StatsContext = createContext(null);
+export const AppContext = createContext(null);
+
 export const App = () => {
-  const now = new Date();
-  const { nick, wordMap, wordStatusMap, wordData, notifications, userData, selectedWord } = useLoaderData();
+  const now = useMemo(() => new Date(), []);
+  const { nick: initialNick, wordMap: initialWordMap, wordStatusMap: initialStatusMap, wordData, notifications, userData: initialUserData } = useLoaderData();
 
-  const AppContext = useMemo(() => {
-    return {
-      nick,
-      wordMap,
-      wordStatusMap,
-      wordData, // 마스터 데이터 포함
-      notifications,
-      userData,
-      now,
-      selectedWord,
-    };
-  }, [nick, wordMap, wordStatusMap, wordData, notifications, userData, now, selectedWord]);
+  // 커스텀 훅 레이어에서 상태 인스턴스화
+  const vocaState = useVoca(initialWordMap, initialStatusMap);
+  const profileState = useProfile(initialNick);
+  const statsState = useStats(initialUserData);
 
+  const appContextValue = useMemo(() => ({
+    wordData,
+    notifications,
+    now,
+  }), [wordData, notifications, now]);
 
   return (
     <Layout>
       <Header notifications={notifications} />
       <Wrapper>
         <Suspense fallback={<div>Loading...</div>}>
-          <Outlet context={AppContext} />
+          <AppContext.Provider value={appContextValue}>
+            <VocaContext.Provider value={vocaState}>
+              <ProfileContext.Provider value={profileState}>
+                <StatsContext.Provider value={statsState}>
+                  <Outlet />
+                </StatsContext.Provider>
+              </ProfileContext.Provider>
+            </VocaContext.Provider>
+          </AppContext.Provider>
         </Suspense>
       </Wrapper>
       <Navigation />
     </Layout>
   );
 };
-

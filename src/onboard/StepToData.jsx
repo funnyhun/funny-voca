@@ -84,7 +84,7 @@ const ProgressStatus = styled.span`
 
 export const StepToData = () => {
   const navigate = useNavigate();
-  const { postVoca } = useVoca();
+  const { initVoca } = useVoca();
   const nick = getStorage(KEYS.NICK);
 
   const [status, setStatus] = useState(-1);
@@ -92,7 +92,7 @@ export const StepToData = () => {
   const handleSelectLevel = async (level) => {
     try {
       setStatus(20); // 초기 프로그레스 설정
-      await postVoca(level);
+      await initVoca(level);
       setStatus(100); // 로드 완료
     } catch (err) {
       console.error("[Onboard] 학습데이터 초기화 실패:", err);

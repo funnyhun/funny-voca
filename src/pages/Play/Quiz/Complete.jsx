@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { Button } from "../../../components/Button";
-import { useNavigate, useRevalidator } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelected } from "../../../hooks/useMyParam";
-import { useEffect } from "react";
-import { useStats } from "../../../hooks/useStats";
+import { useEffect, useContext } from "react";
+import { StatsContext } from "../../../App";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -51,14 +51,12 @@ const Pannel = styled.div`
 
 export const Complete = () => {
   const navigate = useNavigate();
-  const { revalidate } = useRevalidator();
   const { selected } = useSelected();
-  const { updateStats } = useStats();
+  const { recordSession } = useContext(StatsContext);
 
   useEffect(() => {
-    revalidate();
-    updateStats();
-  }, [revalidate]);
+    recordSession();
+  }, [recordSession]);
 
   const navigateHome = () => navigate("/home");
   const navigateVoca = () => navigate(`/voca/${selected}`);
@@ -75,3 +73,4 @@ export const Complete = () => {
     </Wrapper>
   );
 };
+

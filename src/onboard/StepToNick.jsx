@@ -6,8 +6,8 @@ import { VerticalButton } from "../components/Button";
 import { Input } from "../components/Input";
 
 import { HiIcon } from "../assets/iconList";
-import { supabase } from "../api/common/supabase";
 import { setStorage, KEYS } from "../api/util/storage";
+
 
 const Wrapper = styled.div`
   height: 100%;

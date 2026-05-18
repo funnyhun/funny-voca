@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useContext } from "react";
 
-import { useRevalidator } from "react-router-dom";
-import { useVoca } from "../../../hooks/useVoca";
+import { VocaContext } from "../../../App";
 import { CheckCircleIcon, WordIcon, MoreVIcon } from "../../../assets/iconList";
 import { WordDetail } from "./WordDetail";
 
@@ -65,14 +64,12 @@ const MoreButton = styled(MoreVIcon)`
 `;
 
 export const WordItem = ({ word }) => {
-  const { revalidate } = useRevalidator();
   const { word: label, definitions, done, id } = word;
   const [showDetail, setShowDetail] = useState(false);
-  const { updateVoca } = useVoca();
+  const { updateStatus } = useContext(VocaContext);
 
-  const handleToggle = async () => {
-    await updateVoca(id, !done);
-    revalidate();
+  const handleToggle = () => {
+    updateStatus(id, !done);
   };
 
   return (

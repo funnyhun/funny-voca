@@ -51,10 +51,10 @@ async function handleMemberLoading(session, wordData, notifications) {
   const userId = session.user.id;
   const localUserData = getStorage(KEYS.USER_DATA);
   const currentLevel = localUserData?.level || "default";
-  
-  // 난이도별 DB 코드 매핑
-  const levelToNumber = { "default": 0, "800": 800, "900": 900 };
-  const dbLevel = levelToNumber[currentLevel] ?? 0;
+
+  // 난이도별 DB 코드 매핑 (초급 default -> 700)
+  const levelToNumber = { "default": 700, "800": 800, "900": 900 };
+  const dbLevel = levelToNumber[currentLevel] ?? 700;
 
   // 1. 마이그레이션 체크 및 기본 데이터 로드
   let wordMaps = getStorage(KEYS.WORD_MAP);
@@ -62,7 +62,6 @@ async function handleMemberLoading(session, wordData, notifications) {
   // 레거시 로컬 데이터가 있으면 DB로 이전
   if (wordMaps) {
     await migrateVoca();
-    // 마이그레이션 후 로컬 데이터가 삭제되므로 다시 로드 (초기화 필요성 체크)
     wordMaps = getStorage(KEYS.WORD_MAP);
   }
 
@@ -71,7 +70,7 @@ async function handleMemberLoading(session, wordData, notifications) {
     getProfile(userId),
     getVoca(userId, dbLevel)
   ]);
-
+  
   if (!userProfile) throw new Error("User profile not found");
 
   // 3. 템플릿 로드 (없으면 초기화)
@@ -114,8 +113,12 @@ function handleGuestLoading(wordData, notifications) {
   const wordMaps = getStorage(KEYS.WORD_MAP);
   const userData = getStorage(KEYS.USER_DATA);
 
-  if (!nick) return redirect("/onboard/nickname");
-  if (!wordMaps || !userData) return redirect("/onboard/generate-data");
+  if (!nick) {
+    return redirect("/onboard/nickname");
+  }
+  if (!wordMaps || !userData) {
+    return redirect("/onboard/generate-data");
+  }
 
   const currentLevel = userData.level || "default";
   const rawWordMap = wordMaps[currentLevel] || [];

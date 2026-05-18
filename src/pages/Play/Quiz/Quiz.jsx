@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { useState, useMemo } from "react";
-import { useOutletContext } from "react-router-dom";
-import { useVoca } from "../../../hooks/useVoca";
-
-import { useStep } from "../../../hooks/useMyParam";
+import { useState, useMemo, useContext } from "react";
+import { VocaContext } from "../../../App";
+import { useStep, useSelected } from "../../../hooks/useMyParam";
+import { useWord } from "../../../hooks/useWord";
+import { shuffleArray } from "../../../utils/utils";
 
 import { PlayProgressBar } from "../PlayProgressBar";
 import { QuizSelection } from "./QuizSelection";
@@ -35,10 +35,16 @@ const Content = styled.div`
 `;
 
 export const Quiz = () => {
-  const { quizs } = useOutletContext();
+  const { selected } = useSelected();
+  const { words } = useWord(selected);
   const { step } = useStep();
   const [isCorrect, setIsCorrect] = useState(false);
-  const { updateVoca } = useVoca();
+  const { updateStatus } = useContext(VocaContext);
+
+  // 퀴즈 섞기: selected/words 변경 시에만 처음 미완료 단어 리스트를 고정합니다.
+  const quizs = useMemo(() => {
+    return shuffleArray([...words]).filter((w) => w.done === false);
+  }, [words]);
 
   const currentQuiz = quizs[step];
 
@@ -66,7 +72,7 @@ export const Quiz = () => {
     }
 
     return { question, answer, wrongs };
-  }, [currentQuiz, step]);
+  }, [currentQuiz, step, quizs]);
 
   if (step >= quizs.length) {
     return <Complete />;
@@ -76,10 +82,11 @@ export const Quiz = () => {
 
   const { question, answer, wrongs } = quizData;
 
-  const handleCorrect = async () => {
+  const handleCorrect = () => {
     setIsCorrect(true);
-    await updateVoca(currentQuiz.id, true);
+    updateStatus(currentQuiz.id, true);
   };
+
 
   return (
     <Wrapper key={step}>
@@ -90,4 +97,5 @@ export const Quiz = () => {
     </Wrapper>
   );
 };
+
 
