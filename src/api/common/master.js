@@ -1,4 +1,4 @@
-import { supabase } from "./supabase";
+import { supabase, fetchPages } from "./supabase";
 
 /**
  * 서비스에서 사용하는 모든 단어의 마스터 데이터를 조회합니다.
@@ -9,24 +9,25 @@ import { supabase } from "./supabase";
  */
 export const getMaster = async () => {
   try {
-    const { data, error } = await supabase
-      .from("Word")
-      .select(`
-        id:word_id,
-        word,
-        definitions:Definition (
-          class,
-          value:definition,
-          pronounce,
-          example_en,
-          example_ko,
-          quiz_en,
-          quiz_ko
-        )
-      `);
+    const data = await fetchPages(() => 
+      supabase
+        .from("Word")
+        .select(`
+          id:word_id,
+          word,
+          definitions:Definition (
+            class,
+            value:definition,
+            pronounce,
+            example_en,
+            example_ko,
+            quiz_en,
+            quiz_ko
+          )
+        `)
+    );
 
-    if (error) {
-      console.error("[API/Common] Get Master Data Error:", error.message);
+    if (!data) {
       return {};
     }
 

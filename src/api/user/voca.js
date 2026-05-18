@@ -1,4 +1,4 @@
-import { supabase } from "../common/supabase";
+import { supabase, fetchPages } from "../common/supabase";
 import { getStorage, setStorage, KEYS } from "../util/storage";
 
 /**
@@ -12,12 +12,14 @@ export const postVoca = async (userId, level) => {
 
   try {
     // 1. 단어 데이터 로드
-    const { data: words, error: wordError } = await supabase
-      .from("Word")
-      .select("word_id, level, day, category");
+    const words = await fetchPages(() => 
+      supabase
+        .from("Word")
+        .select("word_id, level, day, category")
+    );
     
-    if (wordError || !words) {
-      console.error("[API/User] 단어 목록 로드 실패:", wordError?.message);
+    if (!words) {
+      console.error("[API/User] 단어 목록 로드 실패: 데이터가 비어있습니다.");
       return null;
     }
 
@@ -131,12 +133,15 @@ export const getVoca = async (userId, level) => {
 
   try {
     // 1. Supabase Voca 테이블에서 해당 유저의 학습 상태 조회
-    const { data: userVoca, error: vocaError } = await supabase
-      .from("Voca")
-      .select("word_id, status")
-      .eq("user_id", userId);
-
-    if (vocaError) {
+    let userVoca = [];
+    try {
+      userVoca = await fetchPages(() => 
+        supabase
+          .from("Voca")
+          .select("word_id, status")
+          .eq("user_id", userId)
+      );
+    } catch (vocaError) {
       console.error("[API/User] Voca DB 조회 실패:", vocaError.message);
       // DB 에러 시 로컬 캐시 데이터 반환
       const wordMaps = getStorage(KEYS.WORD_MAP);
@@ -156,12 +161,20 @@ export const getVoca = async (userId, level) => {
     }
 
     // 3. Word 테이블에서 전체 단어 로드하여 맵 재구성
-    const { data: words, error: wordError } = await supabase
-      .from("Word")
-      .select("word_id, level, day, category");
-
-    if (wordError || !words) {
+    let words = [];
+    try {
+      words = await fetchPages(() => 
+        supabase
+          .from("Word")
+          .select("word_id, level, day, category")
+      );
+    } catch (wordError) {
       console.error("[API/User] Word 테이블 조회 실패:", wordError?.message);
+      const wordMaps = getStorage(KEYS.WORD_MAP);
+      return wordMaps ? (wordMaps[targetLevel] || []) : [];
+    }
+
+    if (!words) {
       const wordMaps = getStorage(KEYS.WORD_MAP);
       return wordMaps ? (wordMaps[targetLevel] || []) : [];
     }

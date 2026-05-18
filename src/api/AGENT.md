@@ -153,4 +153,6 @@ export const useVoca = () => {
 4. **JSDoc 필수**: 모든 함수에 파라미터와 반환값 타입 명시
 5. **`util/storage.js`는 순수 유틸만**: 비즈니스 로직 및 도메인 판단 금지
 6. **난이도 매핑 브릿지 보장**: `guest/voca.js` 및 `user/voca.js` 등의 모듈에서 데이터를 가공하거나 저장할 때, 초급 난이도 `"default"`는 로컬스토리지 템플릿 빌드 시 항상 `"default"` 키 아래로 저장되고, DB 조회 시에는 `"700"` 레벨로 변환되어 통일적으로 처리되어야 함.
+7. **Supabase 대용량 데이터 조회 시 페이징 처리 필수**: Supabase의 기본 select Limit가 1,000개이므로, 1,000개 이상의 행을 가질 가능성이 있는 테이블(예: `Word`, `Voca`) 조회 시 반드시 `common/supabase.js`의 `fetchPages` 헬퍼 함수를 적용하여 range 페이징 조회를 수행해야 한다.
+
 

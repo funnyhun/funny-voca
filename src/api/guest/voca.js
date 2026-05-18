@@ -1,5 +1,5 @@
 import { getStorage, setStorage, KEYS } from "../util/storage";
-import { supabase } from "../common/supabase";
+import { supabase, fetchPages } from "../common/supabase";
 
 /**
  * 게스트 사용자의 단어 학습 데이터를 초기화합니다.
@@ -9,12 +9,14 @@ import { supabase } from "../common/supabase";
 export const postVoca = async (level) => {
   try {
     // 1. 단어 데이터 로드 (Supabase Word 테이블에서 조회)
-    const { data: words, error } = await supabase
-      .from("Word")
-      .select("word_id, level, day, category");
+    const words = await fetchPages(() => 
+      supabase
+        .from("Word")
+        .select("word_id, level, day, category")
+    );
     
-    if (error || !words) {
-      console.error("[API/Guest] 단어 목록 로드 실패:", error?.message);
+    if (!words) {
+      console.error("[API/Guest] 단어 목록 로드 실패: 데이터가 비어있습니다.");
       return null;
     }
 
