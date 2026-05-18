@@ -3,9 +3,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { ProgressBar } from "../components/ProgressBar";
-import { initializeAppData } from "../api/voca";
+import { useVoca } from "../hooks/useVoca";
 import { VerticalButton } from "../components/Button";
-import { getStorageItem, KEYS } from "../api/guest/storage";
+import { getStorage, KEYS } from "../api/util/storage";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -84,13 +84,20 @@ const ProgressStatus = styled.span`
 
 export const StepToData = () => {
   const navigate = useNavigate();
-  const nick = getStorageItem(KEYS.NICK);
+  const { postVoca } = useVoca();
+  const nick = getStorage(KEYS.NICK);
 
   const [status, setStatus] = useState(-1);
 
-  const handleSelectLevel = (level) => {
-    setStatus(0); // Start progress
-    initializeAppData(level, setStatus);
+  const handleSelectLevel = async (level) => {
+    try {
+      setStatus(20); // 초기 프로그레스 설정
+      await postVoca(level);
+      setStatus(100); // 로드 완료
+    } catch (err) {
+      console.error("[Onboard] 학습데이터 초기화 실패:", err);
+      setStatus(-1);
+    }
   };
 
   const startApp = () => {

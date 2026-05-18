@@ -1,17 +1,17 @@
 import { supabase } from "../common/supabase";
-import { getStorageItem, removeStorageItem, KEYS } from "../guest/storage";
+import { getStorage, removeStorage, KEYS } from "../util/storage";
 
 /**
  * 로컬스토리지 데이터를 Supabase로 마이그레이션합니다.
  * @returns {Promise<{success: boolean, message?: string, error?: string}>} 성공 여부 객체
  */
-export const migrateLocalDataToSupabase = async () => {
+export const migrateVoca = async () => {
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) return { success: false, message: "로그인 세션이 없습니다." };
 
   const userId = session.user.id;
-  const nick = getStorageItem(KEYS.NICK);
-  const wordMaps = getStorageItem(KEYS.WORD_MAP);
+  const nick = getStorage(KEYS.NICK);
+  const wordMaps = getStorage(KEYS.WORD_MAP);
 
   try {
     // 1. User 프로필 생성/업데이트
@@ -32,11 +32,13 @@ export const migrateLocalDataToSupabase = async () => {
           levelDays.forEach((day) => {
             if (day && Array.isArray(day.word)) {
               day.word.forEach((wordId) => {
+                // day.wordStatus 객체가 있고, 해당 단어의 상태가 true인 것만 완료 처리
+                const isFinished = day.wordStatus ? (day.wordStatus[wordId] === true) : false;
                 vocaInserts.push({
                   user_id: userId,
                   word_id: Number(wordId),
                   day_number: day.day || (Number(day.id) + 1),
-                  status: day.done || false,
+                  status: isFinished,
                 });
               });
             }
@@ -57,14 +59,15 @@ export const migrateLocalDataToSupabase = async () => {
       }
     }
 
-    removeStorageItem(KEYS.NICK);
-    removeStorageItem(KEYS.WORD_MAP);
-    removeStorageItem(KEYS.USER_DATA);
+    // 3. 이전 완료 후 게스트 로컬스토리지 학습 데이터 제거
+    removeStorage(KEYS.NICK);
+    removeStorage(KEYS.WORD_MAP);
+    removeStorage(KEYS.USER_DATA);
 
     return { success: true };
 
   } catch (error) {
-    console.error("마이그레이션 실패:", error.message);
+    console.error("[API/User] 마이그레이션 실패:", error.message);
     return { success: false, error: error.message };
   }
 };

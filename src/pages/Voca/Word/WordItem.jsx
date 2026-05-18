@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useState } from "react";
 
 import { useRevalidator } from "react-router-dom";
-import { updateWordStatus } from "../../../api/voca";
+import { useVoca } from "../../../hooks/useVoca";
 import { CheckCircleIcon, WordIcon, MoreVIcon } from "../../../assets/iconList";
 import { WordDetail } from "./WordDetail";
 
@@ -68,9 +68,10 @@ export const WordItem = ({ word }) => {
   const { revalidate } = useRevalidator();
   const { word: label, definitions, done, id } = word;
   const [showDetail, setShowDetail] = useState(false);
+  const { updateVoca } = useVoca();
 
   const handleToggle = async () => {
-    await updateWordStatus(id, !done);
+    await updateVoca(id, !done);
     revalidate();
   };
 

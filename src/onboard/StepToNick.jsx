@@ -7,7 +7,7 @@ import { Input } from "../components/Input";
 
 import { HiIcon } from "../assets/iconList";
 import { supabase } from "../api/common/supabase";
-import { setStorageItem, KEYS } from "../api/guest/storage";
+import { setStorage, KEYS } from "../api/util/storage";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -66,7 +66,7 @@ export const StepToNick = () => {
     if (nick.length < 2) return;
 
     // Guest 유저: Guest Storage에 닉네임 저장
-    setStorageItem(KEYS.NICK, nick);
+    setStorage(KEYS.NICK, nick);
     navigate("/onboard/generate-data");
   };
 

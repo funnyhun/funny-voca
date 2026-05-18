@@ -1,18 +1,18 @@
 import styled from "styled-components";
 import { Button } from "../../components/Button";
 import { supabase } from "../../api/common/supabase";
-import { initializeAppData } from "../../api/voca";
 import { signOut } from "../../api/auth/actions";
 import { useOutletContext } from "react-router-dom";
 import { useState } from "react";
+import { useVoca } from "../../hooks/useVoca";
+import { checkIsGuest } from "../../api/auth/session";
 import { 
-  getStorageItem, 
-  setStorageItem, 
-  removeStorageItem, 
+  getStorage, 
+  setStorage, 
+  removeStorage, 
   clearStorage, 
-  checkIsGuest, 
   KEYS 
-} from "../../api/guest/storage";
+} from "../../api/util/storage";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -109,6 +109,7 @@ export const Settings = () => {
   const { nick, userData } = useOutletContext();
   const [resetting, setResetting] = useState(false);
   const [resetProgress, setResetProgress] = useState(0);
+  const { postVoca } = useVoca();
 
   const isGuest = checkIsGuest();
 
@@ -124,7 +125,7 @@ export const Settings = () => {
       clearStorage();
     } else {
       await signOut();
-      removeStorageItem(KEYS.NICK);
+      removeStorage(KEYS.NICK);
     }
     window.location.href = "/";
   };
@@ -136,9 +137,9 @@ export const Settings = () => {
     );
     if (!confirmed) return;
 
-    const currentLocal = getStorageItem(KEYS.USER_DATA) || {};
+    const currentLocal = getStorage(KEYS.USER_DATA) || {};
     currentLocal.level = newLevel;
-    setStorageItem(KEYS.USER_DATA, currentLocal);
+    setStorage(KEYS.USER_DATA, currentLocal);
     
     // 새로고침하여 데이터 리로드
     window.location.href = "/";
@@ -156,7 +157,7 @@ export const Settings = () => {
     if (!doubleConfirmed) return;
 
     setResetting(true);
-    setResetProgress(0);
+    setResetProgress(10);
 
     try {
       // 1. DB 유저라면 Supabase Voca 테이블 데이터 삭제
@@ -169,13 +170,15 @@ export const Settings = () => {
           .delete()
           .eq("user_id", session.user.id);
       }
+      setResetProgress(30);
 
       // 2. 로컬스토리지 학습 데이터 초기화
-      removeStorageItem(KEYS.WORD_MAP);
-      removeStorageItem(KEYS.USER_DATA);
+      removeStorage(KEYS.WORD_MAP);
+      removeStorage(KEYS.USER_DATA);
+      setResetProgress(50);
 
       // 3. 새로운 단어 배정
-      await initializeAppData(userData?.level || "default", setResetProgress);
+      await postVoca(userData?.level || "default");
 
       setResetProgress(100);
       window.location.href = "/";

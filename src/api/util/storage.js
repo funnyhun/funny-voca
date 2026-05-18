@@ -1,8 +1,8 @@
 /**
- * Guest 유저 전용 로컬스토리지 접근 유틸리티
+ * 로컬스토리지 접근 유틸리티 (도메인 무관)
  */
 
-const KEYS = {
+export const KEYS = {
   NICK: "nick",
   WORD_MAP: "wordMap",
   USER_DATA: "userData",
@@ -14,7 +14,7 @@ const KEYS = {
  * @param {string} key - KEYS 객체에 정의된 키 이름
  * @returns {any} 파싱된 데이터 또는 null
  */
-export const getStorageItem = (key) => {
+export const getStorage = (key) => {
   try {
     const item = window.localStorage.getItem(key);
     if (!item) return null;
@@ -26,7 +26,7 @@ export const getStorageItem = (key) => {
       return item;
     }
   } catch (err) {
-    console.error(`[API/Guest] Storage Read Error (${key}):`, err);
+    console.error(`[API/Util] Storage Read Error (${key}):`, err);
     return null;
   }
 };
@@ -36,11 +36,11 @@ export const getStorageItem = (key) => {
  * @param {string} key - KEYS 객체에 정의된 키 이름
  * @param {any} value - 저장할 데이터
  */
-export const setStorageItem = (key, value) => {
+export const setStorage = (key, value) => {
   try {
     window.localStorage.setItem(key, JSON.stringify(value));
   } catch (err) {
-    console.error(`[API/Guest] Storage Write Error (${key}):`, err);
+    console.error(`[API/Util] Storage Write Error (${key}):`, err);
   }
 };
 
@@ -48,11 +48,11 @@ export const setStorageItem = (key, value) => {
  * 로컬스토리지에서 데이터를 삭제합니다.
  * @param {string} key - KEYS 객체에 정의된 키 이름
  */
-export const removeStorageItem = (key) => {
+export const removeStorage = (key) => {
   try {
     window.localStorage.removeItem(key);
   } catch (err) {
-    console.error(`[API/Guest] Storage Remove Error (${key}):`, err);
+    console.error(`[API/Util] Storage Remove Error (${key}):`, err);
   }
 };
 
@@ -63,20 +63,6 @@ export const clearStorage = () => {
   try {
     window.localStorage.clear();
   } catch (err) {
-    console.error("[API/Guest] Storage Clear Error:", err);
+    console.error("[API/Util] Storage Clear Error:", err);
   }
 };
-
-/**
- * 현재 사용자가 게스트인지 확인합니다 (인증 토큰 존재 여부 기준).
- * @returns {boolean}
- */
-export const checkIsGuest = () => {
-  try {
-    return !Object.keys(window.localStorage).some((k) => k.includes("auth-token"));
-  } catch (err) {
-    return true;
-  }
-};
-
-export { KEYS };

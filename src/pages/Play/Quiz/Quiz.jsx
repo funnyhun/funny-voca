@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState, useMemo } from "react";
 import { useOutletContext } from "react-router-dom";
-import { updateWordStatus } from "../../../api/voca";
+import { useVoca } from "../../../hooks/useVoca";
 
 import { useStep } from "../../../hooks/useMyParam";
 
@@ -38,6 +38,7 @@ export const Quiz = () => {
   const { quizs } = useOutletContext();
   const { step } = useStep();
   const [isCorrect, setIsCorrect] = useState(false);
+  const { updateVoca } = useVoca();
 
   const currentQuiz = quizs[step];
 
@@ -75,9 +76,9 @@ export const Quiz = () => {
 
   const { question, answer, wrongs } = quizData;
 
-  const handleCorrect = () => {
+  const handleCorrect = async () => {
     setIsCorrect(true);
-    updateWordStatus(currentQuiz.id, true);
+    await updateVoca(currentQuiz.id, true);
   };
 
   return (

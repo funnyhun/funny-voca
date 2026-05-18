@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { useStep } from "../../../hooks/useMyParam";
-import { updateWordStatus } from "../../../api/voca";
+import { useVoca } from "../../../hooks/useVoca";
 
 export const useCard = () => {
   const { words } = useOutletContext();
   const { step, changeStep } = useStep();
   const [mode, setMode] = useState("word");
+  const { updateVoca } = useVoca();
 
   const changeMode = () => {
     setMode((prev) => (prev === "word" ? "def" : "word"));
@@ -17,11 +18,11 @@ export const useCard = () => {
     changeStep(step - 1);
   };
 
-  const nextCard = () => {
+  const nextCard = async () => {
     // 현재 단어 학습 완료 처리
     const currentWord = words[step];
     if (currentWord) {
-      updateWordStatus(currentWord.id, true);
+      await updateVoca(currentWord.id, true);
     }
 
     if (step === words.length - 1) {

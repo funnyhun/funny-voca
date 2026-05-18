@@ -3,7 +3,7 @@ import { Button } from "../../../components/Button";
 import { useNavigate } from "react-router-dom";
 import { useSelected } from "../../../hooks/useMyParam";
 import { useEffect } from "react";
-import { updateLearningStats } from "../../../api/stats";
+import { useStats } from "../../../hooks/useStats";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -52,9 +52,10 @@ const Pannel = styled.div`
 export const Complete = ({ replayCard }) => {
   const navigate = useNavigate();
   const { selected } = useSelected();
+  const { updateStats } = useStats();
 
   useEffect(() => {
-    updateLearningStats();
+    updateStats();
   }, []);
 
   const navigateQuiz = () => navigate(`/play/${selected}/quiz/0`);

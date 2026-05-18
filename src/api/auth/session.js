@@ -27,3 +27,16 @@ export const getUserId = async () => {
   const session = await getSession();
   return session?.user?.id || null;
 };
+
+/**
+ * 현재 사용자가 게스트인지 동기적으로 확인합니다 (로컬스토리지 토큰 존재 여부 기준).
+ * @returns {boolean}
+ */
+export const checkIsGuest = () => {
+  try {
+    return !Object.keys(window.localStorage).some((k) => k.includes("auth-token"));
+  } catch (err) {
+    return true;
+  }
+};
+

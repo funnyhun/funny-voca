@@ -1,13 +1,13 @@
 import { redirect } from "react-router-dom";
 import { supabase } from "../../api/common/supabase";
 import { getSession } from "../../api/auth/session";
-import { getMasterWordData } from "../../api/user/master";
-import { getUserProfile } from "../../api/user/profile";
-import { fetchUserVocaData } from "../../api/user/voca";
-import { getStorageItem, KEYS } from "../../api/guest/storage";
+import { getMaster } from "../../api/common/master";
+import { getProfile } from "../../api/user/profile";
+import { getVoca } from "../../api/user/voca";
+import { getStorage, KEYS } from "../../api/util/storage";
 import { processWordMap, createGuestStatusMap } from "./utils";
-import { migrateLocalDataToSupabase } from "../../api/user/migration";
-import { initWordMap } from "../../api/voca";
+import { migrateVoca } from "../../api/user/migration";
+import { postVoca } from "../../api/guest/voca";
 
 /**
  * [Orchestrator] 어플리케이션 진입 시 필요한 모든 데이터를 로드하고 상태에 따라 분기합니다.
@@ -20,7 +20,7 @@ export const loadUserData = async () => {
     
     // 1. 공통 데이터 로드 (마스터 데이터 및 알림)
     const [wordData, dbNotisResult] = await Promise.all([
-      getMasterWordData(),
+      getMaster(),
       supabase.from("Notification").select("*").order("created_at", { ascending: false })
     ]);
 
@@ -49,7 +49,7 @@ export const loadUserData = async () => {
  */
 async function handleMemberLoading(session, wordData, notifications) {
   const userId = session.user.id;
-  const localUserData = getStorageItem(KEYS.USER_DATA);
+  const localUserData = getStorage(KEYS.USER_DATA);
   const currentLevel = localUserData?.level || "default";
   
   // 난이도별 DB 코드 매핑
@@ -57,27 +57,27 @@ async function handleMemberLoading(session, wordData, notifications) {
   const dbLevel = levelToNumber[currentLevel] ?? 0;
 
   // 1. 마이그레이션 체크 및 기본 데이터 로드
-  let wordMaps = getStorageItem(KEYS.WORD_MAP);
+  let wordMaps = getStorage(KEYS.WORD_MAP);
   
   // 레거시 로컬 데이터가 있으면 DB로 이전
   if (wordMaps) {
-    await migrateLocalDataToSupabase();
+    await migrateVoca();
     // 마이그레이션 후 로컬 데이터가 삭제되므로 다시 로드 (초기화 필요성 체크)
-    wordMaps = getStorageItem(KEYS.WORD_MAP);
+    wordMaps = getStorage(KEYS.WORD_MAP);
   }
 
   // 2. 프로필 및 학습 데이터 병렬 로드
   const [userProfile, vocaData] = await Promise.all([
-    getUserProfile(userId),
-    fetchUserVocaData(userId, dbLevel)
+    getProfile(userId),
+    getVoca(userId, dbLevel)
   ]);
 
   if (!userProfile) throw new Error("User profile not found");
 
   // 3. 템플릿 로드 (없으면 초기화)
   if (!wordMaps) {
-    await initWordMap();
-    wordMaps = getStorageItem(KEYS.WORD_MAP);
+    await postVoca(currentLevel);
+    wordMaps = getStorage(KEYS.WORD_MAP);
   }
   const baseWordMap = wordMaps?.[currentLevel] || [];
 
@@ -90,7 +90,7 @@ async function handleMemberLoading(session, wordData, notifications) {
   const processedWordMap = processWordMap(baseWordMap, wordStatusMap);
 
   return {
-    nick: getStorageItem(KEYS.NICK) || userProfile.nick,
+    nick: getStorage(KEYS.NICK) || userProfile.nick,
     wordMap: processedWordMap,
     wordStatusMap,
     wordData,
@@ -110,9 +110,9 @@ async function handleMemberLoading(session, wordData, notifications) {
  * 미인증 사용자(Guest)를 위한 데이터 로딩 및 가공
  */
 function handleGuestLoading(wordData, notifications) {
-  const nick = getStorageItem(KEYS.NICK);
-  const wordMaps = getStorageItem(KEYS.WORD_MAP);
-  const userData = getStorageItem(KEYS.USER_DATA);
+  const nick = getStorage(KEYS.NICK);
+  const wordMaps = getStorage(KEYS.WORD_MAP);
+  const userData = getStorage(KEYS.USER_DATA);
 
   if (!nick) return redirect("/onboard/nickname");
   if (!wordMaps || !userData) return redirect("/onboard/generate-data");

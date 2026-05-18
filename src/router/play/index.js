@@ -1,6 +1,6 @@
 import { redirect } from "react-router-dom";
 import { supabase } from "../../api/common/supabase";
-import { getStorageItem, KEYS } from "../../api/guest/storage";
+import { getStorage, KEYS } from "../../api/util/storage";
 
 /**
  * 학습(Play) 페이지 진입 시 마지막 학습 위치 또는 기본 위치로 리다이렉트합니다.
@@ -14,8 +14,8 @@ export const loadPlay = async () => {
   }
 
   // 2. Guest: Guest Storage 데이터 사용
-  const userData = getStorageItem(KEYS.USER_DATA);
-  const wordMaps = getStorageItem(KEYS.WORD_MAP);
+  const userData = getStorage(KEYS.USER_DATA);
+  const wordMaps = getStorage(KEYS.WORD_MAP);
   
   if (!userData || !wordMaps) {
     return { words: [] };

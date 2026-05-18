@@ -1,11 +1,10 @@
-import { getStorageItem, setStorageItem, KEYS } from "./storage";
+import { getStorage, setStorage, KEYS } from "../util/storage";
 
 /**
  * 게스트 사용자의 학습 통계(연속 학습일, 오늘 학습량)를 로컬스토리지에 업데이트합니다.
- * [Used In] src/api/stats.js (Facade)
  */
-export const updateGuestLearningStats = () => {
-  const userData = getStorageItem(KEYS.USER_DATA);
+export const updateStats = () => {
+  const userData = getStorage(KEYS.USER_DATA);
   if (!userData) return;
 
   const msToDay = 86400000;
@@ -44,5 +43,5 @@ export const updateGuestLearningStats = () => {
     lastStudiedAt: now.toISOString(),
   };
 
-  setStorageItem(KEYS.USER_DATA, updated);
+  setStorage(KEYS.USER_DATA, updated);
 };

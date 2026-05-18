@@ -3,7 +3,7 @@ import { Button } from "../../../components/Button";
 import { useNavigate, useRevalidator } from "react-router-dom";
 import { useSelected } from "../../../hooks/useMyParam";
 import { useEffect } from "react";
-import { updateLearningStats } from "../../../api/stats";
+import { useStats } from "../../../hooks/useStats";
 
 const Wrapper = styled.div`
   height: 100%;
@@ -53,10 +53,11 @@ export const Complete = () => {
   const navigate = useNavigate();
   const { revalidate } = useRevalidator();
   const { selected } = useSelected();
+  const { updateStats } = useStats();
 
   useEffect(() => {
     revalidate();
-    updateLearningStats();
+    updateStats();
   }, [revalidate]);
 
   const navigateHome = () => navigate("/home");

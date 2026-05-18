@@ -1,4 +1,4 @@
-import { supabase } from "../common/supabase";
+import { supabase } from "./supabase";
 
 /**
  * 서비스에서 사용하는 모든 단어의 마스터 데이터를 조회합니다.
@@ -7,7 +7,7 @@ import { supabase } from "../common/supabase";
  * - Word 및 Definition 테이블을 조인하여 가져옵니다.
  * - 결과값은 O(1) 조회를 위해 객체 형태로 변환하여 반환합니다.
  */
-export const getMasterWordData = async () => {
+export const getMaster = async () => {
   try {
     const { data, error } = await supabase
       .from("Word")
@@ -26,7 +26,7 @@ export const getMasterWordData = async () => {
       `);
 
     if (error) {
-      console.error("[API/User] Get Master Data Error:", error.message);
+      console.error("[API/Common] Get Master Data Error:", error.message);
       return {};
     }
 
@@ -44,7 +44,7 @@ export const getMasterWordData = async () => {
 
     return wordMap;
   } catch (err) {
-    console.error("[API/User] Critical Master Data Error:", err);
+    console.error("[API/Common] Critical Master Data Error:", err);
     return {};
   }
 };
