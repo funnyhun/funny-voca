@@ -2,13 +2,17 @@ import { useState } from "react";
 import * as S from "./Option.styles";
 import { CheckIcon, CloseIcon } from "@/assets/iconList";
 
-export const Option = ({ label, corrected, onClick, disabled }) => {
+export const Option = ({ label, corrected, onClick, onWrong, disabled }) => {
   const [isClicked, setIsClicked] = useState(false);
 
   const clickedOption = () => {
     if (disabled) return;
     setIsClicked(true);
-    if (corrected) onClick();
+    if (corrected) {
+      onClick();
+    } else {
+      if (onWrong) onWrong();
+    }
   };
 
   const buttonProperty = {

@@ -1,18 +1,11 @@
 import * as S from "./QuizPannel.styles";
-import { useStep } from "@/ui/common/hooks/useMyParam";
 import { CircleTimer } from "./CircleTimer";
 import { SmallButton } from "@/ui/common";
 
-export const QuizPannel = ({ disable }) => {
-  const { step, changeStep } = useStep();
-
-  const navNextQuiz = () => {
-    changeStep(step + 1);
-  };
-
+export const QuizPannel = ({ onNext }) => {
   return (
     <S.Wrapper>
-      <CircleTimer second={3} callback={navNextQuiz} />
+      <CircleTimer second={3} callback={onNext} />
       <S.Text>
         <S.Content>
           <S.CheckIcon />
@@ -29,7 +22,7 @@ export const QuizPannel = ({ disable }) => {
         }
         color="main"
         bg="brand"
-        onClick={navNextQuiz}
+        onClick={onNext}
       />
     </S.Wrapper>
   );

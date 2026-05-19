@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import * as S from "./QuizSelection.styles";
 import { Option } from "./Option";
 
-export const QuizSelection = ({ onClick, wrongs, answer, disabled }) => {
+export const QuizSelection = ({ onClick, onWrong, wrongs, answer, disabled }) => {
   const options = useMemo(() => {
     return [...wrongs, answer].sort(() => 0.5 - Math.random());
   }, [wrongs, answer]);
@@ -14,7 +14,8 @@ export const QuizSelection = ({ onClick, wrongs, answer, disabled }) => {
           key={`${label}-${idx}`}
           label={label}
           corrected={label === answer}
-          onClick={label === answer ? onClick : undefined}
+          onClick={onClick}
+          onWrong={onWrong}
           disabled={disabled}
         />
       ))}
