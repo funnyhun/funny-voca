@@ -1,10 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-import { AppRouter } from "./router/router";
+import { AppRouter } from "@/app/router/router";
 
-import { ThemeProvider as MyThemeProvider } from "./hooks/useTheme";
-import { GlobalStyle } from "./styles/GlobalStyle";
+import { ThemeProvider as MyThemeProvider } from "@/common/hooks/useTheme";
+import { GlobalStyle } from "@/app/GlobalStyle";
 
 
 createRoot(document.getElementById("root")).render(
