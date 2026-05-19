@@ -1,3 +1,3 @@
 export * from "./Play";
-export * from "./Card";
+export { Item as Card } from "./Item";
 

@@ -1,0 +1,47 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import * as S from "./Nick.styles";
+
+import { VerticalButton, Input } from "@/ui/common";
+
+import { setStorage, KEYS } from "@/common/api/util/storage";
+
+export const Nick = () => {
+  const navigate = useNavigate();
+  const [nick, setNick] = useState("");
+
+  const submitNick = () => {
+    if (nick.length < 2) return;
+
+    // Guest 유저: Guest Storage에 닉네임 저장
+    setStorage(KEYS.NICK, nick);
+    navigate("/onboard/generate-data");
+  };
+
+  const changeNick = (e) => setNick(e.target.value);
+
+  return (
+    <S.Wrapper>
+      <S.Header>
+        <S.Image />
+        <S.Greet>
+          <p>반가워요!</p>
+          <S.CustomHiIcon />
+        </S.Greet>
+        <S.Content>
+          나만의 단어장 MyVoca를 시작하기전,
+          <br />
+          멋진 닉네임을 정해주세요.
+        </S.Content>
+      </S.Header>
+      <Input
+        label="닉네임"
+        value={nick}
+        onChange={changeNick}
+        placeholder="닉네임 입력(2~10글자)"
+        notice="한글, 영문, 숫자 포함 2~10 자로 입력해주세요."
+      />
+      <VerticalButton label="다음으로" color="main" bg="brand" onClick={submitNick} />
+    </S.Wrapper>
+  );
+};

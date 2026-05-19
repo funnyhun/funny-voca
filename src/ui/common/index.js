@@ -3,14 +3,14 @@ export * from "./components/Button/Button";
 export * from "./components/Input/Input";
 export * from "./components/ProgressBar/ProgressBar";
 export * from "./components/StyledBox/StyledBox";
-export * from "./components/NotificationList/NotificationList";
 
 // 공용 레이아웃 (Layouts)
-export * from "./layout/Header";
-export * from "./layout/Loading";
-export * from "./layout/Navigation";
+export * from "./Layout/Header";
+export * from "./Layout/Loading";
+export * from "./Layout/Navigation";
+export * from "./Layout/NotificationList/NotificationList";
 
 // 온보딩 설정 (Setup)
-export * from "./setup/Setup";
-export * from "./setup/StepToNick";
-export * from "./setup/StepToData";
+export * from "./Setup/Setup";
+export * from "./Setup/Nick";
+export * from "./Setup/Data";

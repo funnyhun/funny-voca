@@ -34,12 +34,12 @@ src/
     *   `router/`: 라우터 매핑 객체 (`router.jsx`) 및 로더 함수 분리
 *   **`ui/common/`**:
     *   `components/`: 버튼, 진행바 등 순수 공용 컴포넌트
-    *   `layout/`: 헤더, 네비게이션 등 메인 레이아웃 프레임
+    *   `Layout/`: 헤더, 로딩, 내비게이션, 알림 목록 등 핵심 레이아웃 프레임 (각각 개별 격리 폴더 및 스타일 파일 구조)
     *   `hooks/`: UI 전반에 재사용되는 훅 (`useWord`, `useMyParam`, `useTheme` 등)
-    *   `setup/`: 온보딩 과정(`StepToNick`, `StepToData`) 전용 공통 컴포넌트
+    *   `Setup/`: 온보딩 과정 전용 공통 컴포넌트 (`Nick`, `Data`로 축약 개편 및 스타일 파일 격리)
 *   **`ui/services/` (주요 서비스 화면)**:
     *   각 도메인 서비스(Home, Play, Voca, Settings)별로 폴더를 구성하며, 컴포넌트와 전용 스타일(`*.styles.js`)을 한 폴더 내에 묶어 모듈성을 강화했습니다.
-    *   *예시*: `Home/Home.jsx`, `Home/Home.styles.js`, `Home/Calendar.jsx`
+    *   *예시*: `Home/Home.jsx`, `Home/Home.styles.js`, `Home/Calendar.jsx` 및 `Play/Play.jsx`, `Play/Item/Item.jsx` (불필요한 중간 Card depth 거세 및 1뎁스 서브폴더화 완료)
 
 ### 2) `src/common/` (Core Logic & Infrastructure)
 리액트 UI 프레임워크와 결합되지 않고 독립적으로 사용 가능한 API 및 헬퍼 함수 집합입니다.

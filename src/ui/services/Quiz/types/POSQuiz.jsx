@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { QuizSelection } from "@/ui/services/Quiz/QuizSelection";
+import { Selection } from "../Selection";
 import { toKoreanPOS, getWrongPOS } from "@/ui/services/Quiz/utils";
 
 export const POSQuiz = ({ currentWord, onCorrect, onWrong, isAnswered }) => {
@@ -19,7 +19,7 @@ export const POSQuiz = ({ currentWord, onCorrect, onWrong, isAnswered }) => {
       <div style={{ fontSize: "2rem", fontWeight: "bold", textAlign: "center", margin: "24px 0", letterSpacing: "1px" }}>
         {word}
       </div>
-      <QuizSelection
+      <Selection
         onClick={onCorrect}
         onWrong={onWrong}
         wrongs={wrongs}

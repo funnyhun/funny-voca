@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { QuizSelection } from "@/ui/services/Quiz/QuizSelection";
+import { Selection } from "../Selection";
 import { getWrongWords } from "@/ui/services/Quiz/utils";
 
 export const SentenceQuiz = ({ currentWord, allWords, onCorrect, onWrong, isAnswered }) => {
@@ -27,7 +27,7 @@ export const SentenceQuiz = ({ currentWord, allWords, onCorrect, onWrong, isAnsw
       <div style={{ fontSize: "1.6rem", fontWeight: "600", textAlign: "center", margin: "24px 0", lineHeight: "1.6", wordBreak: "break-word", padding: "0 16px" }}>
         {question}
       </div>
-      <QuizSelection
+      <Selection
         onClick={onCorrect}
         onWrong={onWrong}
         wrongs={wrongs}

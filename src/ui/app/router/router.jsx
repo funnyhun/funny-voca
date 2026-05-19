@@ -6,17 +6,13 @@ import { loadQuiz } from "@/ui/app/router/quiz";
 
 import { App } from "@/ui/app/App";
 
-import { Setup as Onboard } from "@/ui/common/setup/Setup";
-import { StepToNick } from "@/ui/common/setup/StepToNick";
-import { StepToData } from "@/ui/common/setup/StepToData";
+import { Setup as Onboard, Nick, Data } from "@/ui/common";
 
 import { Home } from "@/ui/services/Home/Home";
 import { Play, Card } from "@/ui/services/Play";
 import { Quiz } from "@/ui/services/Quiz";
 
-import { Voca } from "@/ui/services/Voca/Voca";
-import { VocaList } from "@/ui/services/Voca/VocaList";
-import { WordList } from "@/ui/services/Voca/Word/WordList";
+import { Voca, VocaList, WordList } from "@/ui/services/Voca";
 import { Settings } from "@/ui/services/Settings/Settings";
 
 import { HomeIcon, PlayIcon, QuizIcon, WordIcon, AccountIcon } from "@/assets/iconList";
@@ -81,10 +77,10 @@ export const pages = [
 
 const onboardStep = [
   { index: true, element: <Navigate to="/onboard/nickname" replace /> },
-  { path: "/onboard/nickname", element: <StepToNick />, name: "닉네임 설정" },
+  { path: "/onboard/nickname", element: <Nick />, name: "닉네임 설정" },
   {
     path: "/onboard/generate-data",
-    element: <StepToData />,
+    element: <Data />,
     name: "학습데이터 생성",
   },
 ];

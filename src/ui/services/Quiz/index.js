@@ -1,1 +1,2 @@
-export { QuizManager as Quiz } from "./QuizManager";
+export { Quiz } from "./Quiz";
+
