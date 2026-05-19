@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import * as S from "./CircleTimer.styles";
-import { NumberDisplay } from "./NumberDisplay";
+import { NumberDisplay } from "@/ui/services/Quiz/NumberDisplay";
 
 export const CircleTimer = ({ second = 3, callback }) => {
   useEffect(() => {

@@ -2,7 +2,7 @@ import * as S from "./WordItem.styles";
 import { useState, useContext } from "react";
 
 import { VocaContext } from "@/ui/app/App";
-import { WordDetail } from "./WordDetail";
+import { WordDetail } from "@/ui/services/Voca/Word/WordDetail";
 
 export const WordItem = ({ word }) => {
   const { word: label, definitions, done, id } = word;

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import * as S from "./QuizSelection.styles";
-import { Option } from "./Option";
+import { Option } from "@/ui/services/Quiz/Option";
 
 export const QuizSelection = ({ onClick, onWrong, wrongs, answer, disabled }) => {
   const options = useMemo(() => {

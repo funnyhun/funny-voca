@@ -1,4 +1,3 @@
-import { Play } from "./Play";
-import { Card } from "./Card/Card";
+export * from "./Play";
+export * from "./Card";
 
-export { Play, Card };

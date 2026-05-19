@@ -6,16 +6,16 @@ import { useWord } from "@/ui/common/hooks/useWord";
 import { shuffleArray } from "@/common/utils/utils";
 
 import { PlayProgressBar } from "@/ui/services/Play/PlayProgressBar";
-import { QuizPannel } from "./QuizPannel";
-import { Complete } from "./Complete";
+import { QuizPannel } from "@/ui/services/Quiz/QuizPannel";
+import { Complete } from "@/ui/services/Quiz/Complete";
 
-import { SpellingQuiz } from "./types/SpellingQuiz";
-import { POSQuiz } from "./types/POSQuiz";
-import { SentenceQuiz } from "./types/SentenceQuiz";
+import { SpellingQuiz } from "@/ui/services/Quiz/types/SpellingQuiz";
+import { POSQuiz } from "@/ui/services/Quiz/types/POSQuiz";
+import { SentenceQuiz } from "@/ui/services/Quiz/types/SentenceQuiz";
 
 const LS_KEY = "myvoca_quiz_state";
 
-export const Quiz = () => {
+export const QuizManager = () => {
   const { selected } = useSelected();
   const { words, loading } = useWord(selected);
   const { updateStatus } = useContext(VocaContext);

@@ -1,6 +1,6 @@
 import * as S from "./WordFilter.styles";
 
-import { FILTER_SET, FILTER_TYPE } from "./filter";
+import { FILTER_SET, FILTER_TYPE } from "@/ui/services/Voca/Word/utils/filter";
 
 function WordFilter({ currentFilter, setFilterType }) {
   return (

@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { VocaContext, StatsContext, AppContext } from "@/ui/app/App";
 
-import { Calendar } from "./Calendar";
-import { StatsDashboard } from "./StatsDashboard";
+import { Calendar } from "@/ui/services/Home/Calendar";
+import { StatsDashboard } from "@/ui/services/Home/StatsDashboard";
 import { Wrapper } from "./Home.styles";
 
 export const Home = () => {

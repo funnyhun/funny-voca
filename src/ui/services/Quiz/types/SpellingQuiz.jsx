@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { QuizSelection } from "../QuizSelection";
-import { getWrongWords } from "../utils";
+import { QuizSelection } from "@/ui/services/Quiz/QuizSelection";
+import { getWrongWords } from "@/ui/services/Quiz/utils";
 
 export const SpellingQuiz = ({ currentWord, allWords, onCorrect, onWrong, isAnswered }) => {
   const definition = currentWord.definitions?.[0] || {};

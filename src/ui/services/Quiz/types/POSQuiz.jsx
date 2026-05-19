@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { QuizSelection } from "../QuizSelection";
-import { toKoreanPOS, getWrongPOS } from "../utils";
+import { QuizSelection } from "@/ui/services/Quiz/QuizSelection";
+import { toKoreanPOS, getWrongPOS } from "@/ui/services/Quiz/utils";
 
 export const POSQuiz = ({ currentWord, onCorrect, onWrong, isAnswered }) => {
   const word = currentWord.word;

@@ -4,13 +4,13 @@ import { useState, useMemo, useCallback } from "react";
 import { useSelected } from "@/ui/common/hooks/useMyParam";
 import { useWord } from "@/ui/common/hooks/useWord";
 
-import { WordItem } from "./WordItem";
-import { WordSearch } from "./WordSearch";
-import { WordFilter } from "./WordFilter";
-import { WordNoResult } from "./WordNoResult";
-import { WordEmpty } from "./WordEmpty";
+import { WordItem } from "@/ui/services/Voca/Word/WordItem";
+import { WordSearch } from "@/ui/services/Voca/Word/WordSearch";
+import { WordFilter } from "@/ui/services/Voca/Word/WordFilter";
+import { WordNoResult } from "@/ui/services/Voca/Word/WordNoResult";
+import { WordEmpty } from "@/ui/services/Voca/Word/WordEmpty";
 
-import { FILTER_SET, FILTER_TYPE } from "./filter";
+import { FILTER_SET, FILTER_TYPE } from "@/ui/services/Voca/Word/utils/filter";
 
 export const WordList = () => {
   const { selected } = useSelected();

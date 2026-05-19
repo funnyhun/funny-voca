@@ -1,0 +1,1 @@
+export { QuizManager } from "./QuizManager";

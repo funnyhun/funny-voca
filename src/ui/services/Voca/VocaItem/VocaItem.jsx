@@ -1,5 +1,5 @@
 import * as S from "./VocaItem.styles";
-import { VocaProgressBar } from "./VocaProgressBar";
+import { VocaProgressBar } from "@/ui/services/Voca/VocaProgressBar";
 import { useSelected } from "@/ui/common/hooks/useMyParam";
 
 export const VocaItem = ({ item }) => {

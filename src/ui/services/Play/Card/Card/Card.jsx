@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 import { useCard } from "./useCard";
 import { PlayProgressBar } from "@/ui/services/Play/PlayProgressBar";
-import { Definition } from "./Definition";
-import { Complete } from "./Complete";
-import { CardPannel } from "./CardPannel";
+import { Definition } from "@/ui/services/Play/Card/Definition";
+import { Complete } from "@/ui/services/Play/Card/Complete";
+import { CardPannel } from "@/ui/services/Play/Card/CardPannel";
 import { AudioButton, CustomBorderBox, Title } from "./Card.styles";
 
 const createAudio = () => {

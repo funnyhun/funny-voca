@@ -1,5 +1,5 @@
 import * as S from "./QuizPannel.styles";
-import { CircleTimer } from "./CircleTimer";
+import { CircleTimer } from "@/ui/services/Quiz/CircleTimer";
 import { SmallButton } from "@/ui/common";
 
 export const QuizPannel = ({ onNext }) => {
