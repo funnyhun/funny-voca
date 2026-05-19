@@ -1,0 +1,33 @@
+# Play Service Guide
+
+Play 서비스는 앱의 핵심 학습 로직을 담당하며, 카드 암기와 퀴즈 풀기 두 가지 모드를 제공합니다.
+
+## 1. 역할 및 특징
+- **학습 인터페이스**: 단어 카드 플립 및 4지선다/입력형 퀴즈 UI 제공.
+- **상태 동기화**: 학습 완료 시 즉시 DB/LocalStorage에 반영.
+
+## 2. 주요 구성 요소
+- **Play.jsx**: 부모 컴포넌트. `Card`와 `Quiz` 모드를 전환하며 전체 진행도를 관리함.
+- **Card (Directory)**: 단어 카드 암기 모드. `useCard` 훅을 통해 플립 및 완료 로직 처리.
+- **Quiz (Directory)**: 퀴즈 모드. 오답 체크 및 결과 피드백 처리.
+- **util.js**: 학습에 필요한 보조 계산 로직.
+- **PlayProgressBar.jsx**: 상단 진행률 표시 바.
+
+## 3. 종속성 및 연관 관계
+- **useVoca Hook (`@/ui/common/hooks/useVoca`)**: 학습 진행 사항 갱신(`updateWordStatus`, `resetVoca`)에 사용되는 핵심 훅.
+- **useStats Hook (`@/ui/common/hooks/useStats`)**: 세션 완료 통계 업데이트(`updateStats`)에 사용됨.
+- **utils.js (`@/common/utils/utils`)**: 퀴즈 셔플링(`shuffleArray`)에 사용.
+- **useWord Hook (`@/ui/common/hooks/useWord`)**: 현재 학습할 Day의 단어 목록을 가져오기 위해 필수적으로 사용됨.
+
+## 4. 데이터 흐름 및 격리 아키텍처
+
+1. **`useOutletContext` 완벽 제거**:
+   - `Play.jsx`는 더 이상 자식 컴포넌트에 Context를 주입하여 전달하지 않습니다.
+   - 레이아웃 컴포넌트로서의 구조적 뼈대 역할만 수행하며, 극히 가벼운 상태를 유지합니다.
+2. **독립 도메인 Context 직접 구독**:
+   - `Card.jsx`와 `Quiz.jsx`는 `VocaContext` 및 `useWord` 브릿지 훅을 직접 사용하여 현재 선택된 Day의 단어 목록을 온전히 수신합니다.
+   - 세션 완료 처리를 할 때도 `StatsContext`를 useContext로 받아와 `recordSession` 액션을 깔끔하게 구동합니다.
+3. **퀴즈 풀기 도중 단어 튐(버그) 차단용 셔플 캐싱**:
+   - 퀴즈 진행 중 단어를 암기 완료(`done === true`)로 체크하면 리액티브 상태 갱신으로 인해 퀴즈 도중 단어 목록이 실시간으로 재구성되어 풀던 문제가 튀는 오작동이 있었습니다.
+   - 이를 예방하기 위해, 퀴즈용 단어 세트는 **학습 Day가 변경될 때만** 셔플되도록 `useMemo`로 강력히 캐싱 및 보존합니다.
+   - 단어 암기 상태가 변하더라도 퀴즈 풀에 담긴 리스트 순서는 유지되어 일관된 퀴즈 환경을 제공합니다.

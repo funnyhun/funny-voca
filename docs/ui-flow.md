@@ -14,8 +14,8 @@ graph TD
     CheckData -- 있음 --> Home
 ```
 
-- **닉네임 설정 (StepToNick)**: 사용자의 이름을 입력받는 간단한 화면입니다.
-- **데이터 생성 (StepToData)**: 초기 단어 맵을 생성하고 저장하는 동안 진행 바를 보여주는 전환 화면입니다.
+- **닉네임 설정 (StepToNick)**: 사용자의 이름을 입력받는 화면입니다. (`src/ui/common/setup/StepToNick.jsx`)
+- **데이터 생성 (StepToData)**: 초기 단어 맵을 생성하고 저장하는 동안 진행 바를 보여주는 전환 화면입니다. (`src/ui/common/setup/StepToData.jsx`)
 
 ## 2. 메인 네비게이션 (App Layout)
 온보딩이 완료된 사용자는 상단 `Header`와 하단 `Navigation`바가 고정된 메인 레이아웃 내에 머물게 됩니다.

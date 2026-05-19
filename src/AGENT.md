@@ -1,33 +1,41 @@
 # MyVoca Service Architecture & Guide
 
-본 문서는 MyVoca 프로젝트의 전체 서비스 구조와 핵심 설계 원칙을 에이전트에게 제공하기 위한 가이드입니다.
+본 문서는 MyVoca 프로젝트의 전체 서비스 구조와 핵심 설계 원칙을 에이전트에게 제공하기 위한 가이드입니다. 다른 챗 세션 및 독립 에이전트가 투입되었을 때에도 아키텍처적 일관성을 보존하기 위한 Single Source of Truth(SSOT) 역할을 수행합니다.
 
-## 1. 서비스 계층 구조 (Service Layers)
+---
 
-MyVoca는 다음과 같은 4단계 계층 구조로 동작합니다.
+## 1. 서비스 계층 구조 (Service Layers - 3차 아키텍처 규격)
 
-### Layer 1: Router & Loaders (`src/router`)
-- **역할**: URL 기반 페이지 전환 및 진입 전 필수 데이터 로드(Hydration).
-- **핵심 파일**:
-  - `src/router/user/index.js`: `loadUserData` (사용자 세션/프로필/학습 데이터 통합 로더).
-  - `src/router/user/utils.js`: 데이터 가공용 순수 함수.
+MyVoca는 컴포넌트 복잡성을 극복하기 위해 역할을 프론트엔드 UI, 비즈니스 공용 로직, 정적 리소스로 명확히 나눈 **3차 카테고리(src/ui, src/common, src/assets)** 디렉토리 구조를 따릅니다.
 
-### Layer 2: API Layer (`src/api`)
-- **역할**: 데이터 소스(Supabase, LocalStorage) 접근 로직 추상화 및 모듈화.
-- **구조**:
-  - `auth/`: 세션 및 인증 관리.
-  - `user/`: 회원 프로필 및 학습 데이터(DB) 접근.
-  - `guest/`: 게스트 스토리지(LocalStorage) 제어.
-  - `voca.js`: 회원/게스트 통합 업데이트 인터페이스.
+### Layer 1: 프론트엔드 UI 및 스타일 레이어 (`src/ui`)
+사용자 화면 렌더링 및 상태(State) 구독, 라우팅을 관장하는 리액트 레이어입니다.
+*   **`src/ui/app/`**: 애플리케이션의 핵심 엔트리 및 공통 설정을 포함합니다.
+    *   `App.jsx`: 공통 레이아웃 구조화 및 도메인별 4대 독립 컨텍스트 공급자 배치.
+    *   `GlobalStyle.js`: 글로벌 CSS 규칙 선언.
+    *   `router/`: 전체 경로 라우팅 매핑 (`router.jsx`), 로더 및 헬퍼 함수 (`play/`, `user/`).
+*   **`src/ui/common/`**: 공용 UI 부품, 공통 모듈식 레이아웃 및 훅 레이어입니다.
+    *   `components/`: 버튼, 진행바 등 범용 순수 컴포넌트.
+    *   `layout/`: 헤더, 네비게이션 등 메인 골격 레이아웃.
+    *   `hooks/`: UI 전반에 공유되는 리액트 훅 (`useWord.jsx`, `useMyParam.js`, `useTheme.js` 등).
+    *   `setup/`: 온보딩 단계(`StepToNick`, `StepToData`) 전용 컴포넌트.
+*   **`src/ui/services/`**: 도메인별 주요 서비스 화면 및 전용 스타일입니다.
+    *   서비스 디렉토리 하위에 화면 구성 파일과 스타일 파일(`*.styles.js`)을 모듈로 묶어 관리합니다.
+    *   *분류*: `Home/`, `Play/`, `Voca/`, `Settings/`.
 
-### Layer 3: UI & Components (`src/pages`, `src/components`)
-- **역할**: UI 렌더링 및 사용자 인터랙션 처리.
-- **핵심 아키텍처**: 글로벌 `useOutletContext` 전파 방식을 폐기하고, 도메인별로 완벽하게 관심사가 분리된 4종 독립 Context(`VocaContext`, `ProfileContext`, `StatsContext`, `AppContext`)를 `useContext`로 필요한 만큼만 개별 구독합니다. 이로써 불필요한 전체 리렌더링을 차단하고 계층 구조를 최적화합니다.
-- **핵심 훅**:
-  - `useWord.jsx`: 특정 Day의 단어 리스트와 학습 상태(done)를 연결하는 브릿지. (Voca/Stats/AppContext 구독)
+### Layer 2: 비즈니스 공용 API 및 유틸리티 레이어 (`src/common`)
+UI 라이브러리(React)에 의존하지 않고 어디서나 가져다 쓸 수 있는 비즈니스 및 유틸리티 엔진입니다.
+*   **`src/common/api/`**: 데이터 영속성 관리를 위한 추상화 API 레이어 (Facade 패턴).
+    *   `auth/`: 사용자 계정 정보 및 인증/세션 제어.
+    *   `guest/`: 비로그인 사용자를 위한 로컬 저장소(`LocalStorage`) CRUD.
+    *   `user/`: 로그인 사용자를 위한 Supabase 리모트 데이터베이스 CRUD.
+    *   `voca.js`: 회원/게스트 통일 상태 갱신 인터페이스.
+*   **`src/common/utils/`**: 수학적 계산, 난수 셔플 등 순수 알고리즘 헬퍼 함수 (`utils.js` 등).
 
-### Layer 4: Infrastructure & Utils (`src/utils`)
-- **역할**: 저수준 유틸리티(날짜 계산, 배열 셔플 등) 및 외부 라이브러리 설정.
+### Layer 3: 정적 리소스 및 에셋 레이어 (`src/assets`)
+*   **`src/assets/`**: 애플리케이션 전반에서 사용하는 고해상도 SVG 아이콘 집합 (`iconList.jsx`) 및 미디어 파일.
+
+---
 
 ## 2. 핵심 데이터 흐름 (Core Data Flow)
 
@@ -35,7 +43,7 @@ MyVoca는 다음과 같은 4단계 계층 구조로 동작합니다.
 sequenceDiagram
     participant U as User (Guest/Member)
     participant R as Router (Loader)
-    participant A as API Layer (src/api)
+    participant A as API Layer (src/common/api)
     participant D as Data Source (DB/LS)
     participant C as Domain Contexts (useState)
     participant UI as UI Component
@@ -59,16 +67,22 @@ sequenceDiagram
     C-->>D: DB/LS 영속성 데이터 저장 (비동기)
 ```
 
-## 3. 핵심 설계 규칙
-1. **로더 중심 데이터 초기화**: 컴포넌트 내부의 `useEffect` 데이터 패칭을 지양하고, Router Loader에서 필요한 필수 데이터군을 미리 확보하여 최상위 Context 상태의 초기값으로 주입합니다.
-2. **동기식 낙관적 업데이트 & 백그라운드 동기화**: 
-   - 사용자의 클릭(단어 완료, 퀴즈 정답 등) 시 UI 반응 속도 극대화를 위해 UI 상태(`useState`)를 동기적으로 선(先) 반영합니다.
-   - 실제 서버 DB 또는 로컬스토리지 저장은 훅 내부에서 비동기(fire-and-forget)로 백그라운드 실행되어 은닉화됩니다.
-   - 실패 시에는 별도의 UI 롤백 없이 콘솔 에러 로깅 처리하며, 다음 앱 진입(Loader 재실행) 시 서버/스토리지 데이터 기준으로 자동 보정됩니다.
-3. **도메인 Context 기반 관심사 격리**: 단일 거대 Context 대신 관심사별(`VocaContext`, `ProfileContext`, `StatsContext`, `AppContext`)로 쪼개어 특정 도메인의 상태 변화가 다른 도메인을 구독하는 UI 컴포넌트의 무의미한 리렌더링을 유발하지 않도록 설계합니다.
-4. **API 추상화**: UI 컴포넌트는 데이터 소스(DB vs LS)를 직접 알지 못하며, `src/api`에서 제공하는 통합 인터페이스를 사용합니다.
-5. **JSDoc 의무화**: 모든 API와 유틸리티 함수에는 매개변수와 반환 타입을 명시하여 데이터 무결성을 보장합니다.
-6. **순수 함수 지향**: 비즈니스 로직(가공, 필터링 등)은 부수 효과가 없는 순수 함수로 작성하여 `utils` 폴더에서 관리합니다.
-7. **난이도 매핑 제약 조건 (default ↔ 700)**: 프론트엔드의 `"default"` 난이도는 데이터베이스(Supabase) 및 게스트 저장소 템플릿 내의 초급 단어 레벨 번호인 `"700"`과 1:1 매핑됩니다. API 레이어와 Router Loader 레이어는 이 매핑 브릿지를 항상 명확히 유지해야 하며, 키 불일치로 인한 빈 배열 반환 오류를 방지해야 합니다.
-8. **Supabase 대용량 데이터 조회 페이징 (1,000 Limit 우회)**: Supabase JS Client의 기본 select 한도는 1,000개입니다. 3,600개 이상으로 구성된 `Word` 마스터 테이블이나 1,000개 이상의 행이 쌓일 수 있는 `Voca` 유저 학습 정보 테이블을 조회할 때 데이터 유실이 발생하지 않도록, `src/api/common/supabase.js`의 `fetchPages` 페이징 헬퍼 함수를 필수적으로 사용하여 모든 데이터를 완전히 수집하도록 보장합니다.
+---
 
+## 3. 핵심 설계 및 코드 작성 규칙
+
+1.  **로더 중심 데이터 초기화**: 컴포넌트 내부의 `useEffect` 데이터 패칭을 완전히 배제하고, `Router Loader`에서 사전에 필수 데이터를 로드하여 최상위 컨텍스트의 초기값으로 바인딩합니다.
+2.  **동기식 낙관적 업데이트 & 백그라운드 동기화**:
+    *   사용자의 조작(단어 학습 체크, 퀴즈 정답 등) 시 무지연 반응을 제공하기 위해 로컬 뷰 상태를 동기적으로 즉시 선(先) 반영합니다.
+    *   원격/로컬 스토리지에 데이터를 쓰는 비동기 로직은 훅 내에서 백그라운드로 처리(fire-and-forget)됩니다.
+    *   데이터 쓰기 실패 시 콘솔 에러 외에 별도 롤백 처리를 하지 않으며, 추후 로더 재호출 시 자동 보정됩니다.
+3.  **도메인 Context 기반 관심사 분격**: 단일 거대 Context 체계를 탈피하고 관심사별(`VocaContext`, `ProfileContext`, `StatsContext`, `AppContext`)로 독립 구독하도록 설계하여 렌더링 부하를 극대화로 감소시킵니다.
+4.  **UI-로직 철저한 격리 (의존성 단방향화)**:
+    *   `src/common/` 하위 소스 코드는 어떠한 경우에도 `src/ui/` 하위 소스 코드를 참조(import)할 수 없습니다.
+5.  **난이도 매핑 브릿지 규칙**:
+    *   프론트엔드 UI의 초급 난이도 표기인 `"default"`는 Supabase 테이블 및 게스트 템플릿의 단어 레벨 번호인 `"700"`과 1:1로 엄격하게 맵핑됩니다. 임의 변경으로 인한 조회 실패 오류를 철저히 방지해야 합니다.
+6.  **Supabase 페이징 헬퍼 필수 사용**:
+    *   Supabase JS Client의 1,000행 초과 조회 제한을 우회하기 위해, `src/common/api/common/supabase.js`의 `fetchPages` 헬퍼 함수를 반드시 적용하여 3,600개 이상의 마스터 데이터나 누적 유저 통계 정보를 안전하게 수집해야 합니다.
+7.  **JSDoc 및 스타일 분리 규칙**:
+    *   모든 API 및 유틸리티 함수에는 인자 및 반환 타입을 문서화하는 JSDoc을 충실히 작성합니다.
+    *   Styled Component는 반드시 동일 폴더 내의 `[ComponentName].styles.js`로 분리하여 코드의 가독성을 극대화합니다.
