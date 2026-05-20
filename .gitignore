@@ -9,6 +9,7 @@ lerna-debug.log*
 
 # Temp files
 node_modules
+node_modules_old
 dist
 dist-ssr
 *.local
@@ -26,7 +27,4 @@ dist-ssr
 # Secets
 .env
 
-# Only Local
-/backend
-/supabase
-agent.md
+
