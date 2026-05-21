@@ -4,20 +4,14 @@
     <meta charset="utf-8" />
     <title>Single Page Apps for GitHub Pages</title>
     <script type="text/javascript">
-  // Single Page Apps for GitHub Pages (Rafrex) – query string 보존
-  // segmentCount: 레포 디렉터리 단계 수 (1 = /funny-voca)
-  let segmentCount = 1;
-  let l = window.location;
-  // 경로에서 레포 디렉터리 제외 후 남은 부분
-  const originalPath = l.pathname.split("/").slice(1 + segmentCount).join("/");
-  const query = l.search; // ?code=… 등 전체 쿼리 문자열 유지
-  const hash = l.hash;
-  const newUrl =
-    l.protocol + "//" + l.hostname + (l.port ? ":" + l.port : "") +
-    l.pathname.split("/").slice(0, 1 + segmentCount).join("/") +
-    "/?p=" + encodeURIComponent(originalPath) +
-    (query ? query.replace(/&/g, "~and~") : "") +
-    hash;
+  // SPA fallback for GitHub Pages – 경로 보존 (레포 디렉터리 유지)
+  const segmentCount = 1; // /funny-voca
+  const l = window.location;
+  const pathname = l.pathname; // 예: /funny-voca/home
+  const basePath = pathname.split('/').slice(0, 1 + segmentCount).join('/') || '/';
+  const relative = pathname.split('/').slice(1 + segmentCount).join('/');
+  const finalPath = basePath + (relative ? '/' + relative : '');
+  const newUrl = l.protocol + '//' + l.host + finalPath + l.search + l.hash;
   l.replace(newUrl);
 </script>
   </head>
