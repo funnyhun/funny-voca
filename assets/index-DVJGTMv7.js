@@ -395,7 +395,7 @@ ${U}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   &:hover {
     opacity: 0.8;
   }
-`;const mC=async()=>{const{error:t}=await kt.auth.signInWithOAuth({provider:"kakao",options:{redirectTo:window.location.origin,scopes:"",queryParams:{scope:"profile_nickname"}}});t&&console.error("로그인 중 오류 발생:",t.message)},gC=async()=>{const{error:t}=await kt.auth.signOut();t&&console.error("로그아웃 중 오류 발생:",t.message)},pC=({notifications:t=[],onClose:n})=>{const a=s=>{s.type==="sync"&&mC(),n()};return _.jsxs(_.Fragment,{children:[_.jsx(sC,{onClick:n}),_.jsxs(lC,{children:[_.jsx(oC,{children:"알림"}),_.jsx(uC,{children:t.length>0?t.map(s=>_.jsxs(cC,{onClick:()=>a(s),children:[_.jsx(hC,{children:s.title}),_.jsx(dC,{children:s.content})]},s.id)):_.jsx(fC,{children:"새로운 알림이 없습니다."})})]})]})},yC=z.div`
+`;const mC=async()=>{const{error:t}=await kt.auth.signInWithOAuth({provider:"kakao",options:{redirectTo:void 0,scopes:"",queryParams:{scope:"profile_nickname"}}});t&&console.error("로그인 중 오류 발생:",t.message)},gC=async()=>{const{error:t}=await kt.auth.signOut();t&&console.error("로그아웃 중 오류 발생:",t.message)},pC=({notifications:t=[],onClose:n})=>{const a=s=>{s.type==="sync"&&mC(),n()};return _.jsxs(_.Fragment,{children:[_.jsx(sC,{onClick:n}),_.jsxs(lC,{children:[_.jsx(oC,{children:"알림"}),_.jsx(uC,{children:t.length>0?t.map(s=>_.jsxs(cC,{onClick:()=>a(s),children:[_.jsx(hC,{children:s.title}),_.jsx(dC,{children:s.content})]},s.id)):_.jsx(fC,{children:"새로운 알림이 없습니다."})})]})]})},yC=z.div`
   min-width: ${({theme:t})=>t.min_width};
 
   // Navigation + ios-bottom-area
@@ -678,7 +678,7 @@ MyVoca를 시작할까요?`),_.jsxs(RC,{children:[_.jsxs(AC,{children:[_.jsx(CC,
   color: ${({theme:t})=>t.label};
   line-height: 1.8;
   white-space: pre-line;
-`,vv=()=>{const{selected:t}=Fa(),{words:n}=uc(t),{step:a}=uw(),s=Xn(),o=x.useMemo(()=>n.filter(c=>c.done===!1),[n]);return window.location.pathname.includes("/quiz")&&n.length>0&&o.length===0?_.jsx(yv,{children:_.jsxs(mO,{children:[_.jsx("span",{style:{fontSize:"3rem"},children:"🎉"}),_.jsx(gO,{children:"이미 모두 암기했어요!"}),_.jsx(pO,{children:`이 단어장의 모든 단어를
+`,vv=()=>{const{selected:t}=Fa(),{words:n}=uc(t),{step:a}=uw(),s=Xn(),o=x.useMemo(()=>n.filter(c=>c.done===!1),[n]);return!window.location.pathname.includes("/quiz")&&n.length>0&&o.length===0?_.jsx(yv,{children:_.jsxs(mO,{children:[_.jsx("span",{style:{fontSize:"3rem"},children:"🎉"}),_.jsx(gO,{children:"이미 모두 암기했어요!"}),_.jsx(pO,{children:`이 단어장의 모든 단어를
 이미 암기 완료했습니다.`}),_.jsx(on,{label:"단어장으로 돌아가기",color:"main",bg:"brand",onClick:()=>s(`/voca/${t}`)}),_.jsx(on,{label:"홈으로",color:"font",bg:"main",onClick:()=>s("/home")})]})}):_.jsx(yv,{children:_.jsx(x.Suspense,{fallback:_.jsx("div",{children:"불러올 단어가 없습니다."}),children:_.jsx(Wu,{},a)})})},yO=()=>{const{selected:t}=Fa(),{words:n}=uc(t),{step:a,changeStep:s}=uw(),[o,u]=x.useState("word"),{updateStatus:c}=x.useContext(Sa),f=()=>{u(y=>y==="word"?"def":"word")},m=()=>{a!==0&&s(a-1)},g=()=>{const y=n[a];if(y&&c(y.id,!0),a===n.length-1){u("complete");return}s(a+1)},p=()=>{s(0)};return{mode:o,total:n.length,done:a,wordSet:n[a],events:{changeMode:f,prevCard:m,nextCard:g,replayCard:p}}},vO=z.div`
   display: flex;
   flex-direction: column;
