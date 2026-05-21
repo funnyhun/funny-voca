@@ -2,284 +2,133 @@
   {
     "id": "W0001",
     "word": "completely",
-    "definitions": [
-      {
-        "class": "adv",
-        "value": "전적으로, 완전히",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "adv", "value": "전적으로, 완전히", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0002",
     "word": "refuse",
-    "definitions": [
-      {
-        "class": "v",
-        "value": "거절하다",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "v", "value": "거절하다", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0003",
     "word": "temporarily",
-    "definitions": [
-      {
-        "class": "adv",
-        "value": "일시적으로",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "adv", "value": "일시적으로", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0004",
     "word": "dealer",
-    "definitions": [
-      {
-        "class": "n",
-        "value": "판매업자, 상인",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "n", "value": "판매업자, 상인", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0005",
     "word": "bulk",
-    "definitions": [
-      {
-        "class": "adj",
-        "value": "대량의",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "adj", "value": "대량의", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0006",
     "word": "inventory",
-    "definitions": [
-      {
-        "class": "n",
-        "value": "재고품, 재고 목록",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "n", "value": "재고품, 재고 목록", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0007",
     "word": "short",
-    "definitions": [
-      {
-        "class": "adj",
-        "value": "부족한",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "adj", "value": "부족한", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0008",
     "word": "cost",
-    "definitions": [
-      {
-        "class": "n",
-        "value": "비용",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "n", "value": "비용", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0009",
     "word": "selection",
     "definitions": [
-      {
-        "class": "n",
-        "value": "선택된 것, 선정품목",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+      { "class": "n", "value": "선택된 것, 선정품목", "pronounce": "", "audio": "", "exp": "" }
+    ],
+    "done": false
   },
   {
     "id": "W0010",
     "word": "commercial",
     "definitions": [
-      {
-        "class": "adj",
-        "value": "상업의,상업적인",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      },
-      {
-        "class": "n",
-        "value": "광고",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+      { "class": "adj", "value": "상업의,상업적인", "pronounce": "", "audio": "", "exp": "" },
+      { "class": "n", "value": "광고", "pronounce": "", "audio": "", "exp": "" }
+    ],
+    "done": false
   },
   {
     "id": "W0011",
     "word": "order",
     "definitions": [
-      {
-        "class": "v",
-        "value": "주문하다",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      },
-      {
-        "class": "n",
-        "value": "주문, 주문품",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+      { "class": "v", "value": "주문하다", "pronounce": "", "audio": "", "exp": "" },
+      { "class": "n", "value": "주문, 주문품", "pronounce": "", "audio": "", "exp": "" }
+    ],
+    "done": false
   },
   {
     "id": "W0012",
     "word": "provide",
-    "definitions": [
-      {
-        "class": "v",
-        "value": "공급하다, 제공하다",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "v", "value": "공급하다, 제공하다", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0013",
     "word": "contact",
     "definitions": [
-      {
-        "class": "v",
-        "value": "~와 연락하다",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      },
-      {
-        "class": "n",
-        "value": "교섭하고 있는 사람(상업적)",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+      { "class": "v", "value": "~와 연락하다", "pronounce": "", "audio": "", "exp": "" },
+      { "class": "n", "value": "교섭하고 있는 사람(상업적)", "pronounce": "", "audio": "", "exp": "" }
+    ],
+    "done": false
   },
   {
     "id": "W0014",
     "word": "invoice",
-    "definitions": [
-      {
-        "class": "n",
-        "value": "송장",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "n", "value": "송장", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0015",
     "word": "move",
     "definitions": [
-      {
-        "class": "v",
-        "value": "옮기다, 움직이다",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      },
-      {
-        "class": "n",
-        "value": "조치, 수단, 이동, 이사",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+      { "class": "v", "value": "옮기다, 움직이다", "pronounce": "", "audio": "", "exp": "" },
+      { "class": "n", "value": "조치, 수단, 이동, 이사", "pronounce": "", "audio": "", "exp": "" }
+    ],
+    "done": false
   },
   {
     "id": "W0016",
     "word": "supply",
     "definitions": [
-      {
-        "class": "v",
-        "value": "공급하다",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      },
-      {
-        "class": "n",
-        "value": "공급, 비품, 소모품",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+      { "class": "v", "value": "공급하다", "pronounce": "", "audio": "", "exp": "" },
+      { "class": "n", "value": "공급, 비품, 소모품", "pronounce": "", "audio": "", "exp": "" }
+    ],
+    "done": false
   },
   {
     "id": "W0017",
     "word": "discount",
-    "definitions": [
-      {
-        "class": "n",
-        "value": "할인",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "n", "value": "할인", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0018",
     "word": "distribute",
-    "definitions": [
-      {
-        "class": "v",
-        "value": "배포하다, 배급하다",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "v", "value": "배포하다, 배급하다", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0019",
     "word": "acquisition",
-    "definitions": [
-      {
-        "class": "n",
-        "value": "인수, 구입한 것",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "n", "value": "인수, 구입한 것", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0020",
@@ -288,11 +137,12 @@
       {
         "class": "v",
         "value": "~에게 보장하다, ~을 안심시키다, 장담하다",
-        "pronunce": "",
+        "pronounce": "",
         "audio": "",
         "exp": ""
       }
-    ]
+    ],
+    "done": false
   },
   {
     "id": "W0021",
@@ -301,291 +151,144 @@
       {
         "class": "adj",
         "value": "~의 영향을 받기 쉬운, 조건으로 하는",
-        "pronunce": "",
+        "pronounce": "",
         "audio": "",
         "exp": ""
       },
-      {
-        "class": "v",
-        "value": "~에게 (~을) 받게 하다",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+      { "class": "v", "value": "~에게 (~을) 받게 하다", "pronounce": "", "audio": "", "exp": "" }
+    ],
+    "done": false
   },
   {
     "id": "W0022",
     "word": "seek",
-    "definitions": [
-      {
-        "class": "v",
-        "value": "구하다, 찾다",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "v", "value": "구하다, 찾다", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0023",
     "word": "satisfactory",
-    "definitions": [
-      {
-        "class": "adj",
-        "value": "만족스러운",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "adj", "value": "만족스러운", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0024",
     "word": "confirmation",
-    "definitions": [
-      {
-        "class": "n",
-        "value": "확인, 확증",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "n", "value": "확인, 확증", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0025",
     "word": "unable",
-    "definitions": [
-      {
-        "class": "adj",
-        "value": "~할 수 없는",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "adj", "value": "~할 수 없는", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0026",
     "word": "payment",
-    "definitions": [
-      {
-        "class": "n",
-        "value": "지불, 납입",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "n", "value": "지불, 납입", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0027",
     "word": "measure",
     "definitions": [
-      {
-        "class": "n",
-        "value": "대책, 조치, 수단",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      },
-      {
-        "class": "v",
-        "value": "측정하다",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+      { "class": "n", "value": "대책, 조치, 수단", "pronounce": "", "audio": "", "exp": "" },
+      { "class": "v", "value": "측정하다", "pronounce": "", "audio": "", "exp": "" }
+    ],
+    "done": false
   },
   {
     "id": "W0028",
     "word": "bargain",
-    "definitions": [
-      {
-        "class": "n",
-        "value": "특가품, 흥정",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "n", "value": "특가품, 흥정", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0029",
     "word": "stock",
-    "definitions": [
-      {
-        "class": "n",
-        "value": "재고, 주식",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "n", "value": "재고, 주식", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0030",
     "word": "affordability",
     "definitions": [
-      {
-        "class": "n",
-        "value": "감당할 수 있는 비용",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+      { "class": "n", "value": "감당할 수 있는 비용", "pronounce": "", "audio": "", "exp": "" }
+    ],
+    "done": false
   },
   {
     "id": "W0031",
     "word": "clientele",
     "definitions": [
-      {
-        "class": "n",
-        "value": "고객들, 모든 의뢰인",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+      { "class": "n", "value": "고객들, 모든 의뢰인", "pronounce": "", "audio": "", "exp": "" }
+    ],
+    "done": false
   },
   {
     "id": "W0032",
     "word": "acclaim",
-    "definitions": [
-      {
-        "class": "n",
-        "value": "호평, 찬사",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "n", "value": "호평, 찬사", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0033",
     "word": "represent",
-    "definitions": [
-      {
-        "class": "v",
-        "value": "~을 대표하다",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "v", "value": "~을 대표하다", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0034",
     "word": "rating",
-    "definitions": [
-      {
-        "class": "n",
-        "value": "등급, 평가",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "n", "value": "등급, 평가", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0035",
     "word": "encompass",
-    "definitions": [
-      {
-        "class": "v",
-        "value": "포함하다, 둘러싸다",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "v", "value": "포함하다, 둘러싸다", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0036",
     "word": "finalize",
     "definitions": [
-      {
-        "class": "v",
-        "value": "마무리 짓다, 완결하다",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+      { "class": "v", "value": "마무리 짓다, 완결하다", "pronounce": "", "audio": "", "exp": "" }
+    ],
+    "done": false
   },
   {
     "id": "W0037",
     "word": "market",
-    "definitions": [
-      {
-        "class": "n",
-        "value": "시장",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "n", "value": "시장", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0038",
     "word": "retail",
-    "definitions": [
-      {
-        "class": "n",
-        "value": "소매",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "n", "value": "소매", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0039",
     "word": "commodity",
-    "definitions": [
-      {
-        "class": "n",
-        "value": "상품, 산물",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "n", "value": "상품, 산물", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   },
   {
     "id": "W0040",
     "word": "quote",
     "definitions": [
-      {
-        "class": "n",
-        "value": "견적(액)",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      },
-      {
-        "class": "v",
-        "value": "견적을 내다",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+      { "class": "n", "value": "견적(액)", "pronounce": "", "audio": "", "exp": "" },
+      { "class": "v", "value": "견적을 내다", "pronounce": "", "audio": "", "exp": "" }
+    ],
+    "done": false
   },
   {
     "id": "W0041",
     "word": "consignment",
-    "definitions": [
-      {
-        "class": "n",
-        "value": "위탁판매",
-        "pronunce": "",
-        "audio": "",
-        "exp": ""
-      }
-    ]
+    "definitions": [{ "class": "n", "value": "위탁판매", "pronounce": "", "audio": "", "exp": "" }],
+    "done": false
   }
 ]
