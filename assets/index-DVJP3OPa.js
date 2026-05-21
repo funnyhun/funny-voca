@@ -395,7 +395,7 @@ ${U}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   &:hover {
     opacity: 0.8;
   }
-`;const mC=async()=>{const{error:t}=await kt.auth.signInWithOAuth({provider:"kakao",options:{redirectTo:void 0,scopes:"",queryParams:{scope:"profile_nickname"}}});t&&console.error("로그인 중 오류 발생:",t.message)},gC=async()=>{const{error:t}=await kt.auth.signOut();t&&console.error("로그아웃 중 오류 발생:",t.message)},pC=({notifications:t=[],onClose:n})=>{const a=s=>{s.type==="sync"&&mC(),n()};return _.jsxs(_.Fragment,{children:[_.jsx(sC,{onClick:n}),_.jsxs(lC,{children:[_.jsx(oC,{children:"알림"}),_.jsx(uC,{children:t.length>0?t.map(s=>_.jsxs(cC,{onClick:()=>a(s),children:[_.jsx(hC,{children:s.title}),_.jsx(dC,{children:s.content})]},s.id)):_.jsx(fC,{children:"새로운 알림이 없습니다."})})]})]})},yC=z.div`
+`;const mC=async()=>{const{error:t}=await kt.auth.signInWithOAuth({provider:"kakao",options:{redirectTo:"https://funnyhun.github.io/funny-voca",scopes:"",queryParams:{scope:"profile_nickname"}}});t&&console.error("로그인 중 오류 발생:",t.message)},gC=async()=>{const{error:t}=await kt.auth.signOut();t&&console.error("로그아웃 중 오류 발생:",t.message)},pC=({notifications:t=[],onClose:n})=>{const a=s=>{s.type==="sync"&&mC(),n()};return _.jsxs(_.Fragment,{children:[_.jsx(sC,{onClick:n}),_.jsxs(lC,{children:[_.jsx(oC,{children:"알림"}),_.jsx(uC,{children:t.length>0?t.map(s=>_.jsxs(cC,{onClick:()=>a(s),children:[_.jsx(hC,{children:s.title}),_.jsx(dC,{children:s.content})]},s.id)):_.jsx(fC,{children:"새로운 알림이 없습니다."})})]})]})},yC=z.div`
   min-width: ${({theme:t})=>t.min_width};
 
   // Navigation + ios-bottom-area

@@ -4,16 +4,18 @@
     <meta charset="utf-8" />
     <title>Single Page Apps for GitHub Pages</title>
     <script type="text/javascript">
-  // SPA fallback for GitHub Pages – 경로 보존 (레포 디렉터리 유지)
-  const segmentCount = 1; // /funny-voca
-  const l = window.location;
-  const pathname = l.pathname; // 예: /funny-voca/home
-  const basePath = pathname.split('/').slice(0, 1 + segmentCount).join('/') || '/';
-  const relative = pathname.split('/').slice(1 + segmentCount).join('/');
-  const finalPath = basePath + (relative ? '/' + relative : '');
-  const newUrl = l.protocol + '//' + l.host + finalPath + l.search + l.hash;
-  l.replace(newUrl);
-</script>
+      // SPA fallback for GitHub Pages – 경로 보존 (Rafrex 방식)
+      // segmentCount: 레포 디렉터리 단계 수 (1 = /funny-voca)
+      const segmentCount = 1;
+      const l = window.location;
+      // 레포 디렉터리까지 포함한 기본 경로
+      const basePath = l.pathname.split('/').slice(0, 1 + segmentCount).join('/') || '/';
+      // 레포 디렉터리 이후의 경로 (예: home, play/0 등)
+      const remainingPath = l.pathname.split('/').slice(1 + segmentCount).join('/');
+      // 새로운 URL: basePath + '/?p=/' + remainingPath (remainingPath may be empty)
+      const newUrl = l.protocol + '//' + l.host + basePath + '/?p=/' + (remainingPath ? remainingPath : '') + l.search + l.hash;
+      l.replace(newUrl);
+    </script>
   </head>
   <body></body>
 </html>
