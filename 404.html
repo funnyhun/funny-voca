@@ -5,15 +5,27 @@
     <title>Single Page Apps for GitHub Pages</title>
     <script type="text/javascript">
       // SPA fallback for GitHub Pages – 경로 보존 (Rafrex 방식)
-      // segmentCount: 레포 디렉터리 단계 수 (1 = /funny-voca)
-      const segmentCount = 1;
       const l = window.location;
+      
+      // github.io 호스팅 도메인인 경우 서브디렉토리 단계 수(1)를 갖고, 그 외(커스텀 도메인/로컬)는 0단계
+      const isGithubIo = l.hostname.endsWith('github.io');
+      const segmentCount = isGithubIo ? 1 : 0;
+      
       // 레포 디렉터리까지 포함한 기본 경로
       const basePath = l.pathname.split('/').slice(0, 1 + segmentCount).join('/') || '/';
       // 레포 디렉터리 이후의 경로 (예: home, play/0 등)
       const remainingPath = l.pathname.split('/').slice(1 + segmentCount).join('/');
-      // 새로운 URL: basePath + '/?p=/' + remainingPath (remainingPath may be empty)
-      const newUrl = l.protocol + '//' + l.host + basePath + '/?p=/' + (remainingPath ? remainingPath : '') + l.search + l.hash;
+      
+      // 쿼리 스트링 내의 '&'를 '~and~'로 안전하게 치환하여 유실 방지
+      const search = l.search.slice(1).replace(/&/g, '~and~');
+      
+      // 새로운 URL: basePath + '/?p=/' + remainingPath + (search ? '&q=' + search : '') + l.hash
+      const cleanBasePath = basePath.endsWith('/') ? basePath.slice(0, -1) : basePath;
+      const newUrl = l.protocol + '//' + l.host + cleanBasePath + '/?p=/' + 
+        (remainingPath ? remainingPath : '') + 
+        (search ? '&q=' + search : '') + 
+        l.hash;
+        
       l.replace(newUrl);
     </script>
   </head>
