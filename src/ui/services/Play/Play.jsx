@@ -23,7 +23,7 @@ export const Play = () => {
 
   // 퀴즈 진입 시 모든 단어가 이미 암기 완료인 경우
   const isQuizRoute = window.location.pathname.includes("/quiz");
-  if (isQuizRoute && words.length > 0 && remainingQuizs.length === 0) {
+  if (!isQuizRoute && words.length > 0 && remainingQuizs.length === 0) {
     return (
       <Wrapper>
         <AllDoneWrapper>

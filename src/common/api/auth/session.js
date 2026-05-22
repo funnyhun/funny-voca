@@ -5,18 +5,29 @@ import { supabase } from "@/common/api/common/supabase";
  * @returns {Promise<Object|null>} Supabase 세션 객체 또는 null
  * @description Supabase auth.getSession()의 래퍼 함수입니다.
  */
+let _cachedSession = null;
+let _inflightPromise = null;
+
 export const getSession = async () => {
-  try {
-    const { data: { session }, error } = await supabase.auth.getSession();
-    if (error) {
-      console.error("[API/Auth] Get Session Error:", error.message);
-      return null;
-    }
-    return session;
-  } catch (err) {
-    console.error("[API/Auth] Critical Session Error:", err);
-    return null;
-  }
+  // 캐시가 있으면 바로 반환
+  if (_cachedSession) return _cachedSession;
+  // 진행 중인 요청이 있으면 동일 프라미스 재사용
+  if (_inflightPromise) return _inflightPromise;
+
+  _inflightPromise = supabase.auth.getSession()
+    .then(({ data: { session }, error }) => {
+      if (error) {
+        console.error("[API/Auth] Get Session Error:", error.message);
+        return null;
+      }
+      _cachedSession = session;
+      return session;
+    })
+    .finally(() => {
+      _inflightPromise = null;
+    });
+
+  return _inflightPromise;
 };
 
 /**
@@ -38,5 +49,12 @@ export const checkIsGuest = () => {
   } catch (err) {
     return true;
   }
+};
+
+/**
+ * 세션 캐시를 초기화합니다. 로그아웃 시 호출됩니다.
+ */
+export const clearSessionCache = () => {
+  _cachedSession = null;
 };
 

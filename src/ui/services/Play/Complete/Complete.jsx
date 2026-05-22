@@ -14,7 +14,7 @@ export const Complete = ({ replayCard }) => {
     recordSession();
   }, [recordSession]);
 
-  const navigateQuiz = () => navigate(`/play/${selected}/quiz/0`);
+  const navigateQuiz = () => navigate(`/quiz/${selected}`);
 
   return (
     <Wrapper>
