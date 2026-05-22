@@ -3,11 +3,10 @@ import styled from "styled-components";
 export const Wrapper = styled.div`
   min-width: ${({ theme }) => theme.min_width};
 
-  // Navigation + ios-bottom-area
-  height: calc(100vh - env(safe-area-inset-bottom));
+  height: 100dvh;
 
-  padding-top: calc(env(safe-area-inset-top) + 1rem);
-  padding-bottom: 1rem;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 1rem);
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
   padding-left: 1rem;
   padding-right: 1rem;
   background-color: ${({ theme }) => theme.background};

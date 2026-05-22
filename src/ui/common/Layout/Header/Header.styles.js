@@ -10,9 +10,9 @@ export const Wrapper = styled.div`
   max-width: ${({ theme }) => theme.max_width};
   min-width: ${({ theme }) => theme.min_width};
   width: 100%;
-  height: calc(2.8rem + env(safe-area-inset-top));
+  height: calc(2.8rem + env(safe-area-inset-top, 0px));
 
-  padding-top: calc(env(safe-area-inset-top) - 0.5rem);
+  padding-top: env(safe-area-inset-top, 0px);
   padding-left: 1rem;
   padding-right: 1rem;
 

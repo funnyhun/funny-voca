@@ -27,6 +27,8 @@ export const GlobalStyle = createGlobalStyle`
   html, body, #root {
     height: 100%;
     width: 100%;
+    /* iOS PWA 스크롤 흔들림/바운스 방지 */
+    overscroll-behavior-y: none;
     /* 스크롤바 숨김은 여기서 한 번만 */
     overflow: overlay; 
     -ms-overflow-style: none;

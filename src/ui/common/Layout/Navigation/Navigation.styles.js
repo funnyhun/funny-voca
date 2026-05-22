@@ -10,14 +10,14 @@ export const Wrapper = styled.ul`
   max-width: ${({ theme }) => theme.max_width};
   min-width: ${({ theme }) => theme.min_width};
   width: 100%;
-  height: calc(3.5rem + env(safe-area-inset-bottom));
+  height: calc(3.5rem + env(safe-area-inset-bottom, 0px));
   background-color: ${({ theme }) => theme.main};
 
   display: flex;
   align-items: center;
   justify-content: space-around;
 
-  padding-bottom: env(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
   margin: 0 auto;
 `;
 
