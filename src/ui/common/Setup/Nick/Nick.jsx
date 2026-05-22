@@ -29,7 +29,7 @@ export const Nick = () => {
           <S.CustomHiIcon />
         </S.Greet>
         <S.Content>
-          나만의 단어장 MyVoca를 시작하기전,
+          나만의 단어장 funny-voca를 시작하기전,
           <br />
           멋진 닉네임을 정해주세요.
         </S.Content>

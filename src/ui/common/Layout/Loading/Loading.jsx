@@ -4,7 +4,7 @@ export const Loading = () => {
   return (
     <S.Wrapper>
       <S.ColorBrandIcon />
-      <S.Title>MyVoca</S.Title>
+      <S.Title>funny-voca</S.Title>
     </S.Wrapper>
   );
 };

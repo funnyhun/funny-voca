@@ -1,7 +1,7 @@
 {
-  "name": "MyVoca",
-  "short_name": "MyVoca",
-  "start_url": "/MyVoca",
+  "name": "funny-voca",
+  "short_name": "funny-voca",
+  "start_url": "/funny-voca/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#F6F7F8",
@@ -10,6 +10,18 @@
       "src": "./favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml"
+    },
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }

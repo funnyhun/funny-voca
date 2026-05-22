@@ -36,7 +36,7 @@ export const Data = () => {
     content = `${nick} 님에게 맞는 레벨을 선택해\n맞춤 단어장을 구성해보세요.`;
   } else if (status === 100) {
     greet = "나만의 단어장을\n완성했어요 !";
-    content = `${nick} 님의 맞춤 단어장을 완성했어요.\nMyVoca를 시작할까요?`;
+    content = `${nick} 님의 맞춤 단어장을 완성했어요.\nfunny-voca를 시작할까요?`;
   }
 
   return (

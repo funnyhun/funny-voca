@@ -13,7 +13,7 @@ export const Header = ({ notifications }) => {
   return (
     <>
       <S.Wrapper>
-        <S.Title onClick={navHome}>MyVoca</S.Title>
+        <S.Title onClick={navHome}>funny-voca</S.Title>
         <S.RightSection>
           <S.NotificationBtn $hasUnread={notifications?.length > 0} onClick={toggleNoti} />
         </S.RightSection>
