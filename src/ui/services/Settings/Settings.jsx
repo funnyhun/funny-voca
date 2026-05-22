@@ -34,24 +34,30 @@ export const Settings = () => {
       clearStorage();
     } else {
       await signOut();
-      removeStorage(KEYS.NICK);
+      clearStorage();
     }
     window.location.href = "/";
   };
 
-  const handleLevelChange = (newLevel) => {
+  const handleLevelChange = async (newLevel) => {
     if (userData?.level === newLevel) return;
     const confirmed = window.confirm(
-      "학습 난이도를 변경하시겠습니까?\n이전 난이도의 학습 상태는 유지됩니다."
+      "학습 난이도를 변경하시겠습니까?\n\n이전 난이도의 학습 진행 상황은 모두 삭제되고\n선택한 난이도를 기준으로 학습 데이터가 재설정됩니다.\n\n이 작업은 되돌릴 수 없습니다."
     );
     if (!confirmed) return;
 
-    const currentLocal = getStorage(KEYS.USER_DATA) || {};
-    currentLocal.level = newLevel;
-    setStorage(KEYS.USER_DATA, currentLocal);
-    
-    // 새로고침하여 데이터 리로드
-    window.location.href = "/";
+    setResetting(true);
+    setResetProgress(30);
+
+    try {
+      await resetVoca(newLevel);
+      setResetProgress(100);
+      window.location.href = "/";
+    } catch (err) {
+      console.error("난이도 변경 실패:", err);
+      alert("난이도 변경 중 오류가 발생했습니다. 다시 시도해주세요.");
+      setResetting(false);
+    }
   };
 
   const handleReset = async () => {

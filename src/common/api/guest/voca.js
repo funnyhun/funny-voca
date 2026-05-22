@@ -20,33 +20,49 @@ export const postVoca = async (level) => {
       return null;
     }
 
-    const tempMaps = {};
+    // 2. 레벨별 누적 단어 그룹 정의
+    const levelGroups = {
+      default: words.filter(w => String(w.level) === "0" || String(w.level) === "700"),
+      "800": words.filter(w => String(w.level) === "0" || String(w.level) === "700" || String(w.level) === "800"),
+      "900": words.filter(w => String(w.level) === "0" || String(w.level) === "700" || String(w.level) === "800" || String(w.level) === "900")
+    };
 
-    // 2. Level 및 Category별 그룹화
-    words.forEach(w => {
-      let levelStr = String(w.level);
-      if (levelStr === "0" || levelStr === "700") levelStr = "default";
-
-      if (!tempMaps[levelStr]) tempMaps[levelStr] = {};
-
-      const catName = w.category || "기타";
-      if (!tempMaps[levelStr][catName]) {
-        tempMaps[levelStr][catName] = {
-          category: catName,
-          day: w.day || 1,
-          word: [],
-          length: 0
-        };
-      }
-
-      tempMaps[levelStr][catName].word.push(w.word_id);
-      tempMaps[levelStr][catName].length++;
-    });
-
-    // 3. Dense Array로 변환 및 정렬
     const wordMaps = {};
-    Object.keys(tempMaps).forEach(l => {
-      const categories = Object.values(tempMaps[l]);
+
+    // 3. 각 레벨 내에서 카테고리별 그룹화 및 Day 오프셋 처리
+    Object.keys(levelGroups).forEach(l => {
+      const groupWords = levelGroups[l];
+      const tempMap = {};
+
+      groupWords.forEach(w => {
+        let offset = 0;
+        const levelVal = String(w.level);
+        if (levelVal === "800") {
+          offset = 30;
+        } else if (levelVal === "900") {
+          offset = 60;
+        }
+
+        const actualDay = (w.day || 1) + offset;
+        const catName = w.category || "기타";
+        // 실제 day 번호와 카테고리 이름을 조합해 키값으로 사용
+        const key = `${actualDay}_${catName}`;
+
+        if (!tempMap[key]) {
+          tempMap[key] = {
+            category: catName,
+            day: actualDay,
+            word: [],
+            length: 0
+          };
+        }
+
+        tempMap[key].word.push(w.word_id);
+        tempMap[key].length++;
+      });
+
+      // 정렬 및 맵 구성
+      const categories = Object.values(tempMap);
       categories.sort((a, b) => (a.day - b.day) || a.category.localeCompare(b.category));
 
       wordMaps[l] = categories.map((c, idx) => ({

@@ -16,7 +16,6 @@ export const useVoca = (initialWordMap = [], initialStatusMap = {}) => {
   const [wordMap, setWordMap] = useState(initialWordMap);
   const [wordStatusMap, setWordStatusMap] = useState(initialStatusMap);
 
-  console.log(wordMap);
   const updateStatus = (wordId, status) => {
     // 1. 즉시 로컬 상태 변경 (낙관적 업데이트)
     setWordStatusMap(prev => {
@@ -56,10 +55,15 @@ export const useVoca = (initialWordMap = [], initialStatusMap = {}) => {
     removeStorage(KEYS.WORD_MAP);
     removeStorage(KEYS.USER_DATA);
 
+    let result;
     if (session) {
-      await uPost(session.user.id, level);
+      result = await uPost(session.user.id, level);
     } else {
-      await gPost(level);
+      result = await gPost(level);
+    }
+
+    if (!result) {
+      throw new Error("학습 데이터를 재배정하는 중 오류가 발생했습니다.");
     }
   };
 
