@@ -277,7 +277,8 @@ ${N}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   max-width: ${({theme:t})=>t.max_width};
   min-width: ${({theme:t})=>t.min_width};
   width: 100%;
-  height: calc(3.5rem + var(--sab));
+  min-height: 3.5rem;
+  height: auto;
   background-color: ${({theme:t})=>t.main};
 
   display: flex;
