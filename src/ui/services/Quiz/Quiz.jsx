@@ -8,6 +8,7 @@ import { shuffleArray } from "@/common/utils/utils";
 import { ProgressBar } from "./ProgressBar";
 import { Pannel } from "./Pannel";
 import { Complete } from "./Complete";
+import { Skeleton } from "@/ui/common";
 
 import { SpellingQuiz } from "./types/SpellingQuiz";
 import { POSQuiz } from "./types/POSQuiz";
@@ -81,10 +82,25 @@ export const Quiz = () => {
     return words.find((w) => w.id === currentId);
   }, [session, words]);
 
-  if (loading || !words) {
+  if (loading || !words || words.length === 0) {
     return (
-      <S.Wrapper style={{ justifyContent: "center", alignItems: "center" }}>
-        <div>단어 정보를 불러오는 중입니다...</div>
+      <S.Wrapper style={{ padding: "20px" }}>
+        <div style={{ width: "100%", marginBottom: "20px" }}>
+          <Skeleton height="12px" width="100%" />
+          <div style={{ display: "flex", justifyContent: "center", marginTop: "12px" }}>
+            <Skeleton height="20px" width="200px" />
+          </div>
+        </div>
+        
+        <S.Content style={{ display: "flex", flexDirection: "column", gap: "1.5rem", alignItems: "center", padding: "40px 20px" }}>
+          <Skeleton height="24px" width="150px" />
+          <Skeleton height="60px" width="100%" />
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", width: "100%", marginTop: "20px" }}>
+            <Skeleton height="50px" width="100%" />
+            <Skeleton height="50px" width="100%" />
+            <Skeleton height="50px" width="100%" />
+          </div>
+        </S.Content>
       </S.Wrapper>
     );
   }

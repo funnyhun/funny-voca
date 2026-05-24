@@ -6,7 +6,7 @@ import { loadQuiz } from "@/ui/app/router/quiz";
 
 import { App } from "@/ui/app/App";
 
-import { Setup as Onboard, Nick, Data } from "@/ui/common";
+import { Setup as Onboard, Nick, Data, Spinner, Loading, AppFallback } from "@/ui/common";
 
 import { Home } from "@/ui/services/Home/Home";
 import { Play, Card } from "@/ui/services/Play";
@@ -89,7 +89,7 @@ const routes = [
   {
     path: "/",
     element: <App />,
-    hydrateFallbackElement: <></>,
+    hydrateFallbackElement: <AppFallback />,
     loader: loadUserData,
     name: "App",
     children: pages,

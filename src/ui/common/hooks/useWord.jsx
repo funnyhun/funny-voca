@@ -39,6 +39,10 @@ export const useWord = (selected) => {
   }, [wordMap, idx, wordData, wordStatusMap]);
 
 
-  return { words };
+  const loading = useMemo(() => {
+    return !wordMap || wordMap.length === 0 || !wordData || Object.keys(wordData).length === 0;
+  }, [wordMap, wordData]);
+
+  return { words, loading };
 };
 

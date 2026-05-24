@@ -3,6 +3,7 @@ import { useState, useMemo, useCallback } from "react";
 
 import { useSelected } from "@/ui/common/hooks/useMyParam";
 import { useWord } from "@/ui/common/hooks/useWord";
+import { Skeleton } from "@/ui/common";
 
 import { Item } from "../Item";
 import { Search } from "../Search";
@@ -14,7 +15,7 @@ import { FILTER_SET, FILTER_TYPE } from "../utils/filter";
 
 export const List = () => {
   const { selected } = useSelected();
-  const { words = [] } = useWord(selected);
+  const { words = [], loading } = useWord(selected);
 
   const [filterType, setFilterType] = useState(FILTER_TYPE[0]);
   const [keyword, setKeyword] = useState("");
@@ -40,6 +41,15 @@ export const List = () => {
   }, [words, filterType, keyword]);
 
   const renderContentUI = useCallback(() => {
+    if (loading) {
+      return Array.from({ length: 5 }).map((_, i) => (
+        <div key={i} style={{ display: "flex", flexDirection: "column", gap: "0.5rem", padding: "1.25rem", borderBottom: "1px solid rgba(0,0,0,0.05)" }}>
+          <Skeleton height="20px" width="120px" />
+          <Skeleton height="16px" width="200px" />
+        </div>
+      ));
+    }
+
     if (words.length === 0) return <Empty />;
 
     if (filteredWords.length === 0) return <NoResult />;
@@ -47,7 +57,7 @@ export const List = () => {
     return filteredWords.map((word) => {
       return <Item word={word} key={word.id} />;
     });
-  }, [words, filteredWords]);
+  }, [loading, words, filteredWords]);
 
   return (
     <S.Wrapper>

@@ -25,7 +25,7 @@ export const Data = () => {
   };
 
   const startApp = () => {
-    navigate("/home");
+    window.location.href = "/";
   };
 
   let greet = "나만의 단어장을\n만드는 중...";
