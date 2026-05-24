@@ -70,8 +70,7 @@ ${N}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   max-width: ${({theme:t})=>t.max_width};
   margin: 0 auto;
 `,UA=z.div`
-  // Navigation + ios-bottom-area
-  height: calc(100vh - 3.5rem - env(safe-area-inset-bottom));
+  height: 100dvh;
 
   background-color: ${({theme:t})=>t.background};
 
@@ -79,7 +78,8 @@ ${N}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   flex-direction: column;
   gap: 0.5rem;
 
-  padding-top: calc(2.8rem + env(safe-area-inset-top));
+  padding-top: calc(2.8rem + var(--sat));
+  padding-bottom: calc(3.5rem + var(--sab));
   margin: 0 auto;
 
   overflow-y: auto;
@@ -217,9 +217,9 @@ ${N}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   max-width: ${({theme:t})=>t.max_width};
   min-width: ${({theme:t})=>t.min_width};
   width: 100%;
-  height: calc(2.8rem + env(safe-area-inset-top));
+  height: calc(2.8rem + var(--sat));
 
-  padding-top: calc(env(safe-area-inset-top) - 0.5rem);
+  padding-top: var(--sat);
   padding-left: 1rem;
   padding-right: 1rem;
 
@@ -277,14 +277,14 @@ ${N}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   max-width: ${({theme:t})=>t.max_width};
   min-width: ${({theme:t})=>t.min_width};
   width: 100%;
-  height: calc(3.5rem + env(safe-area-inset-bottom));
+  height: calc(3.5rem + var(--sab));
   background-color: ${({theme:t})=>t.main};
 
   display: flex;
   align-items: center;
   justify-content: space-around;
 
-  padding-bottom: env(safe-area-inset-bottom);
+  padding-bottom: var(--sab);
   margin: 0 auto;
 `,oC=z.li`
   display: flex;
@@ -398,13 +398,9 @@ ${N}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
 `;const vC=async()=>{const{error:t}=await kt.auth.signInWithOAuth({provider:"kakao",options:{redirectTo:"https://funnyhun.github.io/funny-voca",scopes:"",queryParams:{scope:"profile_nickname"}}});t&&console.error("로그인 중 오류 발생:",t.message)},bC=async()=>{const{error:t}=await kt.auth.signOut();t&&console.error("로그아웃 중 오류 발생:",t.message),cR()},wC=({notifications:t=[],onClose:n})=>{const a=s=>{s.type==="sync"&&vC(),n()};return S.jsxs(S.Fragment,{children:[S.jsx(cC,{onClick:n}),S.jsxs(hC,{children:[S.jsx(dC,{children:"알림"}),S.jsx(fC,{children:t.length>0?t.map(s=>S.jsxs(mC,{onClick:()=>a(s),children:[S.jsx(gC,{children:s.title}),S.jsx(pC,{children:s.content})]},s.id)):S.jsx(yC,{children:"새로운 알림이 없습니다."})})]})]})},SC=z.div`
   min-width: ${({theme:t})=>t.min_width};
 
-  // Navigation + ios-bottom-area
-  height: calc(100vh - env(safe-area-inset-bottom));
+  height: 100%;
 
-  padding-top: calc(env(safe-area-inset-top) + 1rem);
-  padding-bottom: 1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding: 1rem;
   background-color: ${({theme:t})=>t.background};
 
   display: flex;
@@ -1289,6 +1285,10 @@ funny-voca를 시작할까요?`),S.jsxs(jC,{children:[S.jsxs(kC,{children:[S.jsx
     --font-color: ${({theme:t})=>t.font};
     --sub-color: ${({theme:t})=>t.sub};
     
+    /* iOS PWA Safe Area 변수 일원화 */
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
+    
     font-size: 14px;
     font-family: 'Noto Sans', sans-serif;
   }
@@ -1309,6 +1309,8 @@ funny-voca를 시작할까요?`),S.jsxs(jC,{children:[S.jsxs(kC,{children:[S.jsx
   html, body, #root {
     height: 100%;
     width: 100%;
+    /* iOS PWA 스크롤 흔들림/바운스 방지 */
+    overscroll-behavior-y: none;
     /* 스크롤바 숨김은 여기서 한 번만 */
     overflow: overlay; 
     -ms-overflow-style: none;

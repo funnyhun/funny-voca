@@ -1,6 +1,6 @@
 {
-  "name": "funny-voca",
-  "short_name": "funny-voca",
+  "name": "FunnyVoca",
+  "short_name": "FunnyVoca",
   "start_url": "/funny-voca/",
   "display": "standalone",
   "background_color": "#ffffff",
