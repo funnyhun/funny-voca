@@ -2,7 +2,7 @@ import * as S from "./Data.styles";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { ProgressBar, VerticalButton } from "@/ui/common";
+import { ProgressBar, VerticalButton, Spinner } from "@/ui/common";
 import { useVoca } from "@/ui/common/hooks/useVoca";
 import { getStorage, KEYS } from "@/common/api/util/storage";
 
@@ -12,6 +12,7 @@ export const Data = () => {
   const nick = getStorage(KEYS.NICK);
 
   const [status, setStatus] = useState(-1);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   const handleSelectLevel = async (level) => {
     try {
@@ -25,7 +26,8 @@ export const Data = () => {
   };
 
   const startApp = () => {
-    window.location.href = "/";
+    setIsNavigating(true);
+    navigate("/", { state: { fromOnboarding: true } });
   };
 
   let greet = "나만의 단어장을\n만드는 중...";
@@ -40,7 +42,9 @@ export const Data = () => {
   }
 
   return (
-    <S.Wrapper>
+    <>
+      {isNavigating && <Spinner fullScreen message="데이터를 구성하고 있습니다..." />}
+      <S.Wrapper>
       <S.Header>
         <S.Image />
         <S.Greet>{greet}</S.Greet>
@@ -67,5 +71,6 @@ export const Data = () => {
 
       {status === 100 && <VerticalButton label="다음으로" color="main" bg="brand" onClick={startApp} />}
     </S.Wrapper>
+    </>
   );
 };

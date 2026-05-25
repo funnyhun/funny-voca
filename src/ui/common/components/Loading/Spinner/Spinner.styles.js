@@ -1,27 +1,16 @@
-import styled, { keyframes } from "styled-components";
-
-const spin = keyframes`
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-`;
+import styled from "styled-components";
 
 export const Overlay = styled.div`
   ${({ $fullScreen }) =>
     $fullScreen
       ? `
         position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        inset: 0;
         z-index: 9999;
-        background: rgba(0, 0, 0, 0.25);
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
+        background-color: rgba(15, 23, 42, 0.4);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        color: white;
       `
       : `
         position: relative;
@@ -29,28 +18,45 @@ export const Overlay = styled.div`
         height: 100%;
         min-height: 150px;
         background: transparent;
+        color: ${({ theme }) => theme.font};
       `}
   
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
-`;
-
-export const Circle = styled.div`
-  width: ${({ $size }) => $size || "48px"};
-  height: ${({ $size }) => $size || "48px"};
-  border: 4px solid ${({ theme }) => theme.sub || "#ccc"};
-  border-top: 4px solid ${({ theme }) => theme.brand || "#137FEC"};
-  border-radius: 50%;
-  animation: ${spin} 0.8s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  gap: 1.2rem;
+  font-weight: 600;
+  font-size: 1rem;
 `;
 
 export const Message = styled.span`
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: ${({ theme }) => theme.font};
-  opacity: 0.8;
+  font-size: 1rem;
+  font-weight: 600;
   letter-spacing: -0.02rem;
+  opacity: 0.95;
+  text-align: center;
 `;
+
+export const ProgressBar = styled.div`
+  width: 200px;
+  height: 8px;
+  background-color: ${({ $fullScreen }) => ($fullScreen ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.1)")};
+  border-radius: 4px;
+  overflow: hidden;
+`;
+
+export const ProgressFill = styled.div`
+  height: 100%;
+  width: ${({ $value }) => $value}%;
+  background-color: ${({ $fullScreen, theme }) => ($fullScreen ? "white" : theme.brand || "#137FEC")};
+  transition: width 0.2s ease;
+  border-radius: 4px;
+`;
+
+export const PercentText = styled.span`
+  font-size: 0.9rem;
+  opacity: 0.8;
+  font-variant-numeric: tabular-nums;
+`;
+

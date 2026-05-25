@@ -1,7 +1,8 @@
 import * as S from "./Settings.styles";
-import { Button } from "@/ui/common";
+import { Button, Spinner } from "@/ui/common";
 import { signOut } from "@/common/api/auth/actions";
 import { useContext, useState } from "react";
+import { useNavigate, useRevalidator } from "react-router-dom";
 import { ProfileContext, StatsContext, VocaContext } from "@/ui/app/App";
 import { checkIsGuest } from "@/common/api/auth/session";
 import { 
@@ -20,6 +21,8 @@ export const Settings = () => {
   const { resetVoca } = useContext(VocaContext);
 
   const isGuest = checkIsGuest();
+  const navigate = useNavigate();
+  const revalidator = useRevalidator();
 
 
   const handleLogout = async () => {
@@ -36,7 +39,7 @@ export const Settings = () => {
       await signOut();
       clearStorage();
     }
-    window.location.href = "/";
+    navigate("/onboard");
   };
 
   const handleLevelChange = async (newLevel) => {
@@ -52,7 +55,8 @@ export const Settings = () => {
     try {
       await resetVoca(newLevel);
       setResetProgress(100);
-      window.location.href = "/";
+      revalidator.revalidate();
+      navigate("/home");
     } catch (err) {
       console.error("난이도 변경 실패:", err);
       alert("난이도 변경 중 오류가 발생했습니다. 다시 시도해주세요.");
@@ -62,7 +66,7 @@ export const Settings = () => {
 
   const handleReset = async () => {
     const confirmed = window.confirm(
-      "⚠️ 학습 데이터를 완전히 초기화할까요?\n\n진행률, 단어 배정이 모두 삭제되고\n새로운 단어 배정이 시작됩니다.\n\n이 작업은 되돌릴 수 없습니다."
+      "학습 데이터를 완전히 초기화할까요?\n\n진행률, 단어 배정이 모두 삭제되고\n새로운 단어 배정이 시작됩니다.\n\n이 작업은 되돌릴 수 없습니다."
     );
     if (!confirmed) return;
 
@@ -77,7 +81,8 @@ export const Settings = () => {
     try {
       await resetVoca(userData?.level || "default");
       setResetProgress(100);
-      window.location.href = "/";
+      revalidator.revalidate();
+      navigate("/home");
     } catch (err) {
       console.error("초기화 실패:", err);
       alert("초기화 중 오류가 발생했습니다. 다시 시도해주세요.");
@@ -89,13 +94,11 @@ export const Settings = () => {
   return (
     <>
       {resetting && (
-        <S.LoadingOverlay>
-          <span>학습 데이터 초기화 중...</span>
-          <S.ProgressBar>
-            <S.ProgressFill $value={resetProgress} />
-          </S.ProgressBar>
-          <span style={{ fontSize: "0.9rem", opacity: 0.7 }}>{resetProgress}%</span>
-        </S.LoadingOverlay>
+        <Spinner
+          fullScreen
+          message="학습 데이터 초기화 중..."
+          status={resetProgress}
+        />
       )}
       <S.Wrapper>
         <S.Section>

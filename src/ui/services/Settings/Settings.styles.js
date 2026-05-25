@@ -58,33 +58,4 @@ export const LevelButton = styled.button`
   transition: all 0.2s;
 `;
 
-export const LoadingOverlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  z-index: 9999;
-  color: white;
-  font-weight: 600;
-  font-size: 1rem;
-`;
 
-export const ProgressBar = styled.div`
-  width: 200px;
-  height: 8px;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-  overflow: hidden;
-`;
-
-export const ProgressFill = styled.div`
-  height: 100%;
-  width: ${({ $value }) => $value}%;
-  background-color: white;
-  transition: width 0.2s ease;
-  border-radius: 4px;
-`;
