@@ -55,6 +55,5 @@ export const Content = styled.div`
 
 export const MoreButton = styled(MoreVIcon)`
   margin-left: auto;
-  cursor: pointer;
   flex-shrink: 0;
 `;

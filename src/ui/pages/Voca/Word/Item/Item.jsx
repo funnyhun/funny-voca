@@ -3,6 +3,7 @@ import { useState, useContext } from "react";
 
 import { VocaContext } from "@/ui/app/App";
 import { Detail } from "../Detail";
+import { clickableProps } from "@/utils/accessibility";
 
 export const Item = ({ word }) => {
   const { word: label, definitions, done, id } = word;
@@ -16,14 +17,14 @@ export const Item = ({ word }) => {
   return (
     <>
       <S.Wrapper>
-        <S.Status $status={done} onClick={handleToggle} style={{ cursor: "pointer" }}>
+        <S.Status $status={done} {...clickableProps(handleToggle)}>
           {done ? <S.CompleteIcon /> : <S.InCompleteIcon />}
         </S.Status>
         <S.Content>
           <S.Label>{label}</S.Label>
           <S.Explain>{`${definitions[0].class}.${definitions[0].value}`}</S.Explain>
         </S.Content>
-        <S.MoreButton onClick={() => setShowDetail(true)} />
+        <S.MoreButton {...clickableProps(() => setShowDetail(true))} />
       </S.Wrapper>
       {showDetail && <Detail word={word} onClose={() => setShowDetail(false)} />}
     </>

@@ -60,7 +60,29 @@ export const GlobalStyle = createGlobalStyle`
     background: none;
   }
 
-  button { cursor: pointer; }
+  button,
+  [role="button"] {
+    cursor: pointer;
+  }
+
+  [role="button"] {
+    user-select: none;
+    transition: opacity 0.2s ease, transform 0.1s ease;
+
+    &:hover {
+      opacity: 0.85;
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+
+    &:focus-visible {
+      outline: 2px solid ${({ theme }) => theme.brand || "var(--sub-color)"};
+      outline-offset: 2px;
+    }
+  }
+
   ul, ol { list-style: none; }
   a { text-decoration: none; color: inherit; }
 
