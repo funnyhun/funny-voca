@@ -71,7 +71,7 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   margin: 0 auto;
 
   height: 100dvh;
-  background-color: ${({theme:t})=>t.background};
+  background-color: blue;
 `,FA=N.div`
   width: 100%;
   height: 100%;
