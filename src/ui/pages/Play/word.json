@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Appliance",
+    "value": "가전제품, 기구",
+    "class": "n",
+    "exp": "The broken appliance requires immediate repair."
+  },
+  {
+    "name": "Dispose of",
+    "value": "~을 처분하다, 버리다",
+    "class": "v",
+    "exp": "Please dispose of the food waste properly."
+  },
+  { "name": "Utensil", "value": "식기, 도구", "class": "n", "exp": "Put the used utensils in the basket." },
+  {
+    "name": "Stock",
+    "value": "재고를 채우다",
+    "class": "v",
+    "exp": "We need to stock the refrigerator every morning."
+  },
+  {
+    "name": "Countertop",
+    "value": "조리대, 상판",
+    "class": "n",
+    "exp": "Wipe down the countertop after use."
+  },
+  {
+    "name": "Inventory",
+    "value": "재고 목록, 재고 조사",
+    "class": "n",
+    "exp": "The monthly inventory includes kitchen supplies."
+  },
+  {
+    "name": "Maintenance",
+    "value": "유지보수, 관리",
+    "class": "n",
+    "exp": "Building maintenance is scheduled for Tuesday."
+  },
+  {
+    "name": "Separate",
+    "value": "분리하다",
+    "class": "v",
+    "exp": "Separate the recyclable waste from the trash."
+  },
+  {
+    "name": "Refreshment",
+    "value": "다과, 가벼운 음식",
+    "class": "n",
+    "exp": "Refreshments will be served at the break."
+  },
+  { "name": "Spill", "value": "엎지르다", "class": "v", "exp": "Be careful not to spill the coffee." }
+]

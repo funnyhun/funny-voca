@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 
 import { AppRouter } from "@/ui/app/router/router";
 
-import { ThemeProvider as MyThemeProvider } from "@/ui/common/hooks/useTheme";
+import { ThemeProvider as MyThemeProvider } from "@/ui/hooks";
 import { GlobalStyle } from "@/ui/app/GlobalStyle";
 
 

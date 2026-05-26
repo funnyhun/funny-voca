@@ -1,6 +1,6 @@
 import { redirect } from "react-router-dom";
-import { supabase } from "@/common/api/common/supabase";
-import { getStorage, KEYS } from "@/common/api/util/storage";
+import { supabase } from "@/api/client";
+import { getStorage, KEYS } from "@/utils/storage";
 
 /**
  * 학습(Play) 페이지 진입 시 마지막 학습 위치 또는 기본 위치로 리다이렉트합니다.

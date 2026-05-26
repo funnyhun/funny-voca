@@ -2,10 +2,9 @@ import { Suspense, useMemo, createContext } from "react";
 import { Outlet, useLoaderData, useNavigation } from "react-router-dom";
 import * as S from "./App.styles";
 
-import { Header, Navigation, LoadingBar, AppFallback } from "@/ui/common";
-import { useVoca } from "@/ui/common/hooks/useVoca";
-import { useProfile } from "@/ui/common/hooks/useProfile";
-import { useStats } from "@/ui/common/hooks/useStats";
+import { Header, Navigation } from "@/ui/layout";
+import { LoadingBar, AppFallback } from "@/ui/components";
+import { useVoca, useProfile, useStats } from "@/ui/hooks";
 
 // 도메인별 Context 정의 및 export
 export const VocaContext = createContext(null);

@@ -6,14 +6,15 @@ import { loadQuiz } from "@/ui/app/router/quiz";
 
 import { App } from "@/ui/app/App";
 
-import { Setup as Onboard, Nick, Data, Spinner, Loading, AppFallback } from "@/ui/common";
+import { Setup as Onboard, Nick, Data } from "@/ui/onboard";
+import { Spinner, AppFallback } from "@/ui/components";
 
-import { Home } from "@/ui/services/Home/Home";
-import { Play, Card } from "@/ui/services/Play";
-import { Quiz } from "@/ui/services/Quiz";
+import { Home } from "@/ui/pages";
+import { Play, Card } from "@/ui/pages";
+import { Quiz } from "@/ui/pages";
 
-import { Voca, VocaList, WordList } from "@/ui/services/Voca";
-import { Settings } from "@/ui/services/Settings/Settings";
+import { Voca, VocaList, WordList } from "@/ui/pages";
+import { Settings } from "@/ui/pages";
 
 import { HomeIcon, PlayIcon, QuizIcon, WordIcon, AccountIcon } from "@/assets/iconList";
 

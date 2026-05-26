@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "imports": {
+    "@/*": "./src/*"
+  },
   "scripts": {
     "dev": "vite --mode development",
     "build": "vite build",
@@ -28,3 +31,4 @@
     "vite-plugin-svgr": "^4.5.0"
   }
 }
+

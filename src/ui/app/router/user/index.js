@@ -1,13 +1,12 @@
 import { redirect } from "react-router-dom";
-import { supabase } from "@/common/api/common/supabase";
-import { getSession } from "@/common/api/auth/session";
-import { getMaster } from "@/common/api/common/master";
-import { getProfile } from "@/common/api/user/profile";
-import { getVoca } from "@/common/api/user/voca";
-import { getStorage, KEYS } from "@/common/api/util/storage";
+import { supabase } from "@/api/client";
+import { getSession } from "@/api/auth";
+import { getMaster } from "@/api/word";
+import { getProfile } from "@/api/profile";
+import { getVoca, postVoca } from "@/api/voca";
+import { getStorage, KEYS } from "@/utils/storage";
 import { processWordMap, createGuestStatusMap } from "./utils";
-import { migrateVoca } from "@/common/api/user/migration";
-import { postVoca } from "@/common/api/guest/voca";
+import { migrateVoca } from "@/api/migration";
 
 /**
  * [Orchestrator] 어플리케이션 진입 시 필요한 모든 데이터를 로드하고 상태에 따라 분기합니다.
@@ -67,8 +66,8 @@ async function handleMemberLoading(session, wordData, notifications) {
 
   // 2. 프로필 및 학습 데이터 병렬 로드
   const [userProfile, vocaData] = await Promise.all([
-    getProfile(userId),
-    getVoca(userId, dbLevel)
+    getProfile(),
+    getVoca(dbLevel)
   ]);
   
   if (!userProfile) throw new Error("User profile not found");

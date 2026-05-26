@@ -1,0 +1,1 @@
+export { getMaster } from "./word";
