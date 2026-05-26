@@ -78,9 +78,9 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   display: flex;
   flex-direction: column;
 
-  /* 전역 Safe Area 단 한 번만 일괄 공제 */
+  /* 상단 노치만 격리 대응하고, 하단은 뷰포트 자체에서 이미 제외되었으므로 0px로 처리 */
   padding-top: env(safe-area-inset-top, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-bottom: 0px;
 `,eC=N.div`
   flex: 1;
   width: 100%;
@@ -491,7 +491,7 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   height: 100dvh;
 
   padding-top: calc(env(safe-area-inset-top, 0px) + 1rem);
-  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
+  padding-bottom: 1rem;
   padding-left: 1rem;
   padding-right: 1rem;
   background-color: ${({theme:t})=>t.background};
