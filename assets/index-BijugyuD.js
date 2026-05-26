@@ -71,14 +71,17 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   margin: 0 auto;
 
   height: 100dvh;
+  background-color: ${({theme:t})=>t.background};
+`,FA=N.div`
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${({theme:t})=>t.background};
 
-  /* 전역 Safe Area 일괄 대응 */
+  /* 전역 Safe Area 단 한 번만 일괄 공제 */
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
-`,FA=N.div`
+`,eC=N.div`
   flex: 1;
   width: 100%;
 
@@ -88,7 +91,7 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   margin: 0 auto;
 
   overflow-y: auto;
-`,eC=N.div`
+`,tC=N.div`
   width: 100%;
   height: 2.8rem;
 
@@ -100,25 +103,25 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   align-items: center;
 
   background-color: ${({theme:t})=>t.main};
-`,tC=N.h1`
+`,nC=N.h1`
   line-height: 1;
   font-size: 1rem;
   font-weight: 800;
   letter-spacing: 0.1rem;
 
   cursor: pointer;
-`,nC=N.div`
+`,rC=N.div`
   display: flex;
   align-items: center;
   gap: 0.8rem;
-`,rC=N.div`
+`,aC=N.div`
   width: 1.2rem;
   height: 1.2rem;
   background-color: ${({theme:t,$hasUnread:n})=>n?t.brand:t.sub};
   border-radius: 50%;
   cursor: pointer;
   position: relative;
-`,aC=({notifications:t})=>{const n=wn(),[a,s]=x.useState(!1),o=()=>n("/home"),u=()=>s(c=>!c);return b.jsxs(b.Fragment,{children:[b.jsxs(eC,{children:[b.jsx(tC,{onClick:o,children:"funny-voca"}),b.jsx(nC,{children:b.jsx(rC,{$hasUnread:t?.length>0,onClick:u})})]}),a&&b.jsx(OC,{notifications:t,onClose:()=>s(!1)})]})},iC=N.ul`
+`,iC=({notifications:t})=>{const n=wn(),[a,s]=x.useState(!1),o=()=>n("/home"),u=()=>s(c=>!c);return b.jsxs(b.Fragment,{children:[b.jsxs(tC,{children:[b.jsx(nC,{onClick:o,children:"funny-voca"}),b.jsx(rC,{children:b.jsx(aC,{$hasUnread:t?.length>0,onClick:u})})]}),a&&b.jsx(jC,{notifications:t,onClose:()=>s(!1)})]})},sC=N.ul`
   width: 100%;
   height: 3.5rem;
   background-color: ${({theme:t})=>t.main};
@@ -126,7 +129,7 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   display: flex;
   align-items: center;
   justify-content: space-around;
-`,sC=N.li`
+`,lC=N.li`
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
@@ -146,7 +149,7 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   & > svg {
     fill: ${({$located:t,theme:n})=>t?n.brand:n.sub};
   }
-`,lC=()=>{const t=wn(),n=Ln().pathname.split("/")[1],a=Tw.slice(1),s=u=>u.split("/")[1]===n,o=u=>{s(u)||t(u)};return b.jsx(iC,{children:a.map(u=>b.jsxs(sC,{onClick:()=>o(u.path),$located:s(u.path),children:[u.icon,b.jsx("p",{children:u.name})]},u.path))})},oC=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#e3e3e3",...t},x.createElement("path",{d:"M237-285q54-38 115.5-56.5T480-360q66 0 127.5 18.5T723-285q35-41 52-91t17-104q0-129.67-91.23-220.84-91.23-91.16-221-91.16Q350-792 259-700.84 168-609.67 168-480q0 54 17 104t52 91Zm243-123q-60 0-102-42t-42-102q0-60 42-102t102-42q60 0 102 42t42 102q0 60-42 102t-102 42Zm.28 312Q401-96 331-126t-122.5-82.5Q156-261 126-330.96t-30-149.5Q96-560 126-629.5q30-69.5 82.5-122T330.96-834q69.96-30 149.5-30t149.04 30q69.5 30 122 82.5T834-629.28q30 69.73 30 149Q864-401 834-331t-82.5 122.5Q699-156 629.28-126q-69.73 30-149 30Zm-.28-72q52 0 100-16.5t90-48.5q-43-27-91-41t-99-14q-51 0-99.5 13.5T290-233q42 32 90 48.5T480-168Zm0-312q30 0 51-21t21-51q0-30-21-51t-51-21q-30 0-51 21t-21 51q0 30 21 51t51 21Zm0-72Zm0 319Z"})),uC=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#e3e3e3",...t},x.createElement("path",{d:"m448-524 244-244q10.91-11 25.45-11Q732-779 743-768.07t11 25.5Q754-728 743-717L499-473l-51-51Zm85 85 210-210q10.67-11 25.33-11Q783-660 794-649q11 11 11 25.67 0 14.66-11 25.33L584-388l-51-51ZM201-224q-81-81-82-195t80-195l113-113 53 54q8 8 15 17t9 21l150-150q10.67-11 25.33-11Q579-796 590-785q11 11 11 25.67 0 14.66-11 25.33L408-552l-45 46 9 9q39 39 38.5 93T371-311l-25 25-51-51 25-25q17-17 17.5-42t-16.59-42.33L286-481q-11-10.67-11-25.33Q275-521 286-532l26-25q14-14.4 14-34.2 0-19.8-14-33.8l-63 62q-60 60-58.5 144.5T252-274q60 60 143.22 60 83.21 0 142.78-60l222.81-222.86Q772-508 786.67-508q14.66 0 25.33 11 11 10.67 11 25.33 0 14.67-11.14 25.81L589-224q-80.51 81-193.76 81Q282-143 201-224Zm194-193ZM672-48v-72q70 0 119-49t49-119h72q0 99.59-70.21 169.79Q771.59-48 672-48ZM48-672q0-99.59 70.21-169.79Q188.41-912 288-912v72q-70 0-119 49t-49 119H48Z"})),cC=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#e3e3e3",...t},x.createElement("path",{d:"m195-143-51-51 292-292-172-42 186-116-16-219 168 141 202-82-82 203 142 167-218.97-16L529-263l-42-172-292 292Zm21-481-72-72 72-72 72 72-72 72Zm341 177 49-78 92 7-59.31-70.2 34.6-85.8-85.02 35L518-698l7 92-79 48.39 89.35 21.73L557-447Zm139 303-72-72 72-72 72 72-72 72ZM572-573Z"})),uw=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#e3e3e3",...t},x.createElement("path",{d:"M552-360q17 0 28.5-11.5T592-400q0-17-11.5-28.5T552-440q-17 0-28.5 11.5T512-400q0 17 11.5 28.5T552-360Zm-29-122h58q0-29 4.5-41.5T608-553q21-20 37.5-40t16.5-51q0-45-30.39-72.5Q601.21-744 552-744q-38 0-68 21.5t-42 58.87L494-642q7-23 22.5-35t35.5-12q23.11 0 37.56 13Q604-663 604-642t-15.5 36.5Q573-590 556-574q-22 20-27.5 36.5T523-482ZM312-240q-29.7 0-50.85-21.15Q240-282.3 240-312v-480q0-29.7 21.15-50.85Q282.3-864 312-864h480q29.7 0 50.85 21.15Q864-821.7 864-792v480q0 29.7-21.15 50.85Q821.7-240 792-240H312Zm0-72h480v-480H312v480ZM168-96q-29.7 0-50.85-21.15Q96-138.3 96-168v-552h72v552h552v72H168Zm144-696v480-480Z"})),cw=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#e3e3e3",...t},x.createElement("path",{d:"M576-240 336-480l240-240 51 51-189 189 189 189-51 51Z"})),hc=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#e3e3e3",...t},x.createElement("path",{d:"M522-480 333-669l51-51 240 240-240 240-51-51 189-189Z"})),dC=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#e3e3e3",...t},x.createElement("path",{d:"M264-216h96v-240h240v240h96v-348L480-726 264-564v348Zm-72 72v-456l288-216 288 216v456H528v-240h-96v240H192Zm288-327Z"})),dw=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#e3e3e3",...t},x.createElement("path",{d:"M467-168q6 17 14 37t18 35H216q-29.7 0-50.85-21.15Q144-138.3 144-168v-624q0-29.7 21.15-50.85Q186.3-864 216-864h480q29.7 0 50.85 21.15Q768-821.7 768-792v293q-16-3-35.5-4.5t-36.5.5v-289H480v312l-96-48-96 48v-312h-72v624h251ZM719.77-48Q640-48 584-104.23q-56-56.22-56-136Q528-320 584.23-376q56.22-56 136-56Q800-432 856-375.77q56 56.22 56 136Q912-160 855.77-104q-56.22 56-136 56ZM672-144l144-96-144-96v192ZM288-792h192-192Zm192 0H216h480-216Z"})),Ff=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#e3e3e3",...t},x.createElement("path",{d:"M168-394h42l22-62h99l22 62h43l-92-244h-44l-92 244Zm77-97 36-102h2l36 102h-74Zm319-87v-76q31-10 64-14.5t68-4.5q23 0 46.5 2.5T792-663v74q-30-7-53-10t-43-3q-34 0-67 6t-65 18Zm0 236v-76q28-9 60-14.5t72-5.5q27 0 50.5 3t45.5 8v74q-30-7-53-10t-43-3q-34 0-67 6t-65 18Zm0-118v-76q32-10 65.5-15t66.5-5q27 0 50.5 3t45.5 8v74q-26-7-49.5-10t-46.5-3q-32 0-64.5 6T564-460ZM264-288q47 0 92 12t88 30v-454q-42-22-87-33t-93-11q-37 0-73.5 6.5T120-716v452q35-13 71-18.5t73-5.5Zm252 42q43-20 88-31t92-11q37 0 73.5 4.5T840-264v-452q-35-13-71-20.5t-73-7.5q-48 0-93 11t-87 33v454Zm-36 102q-49-32-103-52t-113-20q-38 0-76 7.5T115-186q-24 10-45.5-3.5T48-229v-503q0-14 7.5-26T76-776q45-20 92-30t96-10q57 0 111.5 13.5T480-762q51-26 105-40t111-14q49 0 96 10t92 30q13 6 21 18t8 26v503q0 25-15.5 40t-32.5 7q-40-18-82.5-26t-86.5-8q-59 0-113 20t-103 52ZM282-495Z"})),hC=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#e3e3e3",...t},x.createElement("path",{d:"M624-444v-72h144v72H624Zm51 240-115-87 43-57 116 86-44 58Zm-72-408-43-57 115-87 44 58-116 86ZM144-384v-192h144l192-192v576L288-384H144Zm264-210-90 90H216v48h102l90 90v-228Zm-95 114Z"})),fC=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#000000",...t},x.createElement("path",{d:"M389-267 195-460l51-52 143 143 325-324 51 51-376 375Z"})),mC=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#000000",...t},x.createElement("path",{d:"m291-240-51-51 189-189-189-189 51-51 189 189 189-189 51 51-189 189 189 189-51 51-189-189-189 189Z"})),em=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#000000",...t},x.createElement("path",{d:"m429-336 238-237-51-51-187 186-85-84-51 51 136 135Zm51 240q-79 0-149-30t-122.5-82.5Q156-261 126-331T96-480q0-80 30-149.5t82.5-122Q261-804 331-834t149-30q80 0 149.5 30t122 82.5Q804-699 834-629.5T864-480q0 79-30 149t-82.5 122.5Q699-156 629.5-126T480-96Zm0-72q130 0 221-91t91-221q0-130-91-221t-221-91q-130 0-221 91t-91 221q0 130 91 221t221 91Zm0-312Z"})),gC=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#000000",...t},x.createElement("path",{d:"M479.79-192Q450-192 429-213.21t-21-51Q408-294 429.21-315t51-21Q510-336 531-314.79t21 51Q552-234 530.79-213t-51 21Zm0-216Q450-408 429-429.21t-21-51Q408-510 429.21-531t51-21Q510-552 531-530.79t21 51Q552-450 530.79-429t-51 21Zm0-216Q450-624 429-645.21t-21-51Q408-726 429.21-747t51-21Q510-768 531-746.79t21 51Q552-666 530.79-645t-51 21Z"})),pC=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#000000",...t},x.createElement("path",{d:"M765-144 526-383q-30 22-65.79 34.5-35.79 12.5-76.18 12.5Q284-336 214-406t-70-170q0-100 70-170t170-70q100 0 170 70t70 170.03q0 40.39-12.5 76.18Q599-464 577-434l239 239-51 51ZM384-408q70 0 119-49t49-119q0-70-49-119t-119-49q-70 0-119 49t-49 119q0 70 49 119t119 49Z"})),yC=N.div`
+`,oC=()=>{const t=wn(),n=Ln().pathname.split("/")[1],a=Tw.slice(1),s=u=>u.split("/")[1]===n,o=u=>{s(u)||t(u)};return b.jsx(sC,{children:a.map(u=>b.jsxs(lC,{onClick:()=>o(u.path),$located:s(u.path),children:[u.icon,b.jsx("p",{children:u.name})]},u.path))})},uC=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#e3e3e3",...t},x.createElement("path",{d:"M237-285q54-38 115.5-56.5T480-360q66 0 127.5 18.5T723-285q35-41 52-91t17-104q0-129.67-91.23-220.84-91.23-91.16-221-91.16Q350-792 259-700.84 168-609.67 168-480q0 54 17 104t52 91Zm243-123q-60 0-102-42t-42-102q0-60 42-102t102-42q60 0 102 42t42 102q0 60-42 102t-102 42Zm.28 312Q401-96 331-126t-122.5-82.5Q156-261 126-330.96t-30-149.5Q96-560 126-629.5q30-69.5 82.5-122T330.96-834q69.96-30 149.5-30t149.04 30q69.5 30 122 82.5T834-629.28q30 69.73 30 149Q864-401 834-331t-82.5 122.5Q699-156 629.28-126q-69.73 30-149 30Zm-.28-72q52 0 100-16.5t90-48.5q-43-27-91-41t-99-14q-51 0-99.5 13.5T290-233q42 32 90 48.5T480-168Zm0-312q30 0 51-21t21-51q0-30-21-51t-51-21q-30 0-51 21t-21 51q0 30 21 51t51 21Zm0-72Zm0 319Z"})),cC=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#e3e3e3",...t},x.createElement("path",{d:"m448-524 244-244q10.91-11 25.45-11Q732-779 743-768.07t11 25.5Q754-728 743-717L499-473l-51-51Zm85 85 210-210q10.67-11 25.33-11Q783-660 794-649q11 11 11 25.67 0 14.66-11 25.33L584-388l-51-51ZM201-224q-81-81-82-195t80-195l113-113 53 54q8 8 15 17t9 21l150-150q10.67-11 25.33-11Q579-796 590-785q11 11 11 25.67 0 14.66-11 25.33L408-552l-45 46 9 9q39 39 38.5 93T371-311l-25 25-51-51 25-25q17-17 17.5-42t-16.59-42.33L286-481q-11-10.67-11-25.33Q275-521 286-532l26-25q14-14.4 14-34.2 0-19.8-14-33.8l-63 62q-60 60-58.5 144.5T252-274q60 60 143.22 60 83.21 0 142.78-60l222.81-222.86Q772-508 786.67-508q14.66 0 25.33 11 11 10.67 11 25.33 0 14.67-11.14 25.81L589-224q-80.51 81-193.76 81Q282-143 201-224Zm194-193ZM672-48v-72q70 0 119-49t49-119h72q0 99.59-70.21 169.79Q771.59-48 672-48ZM48-672q0-99.59 70.21-169.79Q188.41-912 288-912v72q-70 0-119 49t-49 119H48Z"})),dC=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#e3e3e3",...t},x.createElement("path",{d:"m195-143-51-51 292-292-172-42 186-116-16-219 168 141 202-82-82 203 142 167-218.97-16L529-263l-42-172-292 292Zm21-481-72-72 72-72 72 72-72 72Zm341 177 49-78 92 7-59.31-70.2 34.6-85.8-85.02 35L518-698l7 92-79 48.39 89.35 21.73L557-447Zm139 303-72-72 72-72 72 72-72 72ZM572-573Z"})),uw=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#e3e3e3",...t},x.createElement("path",{d:"M552-360q17 0 28.5-11.5T592-400q0-17-11.5-28.5T552-440q-17 0-28.5 11.5T512-400q0 17 11.5 28.5T552-360Zm-29-122h58q0-29 4.5-41.5T608-553q21-20 37.5-40t16.5-51q0-45-30.39-72.5Q601.21-744 552-744q-38 0-68 21.5t-42 58.87L494-642q7-23 22.5-35t35.5-12q23.11 0 37.56 13Q604-663 604-642t-15.5 36.5Q573-590 556-574q-22 20-27.5 36.5T523-482ZM312-240q-29.7 0-50.85-21.15Q240-282.3 240-312v-480q0-29.7 21.15-50.85Q282.3-864 312-864h480q29.7 0 50.85 21.15Q864-821.7 864-792v480q0 29.7-21.15 50.85Q821.7-240 792-240H312Zm0-72h480v-480H312v480ZM168-96q-29.7 0-50.85-21.15Q96-138.3 96-168v-552h72v552h552v72H168Zm144-696v480-480Z"})),cw=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#e3e3e3",...t},x.createElement("path",{d:"M576-240 336-480l240-240 51 51-189 189 189 189-51 51Z"})),hc=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#e3e3e3",...t},x.createElement("path",{d:"M522-480 333-669l51-51 240 240-240 240-51-51 189-189Z"})),hC=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#e3e3e3",...t},x.createElement("path",{d:"M264-216h96v-240h240v240h96v-348L480-726 264-564v348Zm-72 72v-456l288-216 288 216v456H528v-240h-96v240H192Zm288-327Z"})),dw=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#e3e3e3",...t},x.createElement("path",{d:"M467-168q6 17 14 37t18 35H216q-29.7 0-50.85-21.15Q144-138.3 144-168v-624q0-29.7 21.15-50.85Q186.3-864 216-864h480q29.7 0 50.85 21.15Q768-821.7 768-792v293q-16-3-35.5-4.5t-36.5.5v-289H480v312l-96-48-96 48v-312h-72v624h251ZM719.77-48Q640-48 584-104.23q-56-56.22-56-136Q528-320 584.23-376q56.22-56 136-56Q800-432 856-375.77q56 56.22 56 136Q912-160 855.77-104q-56.22 56-136 56ZM672-144l144-96-144-96v192ZM288-792h192-192Zm192 0H216h480-216Z"})),Ff=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#e3e3e3",...t},x.createElement("path",{d:"M168-394h42l22-62h99l22 62h43l-92-244h-44l-92 244Zm77-97 36-102h2l36 102h-74Zm319-87v-76q31-10 64-14.5t68-4.5q23 0 46.5 2.5T792-663v74q-30-7-53-10t-43-3q-34 0-67 6t-65 18Zm0 236v-76q28-9 60-14.5t72-5.5q27 0 50.5 3t45.5 8v74q-30-7-53-10t-43-3q-34 0-67 6t-65 18Zm0-118v-76q32-10 65.5-15t66.5-5q27 0 50.5 3t45.5 8v74q-26-7-49.5-10t-46.5-3q-32 0-64.5 6T564-460ZM264-288q47 0 92 12t88 30v-454q-42-22-87-33t-93-11q-37 0-73.5 6.5T120-716v452q35-13 71-18.5t73-5.5Zm252 42q43-20 88-31t92-11q37 0 73.5 4.5T840-264v-452q-35-13-71-20.5t-73-7.5q-48 0-93 11t-87 33v454Zm-36 102q-49-32-103-52t-113-20q-38 0-76 7.5T115-186q-24 10-45.5-3.5T48-229v-503q0-14 7.5-26T76-776q45-20 92-30t96-10q57 0 111.5 13.5T480-762q51-26 105-40t111-14q49 0 96 10t92 30q13 6 21 18t8 26v503q0 25-15.5 40t-32.5 7q-40-18-82.5-26t-86.5-8q-59 0-113 20t-103 52ZM282-495Z"})),fC=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#e3e3e3",...t},x.createElement("path",{d:"M624-444v-72h144v72H624Zm51 240-115-87 43-57 116 86-44 58Zm-72-408-43-57 115-87 44 58-116 86ZM144-384v-192h144l192-192v576L288-384H144Zm264-210-90 90H216v48h102l90 90v-228Zm-95 114Z"})),mC=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#000000",...t},x.createElement("path",{d:"M389-267 195-460l51-52 143 143 325-324 51 51-376 375Z"})),gC=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#000000",...t},x.createElement("path",{d:"m291-240-51-51 189-189-189-189 51-51 189 189 189-189 51 51-189 189 189 189-51 51-189-189-189 189Z"})),em=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#000000",...t},x.createElement("path",{d:"m429-336 238-237-51-51-187 186-85-84-51 51 136 135Zm51 240q-79 0-149-30t-122.5-82.5Q156-261 126-331T96-480q0-80 30-149.5t82.5-122Q261-804 331-834t149-30q80 0 149.5 30t122 82.5Q804-699 834-629.5T864-480q0 79-30 149t-82.5 122.5Q699-156 629.5-126T480-96Zm0-72q130 0 221-91t91-221q0-130-91-221t-221-91q-130 0-221 91t-91 221q0 130 91 221t221 91Zm0-312Z"})),pC=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#000000",...t},x.createElement("path",{d:"M479.79-192Q450-192 429-213.21t-21-51Q408-294 429.21-315t51-21Q510-336 531-314.79t21 51Q552-234 530.79-213t-51 21Zm0-216Q450-408 429-429.21t-21-51Q408-510 429.21-531t51-21Q510-552 531-530.79t21 51Q552-450 530.79-429t-51 21Zm0-216Q450-624 429-645.21t-21-51Q408-726 429.21-747t51-21Q510-768 531-746.79t21 51Q552-666 530.79-645t-51 21Z"})),yC=t=>x.createElement("svg",{xmlns:"http://www.w3.org/2000/svg",height:"20px",viewBox:"0 -960 960 960",width:"20px",fill:"#000000",...t},x.createElement("path",{d:"M765-144 526-383q-30 22-65.79 34.5-35.79 12.5-76.18 12.5Q284-336 214-406t-70-170q0-100 70-170t170-70q100 0 170 70t70 170.03q0 40.39-12.5 76.18Q599-464 577-434l239 239-51 51ZM384-408q70 0 119-49t49-119q0-70-49-119t-119-49q-70 0-119 49t-49 119q0 70 49 119t119 49Z"})),vC=N.div`
   width: 100%;
   height: 100%;
 
@@ -156,17 +159,17 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   align-items: center;
 
   background-color: ${({theme:t})=>t.background};
-`,vC=N(cC)`
+`,bC=N(dC)`
   width: 5rem;
   height: 5rem;
 
   color: ${({theme:t})=>t.brand};
-`,bC=N.h1`
+`,wC=N.h1`
   font-weight: 500;
   color: ${({theme:t})=>t.brand};
 
   letter-spacing: 0.3rem;
-`,wC=()=>b.jsxs(yC,{children:[b.jsx(vC,{}),b.jsx(bC,{children:"funny-voca"})]}),SC=N.div`
+`,SC=()=>b.jsxs(vC,{children:[b.jsx(bC,{}),b.jsx(wC,{children:"funny-voca"})]}),_C=N.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -175,7 +178,7 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(2px);
   z-index: 1000;
-`,_C=N.div`
+`,EC=N.div`
   position: fixed;
   top: 3.5rem;
   right: 1rem;
@@ -201,15 +204,15 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
       transform: translateY(0);
     }
   }
-`,EC=N.div`
+`,xC=N.div`
   padding: 1rem;
   font-weight: 700;
   border-bottom: 1px solid ${({theme:t})=>t.week};
   color: ${({theme:t})=>t.font};
-`,xC=N.div`
+`,TC=N.div`
   max-height: 400px;
   overflow-y: auto;
-`,TC=N.div`
+`,RC=N.div`
   padding: 1rem;
   border-bottom: 1px solid ${({theme:t})=>t.week};
   cursor: pointer;
@@ -222,16 +225,16 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   &:last-child {
     border-bottom: none;
   }
-`,RC=N.div`
+`,AC=N.div`
   font-size: 0.9rem;
   font-weight: 600;
   margin-bottom: 0.25rem;
   color: ${({theme:t})=>t.font};
-`,AC=N.div`
+`,CC=N.div`
   font-size: 0.8rem;
   color: ${({theme:t})=>t.label};
   line-height: 1.4;
-`,CC=N.div`
+`,OC=N.div`
   padding: 2rem 1rem;
   text-align: center;
   color: ${({theme:t})=>t.label};
@@ -255,7 +258,7 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   &:hover {
     opacity: 0.8;
   }
-`;const OC=({notifications:t=[],onClose:n})=>{const a=s=>{s.type==="sync"&&bR(),n()};return b.jsxs(b.Fragment,{children:[b.jsx(SC,{onClick:n}),b.jsxs(_C,{children:[b.jsx(EC,{children:"알림"}),b.jsx(xC,{children:t.length>0?t.map(s=>b.jsxs(TC,{onClick:()=>a(s),children:[b.jsx(RC,{children:s.title}),b.jsx(AC,{children:s.content})]},s.id)):b.jsx(CC,{children:"새로운 알림이 없습니다."})})]})]})},jC=N.button`
+`;const jC=({notifications:t=[],onClose:n})=>{const a=s=>{s.type==="sync"&&bR(),n()};return b.jsxs(b.Fragment,{children:[b.jsx(_C,{onClick:n}),b.jsxs(EC,{children:[b.jsx(xC,{children:"알림"}),b.jsx(TC,{children:t.length>0?t.map(s=>b.jsxs(RC,{onClick:()=>a(s),children:[b.jsx(AC,{children:s.title}),b.jsx(CC,{children:s.content})]},s.id)):b.jsx(OC,{children:"새로운 알림이 없습니다."})})]})]})},kC=N.button`
   display: flex;
   flex: 1 0 auto;
   justify-content: center;
@@ -268,7 +271,7 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   margin-top: auto;
 
   cursor: pointer;
-`,kC=N.span`
+`,DC=N.span`
   width: 100%;
 
   display: flex;
@@ -283,7 +286,7 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   & > svg {
     color: ${({$color:t,theme:n})=>n[t]};
   }
-`,Wt=({label:t,color:n,bg:a,onClick:s,className:o})=>b.jsx(jC,{className:o,onClick:s,$bg:a,children:b.jsx(kC,{$color:n,children:t})}),DC=N(Wt)`
+`,Wt=({label:t,color:n,bg:a,onClick:s,className:o})=>b.jsx(kC,{className:o,onClick:s,$bg:a,children:b.jsx(DC,{$color:n,children:t})}),MC=N(Wt)`
   padding: 0.5rem;
 
   & > span {
@@ -291,7 +294,7 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   }
 `,xl=N(Wt)`
   flex: none;
-`,MC=N.div`
+`,NC=N.div`
   width: 100%;
 
   display: flex;
@@ -300,11 +303,11 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   gap: 0.5rem;
 
   padding: 0.1rem;
-`,NC=N.label`
+`,UC=N.label`
   font-size: 0.8rem;
   font-weight: 600;
   color: ${({theme:t})=>t.label};
-`,UC=N.input`
+`,zC=N.input`
   padding: 0.5rem 1rem;
   padding-left: ${({$hasIcon:t})=>t?"2rem":"0.5rem"};
 
@@ -319,11 +322,11 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
     font-size: 0.8rem;
     color: ${({theme:t})=>t.sub};
   }
-`,zC=N.p`
+`,$C=N.p`
   font-size: 0.8rem;
   color: ${({theme:t})=>t.label};
   padding-left: 0.2rem;
-`,$C=N.div`
+`,LC=N.div`
   position: absolute;
   left: 0.5rem;
   display: flex;
@@ -331,7 +334,7 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   justify-content: center;
 
   pointer-events: none;
-`,hw=({icon:t,label:n,value:a,onChange:s,notice:o,placeholder:u,className:c,$isBorder:f=!0,$isOutline:m=!0})=>{const g=x.useId();return b.jsxs(MC,{className:c,children:[t&&b.jsx($C,{children:b.jsx(t,{})}),n&&b.jsx(NC,{htmlFor:g,children:n}),b.jsx(UC,{autoComplete:"off",id:g,value:a,onChange:s,placeholder:u,$hasIcon:!!t,$isBorder:f,$isOutline:m}),o&&b.jsx(zC,{children:o})]})},fw=N.div`
+`,hw=({icon:t,label:n,value:a,onChange:s,notice:o,placeholder:u,className:c,$isBorder:f=!0,$isOutline:m=!0})=>{const g=x.useId();return b.jsxs(NC,{className:c,children:[t&&b.jsx(LC,{children:b.jsx(t,{})}),n&&b.jsx(UC,{htmlFor:g,children:n}),b.jsx(zC,{autoComplete:"off",id:g,value:a,onChange:s,placeholder:u,$hasIcon:!!t,$isBorder:f,$isOutline:m}),o&&b.jsx($C,{children:o})]})},fw=N.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -357,13 +360,13 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
 
   background-color: ${({theme:t})=>t.brand};
   border-radius: ${({$progress:t})=>t===100?"1rem":"1rem 0 0 1rem"};
-`,LC=N(mw)`
+`,BC=N(mw)`
   height: 0.5rem;
-`,BC=N(gw)`
+`,qC=N(gw)`
   height: 0.5rem;
 
   top: -1rem;
-`,tm=({status:t})=>b.jsxs(fw,{children:[b.jsx(mw,{}),b.jsx(gw,{$progress:t})]}),qC=({status:t})=>b.jsxs(fw,{children:[b.jsx(LC,{}),b.jsx(BC,{$progress:t})]}),nm=N.div`
+`,tm=({status:t})=>b.jsxs(fw,{children:[b.jsx(mw,{}),b.jsx(gw,{$progress:t})]}),HC=({status:t})=>b.jsxs(fw,{children:[b.jsx(BC,{}),b.jsx(qC,{$progress:t})]}),nm=N.div`
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -379,7 +382,7 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
 `;N.div`
   display: flex;
   gap: 1rem;
-`;const HC=N.div`
+`;const PC=N.div`
   ${({$fullScreen:t})=>t?`
         position: fixed;
         inset: 0;
@@ -404,29 +407,29 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   gap: 1.2rem;
   font-weight: 600;
   font-size: 1rem;
-`,PC=N.span`
+`,IC=N.span`
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: -0.02rem;
   opacity: 0.95;
   text-align: center;
-`,IC=N.div`
+`,GC=N.div`
   width: 200px;
   height: 8px;
   background-color: ${({$fullScreen:t})=>t?"rgba(255, 255, 255, 0.2)":"rgba(0, 0, 0, 0.1)"};
   border-radius: 4px;
   overflow: hidden;
-`,GC=N.div`
+`,VC=N.div`
   height: 100%;
   width: ${({$value:t})=>t}%;
   background-color: ${({$fullScreen:t,theme:n})=>t?"white":n.brand||"#137FEC"};
   transition: width 0.2s ease;
   border-radius: 4px;
-`,VC=N.span`
+`,KC=N.span`
   font-size: 0.9rem;
   opacity: 0.8;
   font-variant-numeric: tabular-nums;
-`,rm=({fullScreen:t=!1,message:n,status:a})=>{const[s,o]=x.useState(a??0);return x.useEffect(()=>{if(a!==void 0){o(a);return}const u=setInterval(()=>{o(c=>{if(c>=98)return clearInterval(u),98;const f=c<50?Math.floor(Math.random()*8)+4:Math.floor(Math.random()*3)+1;return Math.min(c+f,98)})},150);return()=>clearInterval(u)},[a]),b.jsxs(HC,{$fullScreen:t,children:[n&&b.jsx(PC,{children:n}),b.jsx(IC,{$fullScreen:t,children:b.jsx(GC,{$fullScreen:t,$value:s})}),b.jsxs(VC,{children:[s,"%"]})]})},KC=Xf`
+`,rm=({fullScreen:t=!1,message:n,status:a})=>{const[s,o]=x.useState(a??0);return x.useEffect(()=>{if(a!==void 0){o(a);return}const u=setInterval(()=>{o(c=>{if(c>=98)return clearInterval(u),98;const f=c<50?Math.floor(Math.random()*8)+4:Math.floor(Math.random()*3)+1;return Math.min(c+f,98)})},150);return()=>clearInterval(u)},[a]),b.jsxs(PC,{$fullScreen:t,children:[n&&b.jsx(IC,{children:n}),b.jsx(GC,{$fullScreen:t,children:b.jsx(VC,{$fullScreen:t,$value:s})}),b.jsxs(KC,{children:[s,"%"]})]})},YC=Xf`
   0% {
     left: -100%;
     width: 30%;
@@ -438,7 +441,7 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
     left: 100%;
     width: 30%;
   }
-`,YC=N.div`
+`,QC=N.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -447,7 +450,7 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   background-color: rgba(19, 127, 236, 0.15); /* brand 컬러의 15% 반투명 */
   z-index: 99999;
   overflow: hidden;
-`,QC=N.div`
+`,JC=N.div`
   position: absolute;
   top: 0;
   height: 100%;
@@ -458,15 +461,15 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
     ${({theme:t})=>t.brand||"#137FEC"} 100%
   );
   box-shadow: 0 0 8px ${({theme:t})=>t.brand||"#137FEC"};
-  animation: ${KC} 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-`,JC=()=>b.jsx(YC,{children:b.jsx(QC,{})}),ZC=Xf`
+  animation: ${YC} 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+`,ZC=()=>b.jsx(QC,{children:b.jsx(JC,{})}),WC=Xf`
   0% {
     background-position: -200% 0;
   }
   100% {
     background-position: 200% 0;
   }
-`,WC=N.div`
+`,XC=N.div`
   width: ${({$width:t})=>t||"100%"};
   height: ${({$height:t})=>t||"20px"};
   border-radius: ${({$variant:t})=>t==="circle"?"50%":"0.375rem"};
@@ -479,10 +482,10 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
     ${({theme:t})=>t.main==="#000"?"#222":"#e0e0e0"} 63%
   );
   background-size: 400% 100%;
-  animation: ${ZC} 1.4s ease infinite;
+  animation: ${WC} 1.4s ease infinite;
   
   display: inline-block;
-`,Br=({width:t,height:n,variant:a="rect",className:s})=>b.jsx(WC,{$width:t,$height:n,$variant:a,className:s}),pw=()=>{let t=!1;try{t=!!Ln().state?.fromOnboarding}catch(n){console.warn("[AppFallback] useLocation failed",n)}return t?b.jsx(rm,{fullScreen:!0,message:"데이터를 구성하고 있습니다..."}):b.jsx(wC,{})},yw=(t=[],n={})=>{const[a,s]=x.useState(t),[o,u]=x.useState(n);return{wordMap:a,wordStatusMap:o,updateStatus:(g,y)=>{u(v=>{const S={...v,[g]:y};return s(_=>Pf(_,S)),S}),XC(g,y).catch(v=>{console.error("[useVoca] sync failed:",v)})},initVoca:async g=>{await gf(g)},resetVoca:async g=>{const y=await Ea();if(y){const{error:S}=await qt.from("Voca").delete().eq("user_id",y.user.id);if(S)throw S}if(Ol(_e.WORD_MAP),Ol(_e.USER_DATA),!await gf(g))throw new Error("학습 데이터를 재배정하는 중 오류가 발생했습니다.")},getMaster:Nb}};async function XC(t,n){await NR(t,n)}const FC=(t="")=>{const[n,a]=x.useState(t);return{nick:n,updateNick:o=>{a(o),eO(o).catch(u=>{console.error("[useProfile] sync failed:",u)})}}};async function eO(t){await RR({nick:t})}const tO=()=>{const t=Xe(_e.USER_DATA);if(!t)return;const n=864e5,a=new Date,s=new Date(a).setHours(0,0,0,0),o=t.lastStudiedAt||null;let{continued:u=0,today:c=0}=t;if(o){const m=new Date(o).setHours(0,0,0,0),g=Math.floor((s-m)/n);g===0?c+=1:g===1?(u+=1,c=1):(u=1,c=1)}else u=1,c=1;const f={...t,today:c,continued:u,lastStudiedAt:a.toISOString()};Xt(_e.USER_DATA,f)},nO=(t={})=>{const[n,a]=x.useState(t);return{userData:n,recordSession:()=>{tO();const u=Xe(_e.USER_DATA);u&&a(c=>({...c,...u})),rO().catch(c=>{console.error("[useStats] sync failed:",c)})},updateSelectedDay:u=>{const c={...n,selected:Number(u)};Xt(_e.USER_DATA,c),a(c)}}};async function rO(){await Ea()}const vw={min_width:"320px",max_width:"768px"},aO={...vw,main:"#fff",inverse:"#000",background:"#F6F7F8",font:"#1f1f1f",label:"#666666",sub:"#aaaaaa",brand:"#137FEC",week:"#C8DEF5",success:"#34C759",week_success:"#7ED321",danger:"#FF3B30"},iO={...vw,main:"#000",inverse:"#fff",background:"#121212",font:"#F5F5F5",label:"#9b9b9b",sub:"#9b9b9bff",brand:"#137FEC",week:"#2c3e50",success:"#34C759",week_success:"#7ED321",danger:"#FF3B30"},sO=x.createContext({theme:"light",handleTheme:()=>{}}),lO=()=>{const t=Xe(_e.THEME);return t===null?"light":t},oO=({children:t})=>{const[n,a]=x.useState(lO());x.useEffect(()=>{Xt(_e.THEME,n)},[n]);const s=x.useCallback(()=>{a(o=>o==="light"?"dark":"light")},[]);return b.jsx(sO.Provider,{value:{theme:n,handleTheme:s},children:b.jsx(VA,{theme:n==="light"?aO:iO,children:t})})},bw=(t,n)=>{const a=wn(),s=oE();return{param:Math.max(0,Math.floor(Number(s[t]))||0),navBasedParam:c=>{c<0&&(c=0),a(`${n}${c}`,{relative:"path"})}}},ww=()=>{const{param:t,navBasedParam:n}=bw("step","../");return{step:t,changeStep:n}},ni=()=>{const{param:t,navBasedParam:n}=bw("selected","");return{selected:t,changeSelected:n}},fc=t=>{const{wordMap:n,wordStatusMap:a={}}=x.useContext(xa),{userData:s}=x.useContext(Ta),{wordData:o}=x.useContext(am),u=typeof t=="number"?t:s.selected,c=x.useMemo(()=>!n||!n[u]?(console.warn(`Day index ${u}에 해당하는 데이터를 찾을 수 없습니다.`),[]):n[u].word.map(m=>{const g=o[m]||o[String(m)]||o[Number(m)];return g?{...g,done:a[m]||a[String(m)]||a[Number(m)]||!1}:(console.error(`[Hook/useWord] Word Data Missing: ID ${m}`),null)}).filter(Boolean),[n,u,o,a]),f=x.useMemo(()=>!n||n.length===0||!o||Object.keys(o).length===0,[n,o]);return{words:c,loading:f}},xa=x.createContext(null),Sw=x.createContext(null),Ta=x.createContext(null),am=x.createContext(null),uO=({initialNick:t,initialWordMap:n,initialStatusMap:a,initialUserData:s,wordData:o,notifications:u,now:c})=>{const f=yw(n,a),m=FC(t),g=nO(s),y=x.useMemo(()=>({wordData:o,notifications:u,now:c}),[o,u,c]);return b.jsx(am.Provider,{value:y,children:b.jsx(xa.Provider,{value:f,children:b.jsx(Sw.Provider,{value:m,children:b.jsx(Ta.Provider,{value:g,children:b.jsx(tc,{})})})})})},cO=()=>{const t=x.useMemo(()=>new Date,[]),{nick:n,wordMap:a,wordStatusMap:s,wordData:o,notifications:u,userData:c}=bE(),m=yE().state==="loading",g=`${n}-${c?.level||"default"}`;return b.jsxs(XA,{children:[m&&b.jsx(JC,{}),b.jsx(aC,{notifications:u}),b.jsx(FA,{children:b.jsx(x.Suspense,{fallback:b.jsx(pw,{}),children:b.jsx(uO,{initialNick:n,initialWordMap:a,initialStatusMap:s,initialUserData:c,wordData:o,notifications:u,now:t},g)})}),b.jsx(lC,{})]})},dO=N.div`
+`,Br=({width:t,height:n,variant:a="rect",className:s})=>b.jsx(XC,{$width:t,$height:n,$variant:a,className:s}),pw=()=>{let t=!1;try{t=!!Ln().state?.fromOnboarding}catch(n){console.warn("[AppFallback] useLocation failed",n)}return t?b.jsx(rm,{fullScreen:!0,message:"데이터를 구성하고 있습니다..."}):b.jsx(SC,{})},yw=(t=[],n={})=>{const[a,s]=x.useState(t),[o,u]=x.useState(n);return{wordMap:a,wordStatusMap:o,updateStatus:(g,y)=>{u(v=>{const S={...v,[g]:y};return s(_=>Pf(_,S)),S}),FC(g,y).catch(v=>{console.error("[useVoca] sync failed:",v)})},initVoca:async g=>{await gf(g)},resetVoca:async g=>{const y=await Ea();if(y){const{error:S}=await qt.from("Voca").delete().eq("user_id",y.user.id);if(S)throw S}if(Ol(_e.WORD_MAP),Ol(_e.USER_DATA),!await gf(g))throw new Error("학습 데이터를 재배정하는 중 오류가 발생했습니다.")},getMaster:Nb}};async function FC(t,n){await NR(t,n)}const eO=(t="")=>{const[n,a]=x.useState(t);return{nick:n,updateNick:o=>{a(o),tO(o).catch(u=>{console.error("[useProfile] sync failed:",u)})}}};async function tO(t){await RR({nick:t})}const nO=()=>{const t=Xe(_e.USER_DATA);if(!t)return;const n=864e5,a=new Date,s=new Date(a).setHours(0,0,0,0),o=t.lastStudiedAt||null;let{continued:u=0,today:c=0}=t;if(o){const m=new Date(o).setHours(0,0,0,0),g=Math.floor((s-m)/n);g===0?c+=1:g===1?(u+=1,c=1):(u=1,c=1)}else u=1,c=1;const f={...t,today:c,continued:u,lastStudiedAt:a.toISOString()};Xt(_e.USER_DATA,f)},rO=(t={})=>{const[n,a]=x.useState(t);return{userData:n,recordSession:()=>{nO();const u=Xe(_e.USER_DATA);u&&a(c=>({...c,...u})),aO().catch(c=>{console.error("[useStats] sync failed:",c)})},updateSelectedDay:u=>{const c={...n,selected:Number(u)};Xt(_e.USER_DATA,c),a(c)}}};async function aO(){await Ea()}const vw={min_width:"320px",max_width:"768px"},iO={...vw,main:"#fff",inverse:"#000",background:"#F6F7F8",font:"#1f1f1f",label:"#666666",sub:"#aaaaaa",brand:"#137FEC",week:"#C8DEF5",success:"#34C759",week_success:"#7ED321",danger:"#FF3B30"},sO={...vw,main:"#000",inverse:"#fff",background:"#121212",font:"#F5F5F5",label:"#9b9b9b",sub:"#9b9b9bff",brand:"#137FEC",week:"#2c3e50",success:"#34C759",week_success:"#7ED321",danger:"#FF3B30"},lO=x.createContext({theme:"light",handleTheme:()=>{}}),oO=()=>{const t=Xe(_e.THEME);return t===null?"light":t},uO=({children:t})=>{const[n,a]=x.useState(oO());x.useEffect(()=>{Xt(_e.THEME,n)},[n]);const s=x.useCallback(()=>{a(o=>o==="light"?"dark":"light")},[]);return b.jsx(lO.Provider,{value:{theme:n,handleTheme:s},children:b.jsx(VA,{theme:n==="light"?iO:sO,children:t})})},bw=(t,n)=>{const a=wn(),s=oE();return{param:Math.max(0,Math.floor(Number(s[t]))||0),navBasedParam:c=>{c<0&&(c=0),a(`${n}${c}`,{relative:"path"})}}},ww=()=>{const{param:t,navBasedParam:n}=bw("step","../");return{step:t,changeStep:n}},ni=()=>{const{param:t,navBasedParam:n}=bw("selected","");return{selected:t,changeSelected:n}},fc=t=>{const{wordMap:n,wordStatusMap:a={}}=x.useContext(xa),{userData:s}=x.useContext(Ta),{wordData:o}=x.useContext(am),u=typeof t=="number"?t:s.selected,c=x.useMemo(()=>!n||!n[u]?(console.warn(`Day index ${u}에 해당하는 데이터를 찾을 수 없습니다.`),[]):n[u].word.map(m=>{const g=o[m]||o[String(m)]||o[Number(m)];return g?{...g,done:a[m]||a[String(m)]||a[Number(m)]||!1}:(console.error(`[Hook/useWord] Word Data Missing: ID ${m}`),null)}).filter(Boolean),[n,u,o,a]),f=x.useMemo(()=>!n||n.length===0||!o||Object.keys(o).length===0,[n,o]);return{words:c,loading:f}},xa=x.createContext(null),Sw=x.createContext(null),Ta=x.createContext(null),am=x.createContext(null),cO=({initialNick:t,initialWordMap:n,initialStatusMap:a,initialUserData:s,wordData:o,notifications:u,now:c})=>{const f=yw(n,a),m=eO(t),g=rO(s),y=x.useMemo(()=>({wordData:o,notifications:u,now:c}),[o,u,c]);return b.jsx(am.Provider,{value:y,children:b.jsx(xa.Provider,{value:f,children:b.jsx(Sw.Provider,{value:m,children:b.jsx(Ta.Provider,{value:g,children:b.jsx(tc,{})})})})})},dO=()=>{const t=x.useMemo(()=>new Date,[]),{nick:n,wordMap:a,wordStatusMap:s,wordData:o,notifications:u,userData:c}=bE(),m=yE().state==="loading",g=`${n}-${c?.level||"default"}`;return b.jsx(XA,{children:b.jsxs(FA,{children:[m&&b.jsx(ZC,{}),b.jsx(iC,{notifications:u}),b.jsx(eC,{children:b.jsx(x.Suspense,{fallback:b.jsx(pw,{}),children:b.jsx(cO,{initialNick:n,initialWordMap:a,initialStatusMap:s,initialUserData:c,wordData:o,notifications:u,now:t},g)})}),b.jsx(oC,{})]})})},hO=N.div`
   min-width: ${({theme:t})=>t.min_width};
 
   height: 100dvh;
@@ -500,86 +503,86 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   margin: 0 auto;
 
   overflow-y: auto;
-`,hO=()=>b.jsx(dO,{children:b.jsx(x.Suspense,{fallback:b.jsx("div",{children:"Loading..."}),children:b.jsx(tc,{})})}),fO=N.div`
-  height: 100%;
+`,fO=()=>b.jsx(hO,{children:b.jsx(x.Suspense,{fallback:b.jsx("div",{children:"Loading..."}),children:b.jsx(tc,{})})}),mO=N.div`
+  flex: 1;
 
   display: flex;
   flex-direction: column;
   gap: 1rem;
-`,mO=N.div`
+`,gO=N.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
 
   padding-top: 2rem;
-`,gO=N.div`
+`,pO=N.div`
   width: 10rem;
   height: 10rem;
 
   background-color: ${({theme:t})=>t.week};
   border-radius: 5rem;
-`,pO=N.p`
+`,yO=N.p`
   text-align: center;
   font-size: 1.5rem;
   font-weight: 600;
   letter-spacing: 0.1rem;
 
   white-space: pre-line;
-`,yO=N.p`
+`,vO=N.p`
   color: ${({theme:t})=>t.label};
   text-align: center;
   line-height: 1.7;
 
   white-space: pre-line;
-`,vO=N.div`
+`,bO=N.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
   margin-top: 2rem;
-`,bO=N.div`
+`,wO=N.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   margin-top: 2rem;
-`,wO=N.div`
+`,SO=N.div`
   display: flex;
   justify-content: space-between;
 
   padding: 0rem 0.2rem;
-`,SO=N.span`
+`,_O=N.span`
   font-size: 0.9rem;
   font-weight: 500;
   color: ${({theme:t})=>t.brand};
-`,_O=N.span`
+`,EO=N.span`
   font-size: 1rem;
   font-weight: 600;
   color: ${({theme:t})=>t.font};
-`,EO=()=>{const t=wn(),{initVoca:n}=yw(),a=Xe(_e.NICK),[s,o]=x.useState(-1),[u,c]=x.useState(!1),f=async v=>{try{o(20),await n(v),o(100)}catch(S){console.error("[Onboard] 학습데이터 초기화 실패:",S),o(-1)}},m=()=>{c(!0),t("/",{state:{fromOnboarding:!0}})};let g=`나만의 단어장을
+`,xO=()=>{const t=wn(),{initVoca:n}=yw(),a=Xe(_e.NICK),[s,o]=x.useState(-1),[u,c]=x.useState(!1),f=async v=>{try{o(20),await n(v),o(100)}catch(S){console.error("[Onboard] 학습데이터 초기화 실패:",S),o(-1)}},m=()=>{c(!0),t("/",{state:{fromOnboarding:!0}})};let g=`나만의 단어장을
 만드는 중...`,y=`${a} 님의 학습 데이터를 구성하고 있어요.
 잠시만 기다려주세요.`;return s===-1?(g=`학습할 난이도를
 선택해주세요`,y=`${a} 님에게 맞는 레벨을 선택해
 맞춤 단어장을 구성해보세요.`):s===100&&(g=`나만의 단어장을
 완성했어요 !`,y=`${a} 님의 맞춤 단어장을 완성했어요.
-funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullScreen:!0,message:"데이터를 구성하고 있습니다..."}),b.jsxs(fO,{children:[b.jsxs(mO,{children:[b.jsx(gO,{}),b.jsx(pO,{children:g}),b.jsx(yO,{children:y})]}),s===-1&&b.jsxs(vO,{children:[b.jsx(xl,{label:"초급 (Default)",color:"main",bg:"brand",onClick:()=>f("default")}),b.jsx(xl,{label:"중급 (800)",color:"main",bg:"brand",onClick:()=>f("800")}),b.jsx(xl,{label:"고급 (900)",color:"main",bg:"brand",onClick:()=>f("900")})]}),s>=0&&b.jsxs(bO,{children:[b.jsxs(wO,{children:[b.jsx(SO,{children:"학습데이터 생성 중"}),b.jsxs(_O,{children:[s,"%"]})]}),b.jsx(tm,{status:s})]}),s===100&&b.jsx(xl,{label:"다음으로",color:"main",bg:"brand",onClick:m})]})]})},xO=N.div`
-  height: 100%;
+funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullScreen:!0,message:"데이터를 구성하고 있습니다..."}),b.jsxs(mO,{children:[b.jsxs(gO,{children:[b.jsx(pO,{}),b.jsx(yO,{children:g}),b.jsx(vO,{children:y})]}),s===-1&&b.jsxs(bO,{children:[b.jsx(xl,{label:"초급 (Default)",color:"main",bg:"brand",onClick:()=>f("default")}),b.jsx(xl,{label:"중급 (800)",color:"main",bg:"brand",onClick:()=>f("800")}),b.jsx(xl,{label:"고급 (900)",color:"main",bg:"brand",onClick:()=>f("900")})]}),s>=0&&b.jsxs(wO,{children:[b.jsxs(SO,{children:[b.jsx(_O,{children:"학습데이터 생성 중"}),b.jsxs(EO,{children:[s,"%"]})]}),b.jsx(tm,{status:s})]}),s===100&&b.jsx(xl,{label:"다음으로",color:"main",bg:"brand",onClick:m})]})]})},TO=N.div`
+  flex: 1;
 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   gap: 1rem;
-`,TO=N.div`
+`,RO=N.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-`,RO=N.div`
+`,AO=N.div`
   width: 10rem;
   height: 10rem;
 
   background-color: ${({theme:t})=>t.week};
   border-radius: 5rem;
-`,AO=N.div`
+`,CO=N.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -589,38 +592,38 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
     font-weight: 600;
     letter-spacing: 0.1rem;
   }
-`,CO=N(uC)`
+`,OO=N(cC)`
   width: 2rem;
   height: 2rem;
 
   color: ${({theme:t})=>t.brand};
-`,OO=N.p`
+`,jO=N.p`
   color: ${({theme:t})=>t.label};
   text-align: center;
   line-height: 1.7;
-`,jO=()=>{const t=wn(),[n,a]=x.useState(""),s=()=>{n.length<2||(Xt(_e.NICK,n),t("/onboard/generate-data"))},o=u=>a(u.target.value);return b.jsxs(xO,{children:[b.jsxs(TO,{children:[b.jsx(RO,{}),b.jsxs(AO,{children:[b.jsx("p",{children:"반가워요!"}),b.jsx(CO,{})]}),b.jsxs(OO,{children:["나만의 단어장 funny-voca를 시작하기전,",b.jsx("br",{}),"멋진 닉네임을 정해주세요."]})]}),b.jsx(hw,{label:"닉네임",value:n,onChange:o,placeholder:"닉네임 입력(2~10글자)",notice:"한글, 영문, 숫자 포함 2~10 자로 입력해주세요."}),b.jsx(xl,{label:"다음으로",color:"main",bg:"brand",onClick:s})]})},kO=864e5,DO=(t,n)=>{const s=new Date(t).setHours(0,0,0,0)-n;return Math.floor(s/kO)},MO=(t,n,a,s)=>{const o=new Date(t,n,1).getDay(),u=new Date(t,n+1,0).getDate(),c=Math.ceil((o+u)/7),f=Array.from({length:c},()=>Array(7).fill(!1));let m=1;for(let g=0;g<c;g++)for(let y=0;y<7;y++){if(g===0&&y<o||m>u){f[g][y]=null;continue}const v=new Date(t,n,m),S=DO(v,a),_=S>=0&&s[S];f[g][y]={value:m,status:_?s[S].done:null},m++}return f},NO=N.div`
+`,kO=()=>{const t=wn(),[n,a]=x.useState(""),s=()=>{n.length<2||(Xt(_e.NICK,n),t("/onboard/generate-data"))},o=u=>a(u.target.value);return b.jsxs(TO,{children:[b.jsxs(RO,{children:[b.jsx(AO,{}),b.jsxs(CO,{children:[b.jsx("p",{children:"반가워요!"}),b.jsx(OO,{})]}),b.jsxs(jO,{children:["나만의 단어장 funny-voca를 시작하기전,",b.jsx("br",{}),"멋진 닉네임을 정해주세요."]})]}),b.jsx(hw,{label:"닉네임",value:n,onChange:o,placeholder:"닉네임 입력(2~10글자)",notice:"한글, 영문, 숫자 포함 2~10 자로 입력해주세요."}),b.jsx(xl,{label:"다음으로",color:"main",bg:"brand",onClick:s})]})},DO=864e5,MO=(t,n)=>{const s=new Date(t).setHours(0,0,0,0)-n;return Math.floor(s/DO)},NO=(t,n,a,s)=>{const o=new Date(t,n,1).getDay(),u=new Date(t,n+1,0).getDate(),c=Math.ceil((o+u)/7),f=Array.from({length:c},()=>Array(7).fill(!1));let m=1;for(let g=0;g<c;g++)for(let y=0;y<7;y++){if(g===0&&y<o||m>u){f[g][y]=null;continue}const v=new Date(t,n,m),S=MO(v,a),_=S>=0&&s[S];f[g][y]={value:m,status:_?s[S].done:null},m++}return f},UO=N.div`
   display: flex;
   justify-content: space-between;
-`,UO=N.h2`
+`,zO=N.h2`
   display: none;
-`,zO=N.p`
+`,$O=N.p`
   font-weight: 600;
 
   & > span {
     color: ${({theme:t})=>t.brand};
   }
-`,$O=N.p`
+`,LO=N.p`
   font-weight: 600;
   line-height: 1;
   padding-bottom: 0.2rem;
-`,LO=N.div`
+`,BO=N.div`
   display: flex;
   align-items: center;
 `,_v=N.div`
   display: flex;
   justify-content: space-between;
   gap: 0.1rem;
-`,BO=N.div`
+`,qO=N.div`
   width: 2.5rem;
   height: 2.5rem;
 
@@ -628,7 +631,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   color: ${({$isSunday:t,theme:n})=>t?n.danger:n.sub};
 
   padding: 0.5rem;
-`,qO=N.div`
+`,HO=N.div`
   width: 2.5rem;
   height: 2.5rem;
 
@@ -644,7 +647,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
 
   padding-top: 0.8rem;
   border-radius: 2.5rem;
-`,HO=({mode:t,userData:n,now:a,wordMap:s})=>{const o=x.useMemo(()=>new Date(a),[a]),u=o.getFullYear(),c=o.getMonth(),f=o.getDate(),[m,g]=x.useState(o.getFullYear()),[y,v]=x.useState(o.getMonth()),S=x.useMemo(()=>MO(m,y,n.startedTime,s),[m,y]),_=()=>{y===0?(g(T=>T-1),v(11)):v(T=>T-1)},E=()=>{y===11?(g(T=>T+1),v(0)):v(T=>T+1)};return b.jsxs(nm,{children:[b.jsxs(NO,{children:[b.jsx(UO,{children:"학습기록"}),b.jsxs(zO,{children:["연속 학습 ",b.jsx("span",{children:`${n.continued??0}일 째`})]}),b.jsxs(LO,{children:[b.jsx(cw,{onClick:_}),b.jsx($O,{children:`${m}년 ${y+1}월`}),b.jsx(hc,{onClick:E})]})]}),b.jsx(_v,{children:["일","월","화","수","목","금","토"].map(T=>b.jsx(BO,{$isSunday:T==="일",children:T},T))}),S.map((T,M)=>b.jsx(_v,{children:T.map((z,k)=>{const H=m===u&&y===c,F=z&&z.value===f;return b.jsx(qO,{$isSunday:k===0,$isToday:H&&F,$isLearned:z&&z.status===!0,$isEmpty:!z,children:z&&z.value},`${M}${k}`)})},M))]})},PO=N(nm)`
+`,PO=({mode:t,userData:n,now:a,wordMap:s})=>{const o=x.useMemo(()=>new Date(a),[a]),u=o.getFullYear(),c=o.getMonth(),f=o.getDate(),[m,g]=x.useState(o.getFullYear()),[y,v]=x.useState(o.getMonth()),S=x.useMemo(()=>NO(m,y,n.startedTime,s),[m,y]),_=()=>{y===0?(g(T=>T-1),v(11)):v(T=>T-1)},E=()=>{y===11?(g(T=>T+1),v(0)):v(T=>T+1)};return b.jsxs(nm,{children:[b.jsxs(UO,{children:[b.jsx(zO,{children:"학습기록"}),b.jsxs($O,{children:["연속 학습 ",b.jsx("span",{children:`${n.continued??0}일 째`})]}),b.jsxs(BO,{children:[b.jsx(cw,{onClick:_}),b.jsx(LO,{children:`${m}년 ${y+1}월`}),b.jsx(hc,{onClick:E})]})]}),b.jsx(_v,{children:["일","월","화","수","목","금","토"].map(T=>b.jsx(qO,{$isSunday:T==="일",children:T},T))}),S.map((T,M)=>b.jsx(_v,{children:T.map((z,k)=>{const H=m===u&&y===c,F=z&&z.value===f;return b.jsx(HO,{$isSunday:k===0,$isToday:H&&F,$isLearned:z&&z.status===!0,$isEmpty:!z,children:z&&z.value},`${M}${k}`)})},M))]})},IO=N(nm)`
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
@@ -652,22 +655,22 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   position: relative;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-`,IO=N.div`
+`,GO=N.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`,GO=N.h2`
+`,VO=N.h2`
   font-size: 1.1rem;
   font-weight: 700;
   color: ${({theme:t})=>t.font};
-`,VO=N.div`
+`,KO=N.div`
   font-size: 0.8rem;
   font-weight: 600;
   padding: 0.3rem 0.6rem;
   background-color: ${({theme:t})=>t.week};
   color: ${({theme:t})=>t.brand};
   border-radius: 1rem;
-`,KO=N.div`
+`,YO=N.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -677,19 +680,19 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   font-size: 0.9rem;
   color: ${({theme:t})=>t.label};
   font-weight: 600;
-`,YO=N.div`
+`,QO=N.div`
   width: 100%;
   height: 12px;
   background-color: ${({theme:t})=>t.background};
   border-radius: 10px;
   overflow: hidden;
-`,QO=N.div`
+`,JO=N.div`
   height: 100%;
   width: ${({$progress:t})=>t}%;
   background: linear-gradient(90deg, ${({theme:t})=>t.brand}, ${({theme:t})=>t.week_success});
   border-radius: 10px;
   transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-`,JO=N.div`
+`,ZO=N.div`
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -700,7 +703,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   font-weight: 700;
   font-size: 0.95rem;
   align-self: flex-start;
-`,ZO=N.div`
+`,WO=N.div`
   display: flex;
   gap: 1rem;
   margin-top: 0.5rem;
@@ -731,14 +734,14 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   }
-`,WO=({userData:t,wordMap:n})=>{const a=wn(),s=t?.selected??0,o=(n||[]).filter(Boolean).reduce((g,y)=>g+(y.length||0),0),u=t.learned||0,c=o>0?Math.round(u/o*100):0,m={default:"초급 (Default)",800:"중급 (800)",900:"고급 (900)"}[t?.level]||"알 수 없음";return b.jsxs(PO,{children:[b.jsxs(IO,{children:[b.jsx(GO,{children:"학습 대시보드"}),b.jsx(VO,{children:m})]}),b.jsxs(KO,{children:[b.jsxs(Ev,{children:[b.jsx("span",{children:"전체 마스터 진행률"}),b.jsxs("span",{children:[c,"%"]})]}),b.jsx(YO,{children:b.jsx(QO,{$progress:c})}),b.jsxs(Ev,{style:{fontSize:"0.8rem",color:"#aaaaaa"},children:[b.jsxs("span",{children:[u," 단어 완료"]}),b.jsxs("span",{children:[o," 단어"]})]})]}),b.jsxs(JO,{children:["🔥 ",t.continued,"일 연속 학습 중!"]}),b.jsxs(ZO,{children:[b.jsxs(xv,{onClick:()=>a(`/play/${s}/card/0`),children:[b.jsx(dw,{}),b.jsx("span",{children:"암기하기"})]}),b.jsxs(xv,{onClick:()=>a(`/quiz/${s}`),children:[b.jsx(uw,{}),b.jsx("span",{children:"퀴즈풀기"})]})]})]})},XO=N.div`
+`,XO=({userData:t,wordMap:n})=>{const a=wn(),s=t?.selected??0,o=(n||[]).filter(Boolean).reduce((g,y)=>g+(y.length||0),0),u=t.learned||0,c=o>0?Math.round(u/o*100):0,m={default:"초급 (Default)",800:"중급 (800)",900:"고급 (900)"}[t?.level]||"알 수 없음";return b.jsxs(IO,{children:[b.jsxs(GO,{children:[b.jsx(VO,{children:"학습 대시보드"}),b.jsx(KO,{children:m})]}),b.jsxs(YO,{children:[b.jsxs(Ev,{children:[b.jsx("span",{children:"전체 마스터 진행률"}),b.jsxs("span",{children:[c,"%"]})]}),b.jsx(QO,{children:b.jsx(JO,{$progress:c})}),b.jsxs(Ev,{style:{fontSize:"0.8rem",color:"#aaaaaa"},children:[b.jsxs("span",{children:[u," 단어 완료"]}),b.jsxs("span",{children:[o," 단어"]})]})]}),b.jsxs(ZO,{children:["🔥 ",t.continued,"일 연속 학습 중!"]}),b.jsxs(WO,{children:[b.jsxs(xv,{onClick:()=>a(`/play/${s}/card/0`),children:[b.jsx(dw,{}),b.jsx("span",{children:"암기하기"})]}),b.jsxs(xv,{onClick:()=>a(`/quiz/${s}`),children:[b.jsx(uw,{}),b.jsx("span",{children:"퀴즈풀기"})]})]})]})},FO=N.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
 
   padding: 1rem 1rem;
   padding-bottom: 1rem;
-`,FO=()=>{const{wordMap:t}=x.useContext(xa),{userData:n}=x.useContext(Ta),{now:a}=x.useContext(am);return b.jsxs(XO,{children:[b.jsx(WO,{userData:n,wordMap:t}),b.jsx(HO,{mode:"compact",now:a,userData:n,wordMap:t})]})},Tv=N.div`
+`,ej=()=>{const{wordMap:t}=x.useContext(xa),{userData:n}=x.useContext(Ta),{now:a}=x.useContext(am);return b.jsxs(FO,{children:[b.jsx(XO,{userData:n,wordMap:t}),b.jsx(PO,{mode:"compact",now:a,userData:n,wordMap:t})]})},Tv=N.div`
   height: 100%;
 
   display: flex;
@@ -747,7 +750,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
 
   padding: 1rem 1rem;
   padding-bottom: 1rem;
-`,ej=N.div`
+`,tj=N.div`
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -756,36 +759,36 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   gap: 1rem;
   padding: 1rem;
   text-align: center;
-`,tj=N.h3`
+`,nj=N.h3`
   font-size: 1.4rem;
   font-weight: 700;
   color: ${({theme:t})=>t.font};
-`,nj=N.p`
+`,rj=N.p`
   color: ${({theme:t})=>t.label};
   line-height: 1.8;
   white-space: pre-line;
-`,Rv=()=>{const{selected:t}=ni(),{words:n}=fc(t),{step:a}=ww(),s=wn(),[o,u]=x.useState(!1),c=x.useMemo(()=>n.filter(m=>m.done===!1),[n]);return!window.location.pathname.includes("/quiz")&&n.length>0&&c.length===0&&!o?b.jsx(Tv,{children:b.jsxs(ej,{children:[b.jsx("span",{style:{fontSize:"3rem"},children:"🎉"}),b.jsx(tj,{children:"이미 모두 학습했어요!"}),b.jsx(nj,{children:`이 단어장의 모든 단어를
-이미 학습 완료했습니다.`}),b.jsx(Wt,{label:"복습하기",color:"main",bg:"brand",onClick:()=>u(!0)}),b.jsx(Wt,{label:"단어장으로 돌아가기",color:"font",bg:"main",onClick:()=>s(`/voca/${t}`)}),b.jsx(Wt,{label:"홈으로",color:"font",bg:"main",onClick:()=>s("/home")})]})}):b.jsx(Tv,{children:b.jsx(x.Suspense,{fallback:b.jsx("div",{children:"불러올 단어가 없습니다."}),children:b.jsx(tc,{},a)})})},rj=()=>{const{selected:t}=ni(),{words:n}=fc(t),{step:a,changeStep:s}=ww(),[o,u]=x.useState("word"),{updateStatus:c}=x.useContext(xa),f=()=>{u(v=>v==="word"?"def":"word")},m=()=>{a!==0&&s(a-1)},g=()=>{if(a===n.length-1){u("complete");return}s(a+1)},y=()=>{s(0)};return{mode:o,total:n.length,done:a,wordSet:n[a],events:{changeMode:f,prevCard:m,nextCard:g,replayCard:y}}},aj=N.div`
+`,Rv=()=>{const{selected:t}=ni(),{words:n}=fc(t),{step:a}=ww(),s=wn(),[o,u]=x.useState(!1),c=x.useMemo(()=>n.filter(m=>m.done===!1),[n]);return!window.location.pathname.includes("/quiz")&&n.length>0&&c.length===0&&!o?b.jsx(Tv,{children:b.jsxs(tj,{children:[b.jsx("span",{style:{fontSize:"3rem"},children:"🎉"}),b.jsx(nj,{children:"이미 모두 학습했어요!"}),b.jsx(rj,{children:`이 단어장의 모든 단어를
+이미 학습 완료했습니다.`}),b.jsx(Wt,{label:"복습하기",color:"main",bg:"brand",onClick:()=>u(!0)}),b.jsx(Wt,{label:"단어장으로 돌아가기",color:"font",bg:"main",onClick:()=>s(`/voca/${t}`)}),b.jsx(Wt,{label:"홈으로",color:"font",bg:"main",onClick:()=>s("/home")})]})}):b.jsx(Tv,{children:b.jsx(x.Suspense,{fallback:b.jsx("div",{children:"불러올 단어가 없습니다."}),children:b.jsx(tc,{},a)})})},aj=()=>{const{selected:t}=ni(),{words:n}=fc(t),{step:a,changeStep:s}=ww(),[o,u]=x.useState("word"),{updateStatus:c}=x.useContext(xa),f=()=>{u(v=>v==="word"?"def":"word")},m=()=>{a!==0&&s(a-1)},g=()=>{if(a===n.length-1){u("complete");return}s(a+1)},y=()=>{s(0)};return{mode:o,total:n.length,done:a,wordSet:n[a],events:{changeMode:f,prevCard:m,nextCard:g,replayCard:y}}},ij=N.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 0.5rem;
-`,ij=N.div`
+`,sj=N.div`
   font-size: 1.5rem;
   font-weight: 600;
   line-height: 1;
   color: ${({theme:t})=>t.label};
-`,sj=({total:t,done:n})=>b.jsxs(aj,{children:[b.jsx(ij,{children:`${n} / ${t}`}),b.jsx(tm,{status:t>0?n/t*100:0})]});N.p`
+`,lj=({total:t,done:n})=>b.jsxs(ij,{children:[b.jsx(sj,{children:`${n} / ${t}`}),b.jsx(tm,{status:t>0?n/t*100:0})]});N.p`
   text-align: center;
   color: ${({theme:t})=>t.label};
   font-size: 1rem;
   font-weight: 500;
-`;const lj=N.p`
+`;const oj=N.p`
   text-align: center;
   color: ${({theme:t})=>t.sub};
   font-size: 1.5rem;
   font-weight: 500;
-`,oj=({definitions:t})=>b.jsx(b.Fragment,{children:t.map(({class:n,value:a,exp:s},o)=>b.jsx(lj,{children:`${n}. ${a}`},o))}),uj=N.div`
+`,uj=({definitions:t})=>b.jsx(b.Fragment,{children:t.map(({class:n,value:a,exp:s},o)=>b.jsx(oj,{children:`${n}. ${a}`},o))}),cj=N.div`
   height: 100%;
 
   display: flex;
@@ -794,7 +797,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   gap: 1rem;
 
   padding-bottom: 1rem;
-`,cj=N.div`
+`,dj=N.div`
   width: 13rem;
   height: 15rem;
 
@@ -802,16 +805,16 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   border-radius: 1rem;
 
   margin: 0rem 10rem;
-`,dj=N.h3`
+`,hj=N.h3`
   font-weight: 600;
 
   padding-top: 0.5rem;
-`,hj=N.div`
+`,fj=N.div`
   color: ${({theme:t})=>t.label};
   text-align: center;
   line-height: 2;
   white-space: pre-wrap;
-`,fj=N.div`
+`,mj=N.div`
   width: 100%;
 
   display: flex;
@@ -819,8 +822,8 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   gap: 1rem;
 
   margin-top: auto;
-`,mj=({replayCard:t})=>{const n=wn(),{selected:a}=ni(),{recordSession:s}=x.useContext(Ta);x.useEffect(()=>{s()},[s]);const o=()=>n(`/quiz/${a}`);return b.jsxs(uj,{children:[b.jsx(cj,{}),b.jsx(dj,{children:"학습 완료!"}),b.jsx(hj,{children:`오늘의 단어를 모두 확인했습니다.
-퀴즈로 이동할까요?`}),b.jsxs(fj,{children:[b.jsx(Wt,{label:"퀴즈 풀러가기",color:"main",bg:"brand",onClick:o}),b.jsx(Wt,{label:"다시 학습하기",color:"font",bg:"main",onClick:t})]})]})},gj=N.div`
+`,gj=({replayCard:t})=>{const n=wn(),{selected:a}=ni(),{recordSession:s}=x.useContext(Ta);x.useEffect(()=>{s()},[s]);const o=()=>n(`/quiz/${a}`);return b.jsxs(cj,{children:[b.jsx(dj,{}),b.jsx(hj,{children:"학습 완료!"}),b.jsx(fj,{children:`오늘의 단어를 모두 확인했습니다.
+퀴즈로 이동할까요?`}),b.jsxs(mj,{children:[b.jsx(Wt,{label:"퀴즈 풀러가기",color:"main",bg:"brand",onClick:o}),b.jsx(Wt,{label:"다시 학습하기",color:"font",bg:"main",onClick:t})]})]})},pj=N.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -830,36 +833,36 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   & p {
     line-height: 1.5;
   }
-`,pj=N.div`
+`,yj=N.div`
   display: flex;
   gap: 1rem;
-`,yj=N(cw)`
+`,vj=N(cw)`
   width: 1.2rem;
   height: 1.2rem;
   margin-left: -0.5rem;
-`,vj=N(hc)`
+`,bj=N(hc)`
   width: 1.2rem;
   height: 1.2rem;
   margin-right: -0.5rem;
-`,bj=({changeEvent:t,prevEvent:n,nextEvent:a})=>{const s={left:b.jsxs(b.Fragment,{children:[b.jsx(yj,{}),"이전"]}),right:b.jsxs(b.Fragment,{children:["다음",b.jsx(vj,{})]})};return b.jsxs(gj,{children:[b.jsx(Wt,{label:"뒤집기",color:"main",bg:"success",onClick:t}),b.jsxs(pj,{children:[b.jsx(Wt,{label:s.left,color:"main",bg:"brand",onClick:n}),b.jsx(Wt,{label:s.right,color:"main",bg:"brand",onClick:a})]})]})},wj=N(hC)`
+`,wj=({changeEvent:t,prevEvent:n,nextEvent:a})=>{const s={left:b.jsxs(b.Fragment,{children:[b.jsx(vj,{}),"이전"]}),right:b.jsxs(b.Fragment,{children:["다음",b.jsx(bj,{})]})};return b.jsxs(pj,{children:[b.jsx(Wt,{label:"뒤집기",color:"main",bg:"success",onClick:t}),b.jsxs(yj,{children:[b.jsx(Wt,{label:s.left,color:"main",bg:"brand",onClick:n}),b.jsx(Wt,{label:s.right,color:"main",bg:"brand",onClick:a})]})]})},Sj=N(fC)`
   width: 2.5rem;
   height: 2.5rem;
   align-self: flex-end;
   cursor: pointer;
 
   margin-bottom: 0.5rem;
-`,Sj=N(nm)`
+`,_j=N(nm)`
   flex-direction: column;
   justify-content: center;
   gap: 1rem;
 
   padding: 1rem;
-`,_j=N.h3`
+`,Ej=N.h3`
   text-align: center;
   font-size: ${({$length:t})=>`clamp(1rem, ${3.5-t/8}rem, 3.5rem)`};
   font-weight: 600;
   letter-spacing: 0.2rem;
-`,Ej=()=>{const t=new SpeechSynthesisUtterance;return t.lang="en-US",t.rate=.9,t},xj=()=>{const{mode:t,total:n,done:a,wordSet:s,events:o}=rj(),{changeMode:u,prevCard:c,nextCard:f,replayCard:m}=o;if(!s)return null;const{word:g,definitions:y}=s,v=x.useMemo(()=>Ej(),[]);x.useEffect(()=>()=>window.speechSynthesis.cancel());const S=()=>{window.speechSynthesis.cancel(),v.text=g,window.speechSynthesis.speak(v)},_={word:b.jsx(_j,{$length:g.length,children:g}),def:b.jsx(oj,{definitions:y})};return t!=="complete"?b.jsxs(b.Fragment,{children:[b.jsx(sj,{total:n,done:a}),b.jsx(wj,{onClick:S}),b.jsx(Sj,{children:_[t]}),b.jsx(bj,{changeEvent:u,prevEvent:c,nextEvent:f})]}):b.jsx(mj,{replayCard:m})},Yh=N.div`
+`,xj=()=>{const t=new SpeechSynthesisUtterance;return t.lang="en-US",t.rate=.9,t},Tj=()=>{const{mode:t,total:n,done:a,wordSet:s,events:o}=aj(),{changeMode:u,prevCard:c,nextCard:f,replayCard:m}=o;if(!s)return null;const{word:g,definitions:y}=s,v=x.useMemo(()=>xj(),[]);x.useEffect(()=>()=>window.speechSynthesis.cancel());const S=()=>{window.speechSynthesis.cancel(),v.text=g,window.speechSynthesis.speak(v)},_={word:b.jsx(Ej,{$length:g.length,children:g}),def:b.jsx(uj,{definitions:y})};return t!=="complete"?b.jsxs(b.Fragment,{children:[b.jsx(lj,{total:n,done:a}),b.jsx(Sj,{onClick:S}),b.jsx(_j,{children:_[t]}),b.jsx(wj,{changeEvent:u,prevEvent:c,nextEvent:f})]}):b.jsx(gj,{replayCard:m})},Yh=N.div`
   height: 100%;
 
   display: flex;
@@ -879,17 +882,17 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   font-weight: 600;
 
   background-color: ${({theme:t})=>t.main};
-`,xf=t=>{const n=[...t];for(let a=n.length-1;a>0;a--){const s=Math.floor(Math.random()*(a+1));[n[a],n[s]]=[n[s],n[a]]}return n},Tj=N.div`
+`,xf=t=>{const n=[...t];for(let a=n.length-1;a>0;a--){const s=Math.floor(Math.random()*(a+1));[n[a],n[s]]=[n[s],n[a]]}return n},Rj=N.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 0.5rem;
-`,Rj=N.div`
+`,Aj=N.div`
   font-size: 1.5rem;
   font-weight: 600;
   line-height: 1;
   color: ${({theme:t})=>t.label};
-`,Aj=({total:t,done:n})=>b.jsxs(Tj,{children:[b.jsx(Rj,{children:`${n} / ${t}`}),b.jsx(tm,{status:n/t*100})]}),Cj=N.div`
+`,Cj=({total:t,done:n})=>b.jsxs(Rj,{children:[b.jsx(Aj,{children:`${n} / ${t}`}),b.jsx(tm,{status:n/t*100})]}),Oj=N.div`
   max-width: ${({theme:t})=>t.max_width};
   min-width: ${({theme:t})=>t.min_width};
   width: 100%;
@@ -909,7 +912,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
 
   margin: 0 auto;
   padding: 0.5rem 1rem;
-`,Oj=N.div`
+`,jj=N.div`
   height: 100%;
 
   display: flex;
@@ -918,11 +921,11 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   gap: 0.3rem;
 
   margin-right: 6rem;
-`,jj=N(em)`
+`,kj=N(em)`
   width: 1rem;
   height: 1rem;
   color: ${({theme:t})=>t.week_success};
-`,kj=N.span`
+`,Dj=N.span`
   display: flex;
   align-items: center;
   gap: 0.1rem;
@@ -931,36 +934,36 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.1rem;
-`,Dj=N.span`
+`,Mj=N.span`
   color: ${({theme:t})=>t.label};
   font-size: 0.7rem;
-`,Mj=N(hc)`
+`,Nj=N(hc)`
   margin-right: -1rem;
-`,Nj=N.div`
+`,Uj=N.div`
   width: 2.5rem;
   height: 2.5rem;
 
   display: flex;
   align-items: center;
   justify-content: center;
-`,Uj=N.svg`
+`,zj=N.svg`
   width: 100%;
   height: 100%;
   transform: rotate(-90deg);
 
   shape-rendering: geometricPrecision;
-`,zj=N.circle`
+`,$j=N.circle`
   fill: none;
   stroke: ${({theme:t})=>t.sub};
   stroke-width: 6;
-`,$j=Xf`
+`,Lj=Xf`
   from {
     stroke-dashoffset: 282.6;
   }
   to {
     stroke-dashoffset: 0;
   }
-`,Lj=N.circle`
+`,Bj=N.circle`
   fill: none;
   stroke: ${({theme:t})=>t.week_success};
   stroke-width: 6;
@@ -968,15 +971,15 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
 
   stroke-dasharray: 282.6;
 
-  animation: ${$j} ${({$duration:t})=>t}s linear forwards;
-`,Bj=N.span`
+  animation: ${Lj} ${({$duration:t})=>t}s linear forwards;
+`,qj=N.span`
   position: absolute;
 
   font-size: 0.8rem;
   font-weight: 600;
   color: ${({theme:t})=>t.week_success};
   line-height: 1;
-`,qj=({second:t})=>{const[n,a]=x.useState(t);return x.useEffect(()=>{const s=setInterval(()=>{a(o=>o>0?o-1:0)},1e3);return()=>clearInterval(s)},[]),b.jsx(Bj,{children:n})},Hj=({second:t=3,callback:n})=>(x.useEffect(()=>{let a;return a=setTimeout(()=>{n()},t*1e3),()=>{clearTimeout(a)}},[t,n]),b.jsxs(Nj,{children:[b.jsxs(Uj,{viewBox:"0 0 100 100",children:[b.jsx(zj,{cx:"50",cy:"50",r:"45"}),b.jsx(Lj,{cx:"50",cy:"50",r:"45",$duration:t})]}),b.jsx(qj,{second:t})]})),Pj=({onNext:t})=>b.jsxs(Cj,{children:[b.jsx(Hj,{second:3,callback:t}),b.jsxs(Oj,{children:[b.jsxs(kj,{children:[b.jsx(jj,{}),"정답입니다!"]}),b.jsx(Dj,{children:"3초 뒤 자동으로 전환"})]}),b.jsx(DC,{label:b.jsxs(b.Fragment,{children:["다음",b.jsx(Mj,{})]}),color:"main",bg:"brand",onClick:t})]}),Ij=N.div`
+`,Hj=({second:t})=>{const[n,a]=x.useState(t);return x.useEffect(()=>{const s=setInterval(()=>{a(o=>o>0?o-1:0)},1e3);return()=>clearInterval(s)},[]),b.jsx(qj,{children:n})},Pj=({second:t=3,callback:n})=>(x.useEffect(()=>{let a;return a=setTimeout(()=>{n()},t*1e3),()=>{clearTimeout(a)}},[t,n]),b.jsxs(Uj,{children:[b.jsxs(zj,{viewBox:"0 0 100 100",children:[b.jsx($j,{cx:"50",cy:"50",r:"45"}),b.jsx(Bj,{cx:"50",cy:"50",r:"45",$duration:t})]}),b.jsx(Hj,{second:t})]})),Ij=({onNext:t})=>b.jsxs(Oj,{children:[b.jsx(Pj,{second:3,callback:t}),b.jsxs(jj,{children:[b.jsxs(Dj,{children:[b.jsx(kj,{}),"정답입니다!"]}),b.jsx(Mj,{children:"3초 뒤 자동으로 전환"})]}),b.jsx(MC,{label:b.jsxs(b.Fragment,{children:["다음",b.jsx(Nj,{})]}),color:"main",bg:"brand",onClick:t})]}),Gj=N.div`
   height: 100%;
 
   display: flex;
@@ -985,7 +988,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   gap: 1rem;
 
   padding-bottom: 1rem;
-`,Gj=N.div`
+`,Vj=N.div`
   width: 13rem;
   height: 15rem;
 
@@ -993,16 +996,16 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   border-radius: 1rem;
 
   margin: 0rem 10rem;
-`,Vj=N.h3`
+`,Kj=N.h3`
   font-weight: 600;
 
   padding-top: 0.5rem;
-`,Kj=N.div`
+`,Yj=N.div`
   color: ${({theme:t})=>t.label};
   text-align: center;
   line-height: 2;
   white-space: pre-wrap;
-`,Yj=N.div`
+`,Qj=N.div`
   width: 100%;
 
   display: flex;
@@ -1010,19 +1013,19 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   gap: 1rem;
 
   margin-top: auto;
-`,Qj=()=>{const t=wn(),{selected:n}=ni(),{recordSession:a}=x.useContext(Ta);x.useEffect(()=>{a()},[a]);const s=()=>t("/home"),o=()=>t(`/voca/${n}`);return b.jsxs(Ij,{children:[b.jsx(Gj,{}),b.jsx(Vj,{children:"퀴즈 완료!"}),b.jsx(Kj,{children:`모든 퀴즈를 정답으로 맞혔습니다.
-단어장으로 이동해 결과를 확인할까요?`}),b.jsxs(Yj,{children:[b.jsx(Wt,{label:"단어장 확인하기",color:"main",bg:"brand",onClick:o}),b.jsx(Wt,{label:"홈으로 돌아가기",color:"font",bg:"main",onClick:s})]})]})},Jj=N.div`
+`,Jj=()=>{const t=wn(),{selected:n}=ni(),{recordSession:a}=x.useContext(Ta);x.useEffect(()=>{a()},[a]);const s=()=>t("/home"),o=()=>t(`/voca/${n}`);return b.jsxs(Gj,{children:[b.jsx(Vj,{}),b.jsx(Kj,{children:"퀴즈 완료!"}),b.jsx(Yj,{children:`모든 퀴즈를 정답으로 맞혔습니다.
+단어장으로 이동해 결과를 확인할까요?`}),b.jsxs(Qj,{children:[b.jsx(Wt,{label:"단어장 확인하기",color:"main",bg:"brand",onClick:o}),b.jsx(Wt,{label:"홈으로 돌아가기",color:"font",bg:"main",onClick:s})]})]})},Zj=N.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-`,Zj=N(Wt)`
+`,Wj=N(Wt)`
   justify-content: flex-start;
 
   & svg {
     visibility: ${({$isClicked:t})=>t?"visible":"hidden"};
     margin-left: auto;
   }
-`,Wj=({label:t,corrected:n,onClick:a,onWrong:s,disabled:o})=>{const[u,c]=x.useState(!1),f=()=>{o||(c(!0),n?a():s&&s())},m={label:b.jsxs(b.Fragment,{children:[t,n?b.jsx(fC,{}):b.jsx(mC,{})]}),color:u?"main":"font",bg:u?n?"success":"danger":"main"};return b.jsx(Zj,{label:m.label,bg:m.bg,color:m.color,onClick:f,$isClicked:u,disabled:o})},im=({onClick:t,onWrong:n,wrongs:a,answer:s,disabled:o})=>{const u=x.useMemo(()=>[...a,s].sort(()=>.5-Math.random()),[a,s]);return b.jsx(Jj,{children:u.map((c,f)=>b.jsx(Wj,{label:c,corrected:c===s,onClick:t,onWrong:n,disabled:o},`${c}-${f}`))})},Xj=["명사","동사","형용사","부사","전치사","접속사","대명사"],_w=t=>{if(!t)return"명사";const n=t.trim().toLowerCase().replace(/\.$/,"");return{n:"명사",v:"동사",a:"형용사",ad:"부사",prep:"전치사",conj:"접속사",pron:"대명사",int:"감탄사",adj:"형용사"}[n]||t},Ew=(t,n)=>{const a=n.filter(s=>s.word!==t).sort(()=>.5-Math.random()).slice(0,3).map(s=>s.word);for(;a.length<3;)a.push("---");return a},Fj=t=>{const n=_w(t),a=Xj.filter(o=>o!==n);return xf([...a]).slice(0,3)},e5=({currentWord:t,allWords:n,onCorrect:a,onWrong:s,isAnswered:o})=>{const c=(t.definitions?.[0]||{}).value||"뜻 정보가 없습니다.",f=t.word,m=x.useMemo(()=>Ew(f,n),[f,n]);return b.jsxs(b.Fragment,{children:[b.jsx("div",{style:{textAlign:"center",fontSize:"1.2rem",color:"#666",marginBottom:"8px"},children:"의미에 알맞은 단어를 선택하세요."}),b.jsx("div",{style:{fontSize:"1.8rem",fontWeight:"bold",textAlign:"center",margin:"24px 0"},children:c}),b.jsx(im,{onClick:a,onWrong:s,wrongs:m,answer:f,disabled:o})]})},t5=({currentWord:t,onCorrect:n,onWrong:a,isAnswered:s})=>{const o=t.word,u=t.definitions?.[0]?.type||"n.",c=_w(u),f=x.useMemo(()=>Fj(u),[u]);return b.jsxs(b.Fragment,{children:[b.jsx("div",{style:{textAlign:"center",fontSize:"1.2rem",color:"#666",marginBottom:"8px"},children:"단어의 올바른 품사를 선택하세요."}),b.jsx("div",{style:{fontSize:"2rem",fontWeight:"bold",textAlign:"center",margin:"24px 0",letterSpacing:"1px"},children:o}),b.jsx(im,{onClick:n,onWrong:a,wrongs:f,answer:c,disabled:s})]})},n5=({currentWord:t,allWords:n,onCorrect:a,onWrong:s,isAnswered:o})=>{const c=(t.definitions||[])[0]||{},f=t.word,m=x.useMemo(()=>{if(c.quiz_en&&c.quiz_en.length>0){const y=Math.floor(Math.random()*c.quiz_en.length);return c.quiz_en[y]}return`[  ] : ${c.value||"뜻 정보 없음"}`},[c]),g=x.useMemo(()=>Ew(f,n),[f,n]);return b.jsxs(b.Fragment,{children:[b.jsx("div",{style:{textAlign:"center",fontSize:"1.2rem",color:"#666",marginBottom:"8px"},children:"문맥에 알맞은 단어를 선택하세요."}),b.jsx("div",{style:{fontSize:"1.6rem",fontWeight:"600",textAlign:"center",margin:"24px 0",lineHeight:"1.6",wordBreak:"break-word",padding:"0 16px"},children:m}),b.jsx(im,{onClick:a,onWrong:s,wrongs:g,answer:f,disabled:o})]})},Ru="myvoca_quiz_state",r5=()=>{const{selected:t}=ni(),{words:n,loading:a}=fc(t),{updateStatus:s}=x.useContext(xa),[o,u]=x.useState(null),[c,f]=x.useState(!1),[m,g]=x.useState(!1);x.useEffect(()=>{if(a||!n||n.length===0)return;const z=localStorage.getItem(Ru);let k=null;try{z&&(k=JSON.parse(z))}catch(F){console.error("Failed to parse saved quiz state",F)}const H=Number(t);if(!k||k.day!==H){const F=n.filter(fe=>!fe.done),ne=(F.length>0?F:n).map(fe=>fe.id),Y=xf([...ne]),j={day:H,phase:"SPELLING",doneCount:0,totalCount:ne.length,queue:Y,targetWordIds:ne};localStorage.setItem(Ru,JSON.stringify(j)),u(j)}else u(k);f(!1),g(!1)},[n,a,t]);const y=z=>{z?localStorage.setItem(Ru,JSON.stringify(z)):localStorage.removeItem(Ru),u(z)},v=x.useMemo(()=>{if(!o||!o.queue||o.queue.length===0)return null;const z=o.queue[0];return n.find(k=>k.id===z)},[o,n]);if(a||!n||n.length===0)return b.jsxs(Yh,{style:{padding:"20px"},children:[b.jsxs("div",{style:{width:"100%",marginBottom:"20px"},children:[b.jsx(Br,{height:"12px",width:"100%"}),b.jsx("div",{style:{display:"flex",justifyContent:"center",marginTop:"12px"},children:b.jsx(Br,{height:"20px",width:"200px"})})]}),b.jsxs(Av,{style:{display:"flex",flexDirection:"column",gap:"1.5rem",alignItems:"center",padding:"40px 20px"},children:[b.jsx(Br,{height:"24px",width:"150px"}),b.jsx(Br,{height:"60px",width:"100%"}),b.jsxs("div",{style:{display:"flex",flexDirection:"column",gap:"0.75rem",width:"100%",marginTop:"20px"},children:[b.jsx(Br,{height:"50px",width:"100%"}),b.jsx(Br,{height:"50px",width:"100%"}),b.jsx(Br,{height:"50px",width:"100%"})]})]})]});if(o&&o.phase==="COMPLETE")return b.jsx(Qj,{});if(!o||!v)return b.jsx(Yh,{style:{justifyContent:"center",alignItems:"center"},children:b.jsx("div",{children:"진행 가능한 퀴즈가 없습니다."})});const S=()=>{g(!0)},_=()=>{f(!0)},E=()=>{g(!1);let z=[],k=o.doneCount;if(c?z=[...o.queue.slice(1),o.queue[0]]:(z=o.queue.slice(1),k+=1),f(!1),z.length===0){let H="SPELLING";if(o.phase==="SPELLING"?H="POS":o.phase==="POS"?H="SENTENCE":o.phase==="SENTENCE"&&(H="COMPLETE"),H==="COMPLETE")o.targetWordIds.forEach(F=>{s(F,!0)}),y({...o,phase:"COMPLETE",queue:[],doneCount:o.targetWordIds.length});else{const F=xf([...o.targetWordIds]);y({...o,phase:H,doneCount:0,queue:F})}}else y({...o,doneCount:k,queue:z})},T=()=>{switch(o.phase){case"SPELLING":return b.jsx(e5,{currentWord:v,allWords:n,onCorrect:S,onWrong:_,isAnswered:m});case"POS":return b.jsx(t5,{currentWord:v,onCorrect:S,onWrong:_,isAnswered:m});case"SENTENCE":return b.jsx(n5,{currentWord:v,allWords:n,onCorrect:S,onWrong:_,isAnswered:m});default:return null}},M=z=>{switch(z){case"SPELLING":return"1단계: 뜻 보고 단어 맞추기 (스펠링 퀴즈)";case"POS":return"2단계: 단어 보고 품사 맞추기 (품사 퀴즈)";case"SENTENCE":return"3단계: 빈칸 채우기 (예문 퀴즈)";default:return"퀴즈 진행 중"}};return b.jsxs(Yh,{children:[b.jsxs("div",{children:[b.jsx(Aj,{total:o.totalCount,done:o.doneCount}),b.jsx("div",{style:{textAlign:"center",fontWeight:"bold",fontSize:"1.1rem",color:"var(--color-brand, #4f46e5)",marginTop:"12px"},children:M(o.phase)})]}),b.jsx(Av,{children:b.jsx("div",{style:{width:"100%",padding:"20px"},children:T()})}),m&&b.jsx(Pj,{onNext:E})]},`${o.phase}-${v.id}`)},a5=N.div`
+`,Xj=({label:t,corrected:n,onClick:a,onWrong:s,disabled:o})=>{const[u,c]=x.useState(!1),f=()=>{o||(c(!0),n?a():s&&s())},m={label:b.jsxs(b.Fragment,{children:[t,n?b.jsx(mC,{}):b.jsx(gC,{})]}),color:u?"main":"font",bg:u?n?"success":"danger":"main"};return b.jsx(Wj,{label:m.label,bg:m.bg,color:m.color,onClick:f,$isClicked:u,disabled:o})},im=({onClick:t,onWrong:n,wrongs:a,answer:s,disabled:o})=>{const u=x.useMemo(()=>[...a,s].sort(()=>.5-Math.random()),[a,s]);return b.jsx(Zj,{children:u.map((c,f)=>b.jsx(Xj,{label:c,corrected:c===s,onClick:t,onWrong:n,disabled:o},`${c}-${f}`))})},Fj=["명사","동사","형용사","부사","전치사","접속사","대명사"],_w=t=>{if(!t)return"명사";const n=t.trim().toLowerCase().replace(/\.$/,"");return{n:"명사",v:"동사",a:"형용사",ad:"부사",prep:"전치사",conj:"접속사",pron:"대명사",int:"감탄사",adj:"형용사"}[n]||t},Ew=(t,n)=>{const a=n.filter(s=>s.word!==t).sort(()=>.5-Math.random()).slice(0,3).map(s=>s.word);for(;a.length<3;)a.push("---");return a},e5=t=>{const n=_w(t),a=Fj.filter(o=>o!==n);return xf([...a]).slice(0,3)},t5=({currentWord:t,allWords:n,onCorrect:a,onWrong:s,isAnswered:o})=>{const c=(t.definitions?.[0]||{}).value||"뜻 정보가 없습니다.",f=t.word,m=x.useMemo(()=>Ew(f,n),[f,n]);return b.jsxs(b.Fragment,{children:[b.jsx("div",{style:{textAlign:"center",fontSize:"1.2rem",color:"#666",marginBottom:"8px"},children:"의미에 알맞은 단어를 선택하세요."}),b.jsx("div",{style:{fontSize:"1.8rem",fontWeight:"bold",textAlign:"center",margin:"24px 0"},children:c}),b.jsx(im,{onClick:a,onWrong:s,wrongs:m,answer:f,disabled:o})]})},n5=({currentWord:t,onCorrect:n,onWrong:a,isAnswered:s})=>{const o=t.word,u=t.definitions?.[0]?.type||"n.",c=_w(u),f=x.useMemo(()=>e5(u),[u]);return b.jsxs(b.Fragment,{children:[b.jsx("div",{style:{textAlign:"center",fontSize:"1.2rem",color:"#666",marginBottom:"8px"},children:"단어의 올바른 품사를 선택하세요."}),b.jsx("div",{style:{fontSize:"2rem",fontWeight:"bold",textAlign:"center",margin:"24px 0",letterSpacing:"1px"},children:o}),b.jsx(im,{onClick:n,onWrong:a,wrongs:f,answer:c,disabled:s})]})},r5=({currentWord:t,allWords:n,onCorrect:a,onWrong:s,isAnswered:o})=>{const c=(t.definitions||[])[0]||{},f=t.word,m=x.useMemo(()=>{if(c.quiz_en&&c.quiz_en.length>0){const y=Math.floor(Math.random()*c.quiz_en.length);return c.quiz_en[y]}return`[  ] : ${c.value||"뜻 정보 없음"}`},[c]),g=x.useMemo(()=>Ew(f,n),[f,n]);return b.jsxs(b.Fragment,{children:[b.jsx("div",{style:{textAlign:"center",fontSize:"1.2rem",color:"#666",marginBottom:"8px"},children:"문맥에 알맞은 단어를 선택하세요."}),b.jsx("div",{style:{fontSize:"1.6rem",fontWeight:"600",textAlign:"center",margin:"24px 0",lineHeight:"1.6",wordBreak:"break-word",padding:"0 16px"},children:m}),b.jsx(im,{onClick:a,onWrong:s,wrongs:g,answer:f,disabled:o})]})},Ru="myvoca_quiz_state",a5=()=>{const{selected:t}=ni(),{words:n,loading:a}=fc(t),{updateStatus:s}=x.useContext(xa),[o,u]=x.useState(null),[c,f]=x.useState(!1),[m,g]=x.useState(!1);x.useEffect(()=>{if(a||!n||n.length===0)return;const z=localStorage.getItem(Ru);let k=null;try{z&&(k=JSON.parse(z))}catch(F){console.error("Failed to parse saved quiz state",F)}const H=Number(t);if(!k||k.day!==H){const F=n.filter(fe=>!fe.done),ne=(F.length>0?F:n).map(fe=>fe.id),Y=xf([...ne]),j={day:H,phase:"SPELLING",doneCount:0,totalCount:ne.length,queue:Y,targetWordIds:ne};localStorage.setItem(Ru,JSON.stringify(j)),u(j)}else u(k);f(!1),g(!1)},[n,a,t]);const y=z=>{z?localStorage.setItem(Ru,JSON.stringify(z)):localStorage.removeItem(Ru),u(z)},v=x.useMemo(()=>{if(!o||!o.queue||o.queue.length===0)return null;const z=o.queue[0];return n.find(k=>k.id===z)},[o,n]);if(a||!n||n.length===0)return b.jsxs(Yh,{style:{padding:"20px"},children:[b.jsxs("div",{style:{width:"100%",marginBottom:"20px"},children:[b.jsx(Br,{height:"12px",width:"100%"}),b.jsx("div",{style:{display:"flex",justifyContent:"center",marginTop:"12px"},children:b.jsx(Br,{height:"20px",width:"200px"})})]}),b.jsxs(Av,{style:{display:"flex",flexDirection:"column",gap:"1.5rem",alignItems:"center",padding:"40px 20px"},children:[b.jsx(Br,{height:"24px",width:"150px"}),b.jsx(Br,{height:"60px",width:"100%"}),b.jsxs("div",{style:{display:"flex",flexDirection:"column",gap:"0.75rem",width:"100%",marginTop:"20px"},children:[b.jsx(Br,{height:"50px",width:"100%"}),b.jsx(Br,{height:"50px",width:"100%"}),b.jsx(Br,{height:"50px",width:"100%"})]})]})]});if(o&&o.phase==="COMPLETE")return b.jsx(Jj,{});if(!o||!v)return b.jsx(Yh,{style:{justifyContent:"center",alignItems:"center"},children:b.jsx("div",{children:"진행 가능한 퀴즈가 없습니다."})});const S=()=>{g(!0)},_=()=>{f(!0)},E=()=>{g(!1);let z=[],k=o.doneCount;if(c?z=[...o.queue.slice(1),o.queue[0]]:(z=o.queue.slice(1),k+=1),f(!1),z.length===0){let H="SPELLING";if(o.phase==="SPELLING"?H="POS":o.phase==="POS"?H="SENTENCE":o.phase==="SENTENCE"&&(H="COMPLETE"),H==="COMPLETE")o.targetWordIds.forEach(F=>{s(F,!0)}),y({...o,phase:"COMPLETE",queue:[],doneCount:o.targetWordIds.length});else{const F=xf([...o.targetWordIds]);y({...o,phase:H,doneCount:0,queue:F})}}else y({...o,doneCount:k,queue:z})},T=()=>{switch(o.phase){case"SPELLING":return b.jsx(t5,{currentWord:v,allWords:n,onCorrect:S,onWrong:_,isAnswered:m});case"POS":return b.jsx(n5,{currentWord:v,onCorrect:S,onWrong:_,isAnswered:m});case"SENTENCE":return b.jsx(r5,{currentWord:v,allWords:n,onCorrect:S,onWrong:_,isAnswered:m});default:return null}},M=z=>{switch(z){case"SPELLING":return"1단계: 뜻 보고 단어 맞추기 (스펠링 퀴즈)";case"POS":return"2단계: 단어 보고 품사 맞추기 (품사 퀴즈)";case"SENTENCE":return"3단계: 빈칸 채우기 (예문 퀴즈)";default:return"퀴즈 진행 중"}};return b.jsxs(Yh,{children:[b.jsxs("div",{children:[b.jsx(Cj,{total:o.totalCount,done:o.doneCount}),b.jsx("div",{style:{textAlign:"center",fontWeight:"bold",fontSize:"1.1rem",color:"var(--color-brand, #4f46e5)",marginTop:"12px"},children:M(o.phase)})]}),b.jsx(Av,{children:b.jsx("div",{style:{width:"100%",padding:"20px"},children:T()})}),m&&b.jsx(Ij,{onNext:E})]},`${o.phase}-${v.id}`)},i5=N.div`
   height: 100%;
   padding: 1rem;
   display: flex;
@@ -1037,7 +1040,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   font-size: 1.2rem;
   font-weight: 600;
   color: ${({theme:t})=>t.font};
-`,i5=N.div`
+`,s5=N.div`
   padding: 1rem;
   background-color: ${({theme:t})=>t.main};
   border-radius: 0.5rem;
@@ -1051,7 +1054,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   font-size: 1rem;
   font-weight: 500;
   color: ${({theme:t})=>t.font};
-`,s5=N.div`
+`,l5=N.div`
   display: flex;
   gap: 0.5rem;
 `,Wh=N.button`
@@ -1064,7 +1067,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
-`,l5=()=>{const{nick:t}=x.useContext(Sw),{userData:n}=x.useContext(Ta),[a,s]=x.useState(!1),[o,u]=x.useState(0),{resetVoca:c}=x.useContext(xa),f=yR(),m=wn(),g=vE(),y=async()=>{window.confirm(f?`게스트 데이터를 삭제하고 나가시겠어요?
+`,o5=()=>{const{nick:t}=x.useContext(Sw),{userData:n}=x.useContext(Ta),[a,s]=x.useState(!1),[o,u]=x.useState(0),{resetVoca:c}=x.useContext(xa),f=yR(),m=wn(),g=vE(),y=async()=>{window.confirm(f?`게스트 데이터를 삭제하고 나가시겠어요?
 저장된 모든 학습 기록이 사라집니다.`:`로그아웃 하시겠어요?
 데이터는 서버에 안전하게 보관됩니다.`)&&(f||await wR(),ov(),m("/onboard"))},v=async _=>{if(!(n?.level===_||!window.confirm(`학습 난이도를 변경하시겠습니까?
 
@@ -1076,7 +1079,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
 진행률, 단어 배정이 모두 삭제되고
 새로운 단어 배정이 시작됩니다.
 
-이 작업은 되돌릴 수 없습니다.`)||!window.confirm("정말로 초기화하시겠어요? 마지막 확인입니다."))){s(!0),u(30);try{await c(n?.level||"default"),u(100),g.revalidate(),m("/home")}catch(T){console.error("초기화 실패:",T),alert("초기화 중 오류가 발생했습니다. 다시 시도해주세요."),s(!1)}}};return b.jsxs(b.Fragment,{children:[a&&b.jsx(rm,{fullScreen:!0,message:"학습 데이터 초기화 중...",status:o}),b.jsxs(a5,{children:[b.jsxs(Au,{children:[b.jsx(Qh,{children:"계정 설정"}),b.jsxs(i5,{children:[b.jsx(Jh,{children:"닉네임"}),b.jsx(Zh,{children:t||"Guest"}),b.jsx(Jh,{children:"상태"}),b.jsx(Zh,{children:f?"게스트 모드":"로그인 완료"}),n?.startedTime&&b.jsxs(b.Fragment,{children:[b.jsx(Jh,{children:"학습 시작일"}),b.jsx(Zh,{children:new Date(n.startedTime).toLocaleDateString("ko-KR")})]})]})]}),b.jsxs(Au,{children:[b.jsx(Qh,{children:"학습 난이도"}),b.jsxs(s5,{children:[b.jsx(Wh,{$active:n?.level==="default",onClick:()=>v("default"),children:"초급 (Default)"}),b.jsx(Wh,{$active:n?.level==="800",onClick:()=>v("800"),children:"중급 (800)"}),b.jsx(Wh,{$active:n?.level==="900",onClick:()=>v("900"),children:"고급 (900)"})]})]}),b.jsxs(Au,{children:[b.jsx(Qh,{children:"데이터 관리"}),b.jsx(Wt,{label:"학습 데이터 초기화",color:"font",bg:"main",onClick:S})]}),b.jsx(Au,{style:{marginTop:"auto"},children:b.jsx(Wt,{label:f?"데이터 삭제 및 나가기":"로그아웃",color:"main",bg:"brand",onClick:y})})]})]})},o5=N.div`
+이 작업은 되돌릴 수 없습니다.`)||!window.confirm("정말로 초기화하시겠어요? 마지막 확인입니다."))){s(!0),u(30);try{await c(n?.level||"default"),u(100),g.revalidate(),m("/home")}catch(T){console.error("초기화 실패:",T),alert("초기화 중 오류가 발생했습니다. 다시 시도해주세요."),s(!1)}}};return b.jsxs(b.Fragment,{children:[a&&b.jsx(rm,{fullScreen:!0,message:"학습 데이터 초기화 중...",status:o}),b.jsxs(i5,{children:[b.jsxs(Au,{children:[b.jsx(Qh,{children:"계정 설정"}),b.jsxs(s5,{children:[b.jsx(Jh,{children:"닉네임"}),b.jsx(Zh,{children:t||"Guest"}),b.jsx(Jh,{children:"상태"}),b.jsx(Zh,{children:f?"게스트 모드":"로그인 완료"}),n?.startedTime&&b.jsxs(b.Fragment,{children:[b.jsx(Jh,{children:"학습 시작일"}),b.jsx(Zh,{children:new Date(n.startedTime).toLocaleDateString("ko-KR")})]})]})]}),b.jsxs(Au,{children:[b.jsx(Qh,{children:"학습 난이도"}),b.jsxs(l5,{children:[b.jsx(Wh,{$active:n?.level==="default",onClick:()=>v("default"),children:"초급 (Default)"}),b.jsx(Wh,{$active:n?.level==="800",onClick:()=>v("800"),children:"중급 (800)"}),b.jsx(Wh,{$active:n?.level==="900",onClick:()=>v("900"),children:"고급 (900)"})]})]}),b.jsxs(Au,{children:[b.jsx(Qh,{children:"데이터 관리"}),b.jsx(Wt,{label:"학습 데이터 초기화",color:"font",bg:"main",onClick:S})]}),b.jsx(Au,{style:{marginTop:"auto"},children:b.jsx(Wt,{label:f?"데이터 삭제 및 나가기":"로그아웃",color:"main",bg:"brand",onClick:y})})]})]})},u5=N.div`
   height: 100%;
 
   display: flex;
@@ -1084,7 +1087,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   gap: 1rem;
 
   padding: 0rem 1rem;
-`,u5=()=>b.jsx(o5,{children:b.jsx(tc,{})}),c5=N.ul`
+`,c5=()=>b.jsx(u5,{children:b.jsx(tc,{})}),d5=N.ul`
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -1103,7 +1106,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   & > :last-child {
     margin-bottom: 1rem;
   }
-`,d5=N.li`
+`,h5=N.li`
   width: 100%;
   display: flex;
   align-items: center;
@@ -1125,11 +1128,11 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
     );
     box-shadow: 0 8px 24px rgba(79, 70, 229, 0.08);
   `}
-`,h5=N(em)`
+`,f5=N(em)`
   color: ${({theme:t})=>t.main};
-`,f5=N(Ff)`
+`,m5=N(Ff)`
   color: ${({theme:t})=>t.brand};
-`,m5=N.div`
+`,g5=N.div`
   display: flex;
   align-items: center;
   background-color: ${({theme:t})=>t.week};
@@ -1139,12 +1142,12 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   & > svg {
     fill: ${({$status:t,theme:n})=>t?n.success:n.brand};
   }
-`,g5=N.h3`
+`,p5=N.h3`
   font-size: 1rem;
-`,p5=N.span`
+`,y5=N.span`
   color: ${({theme:t})=>t.label};
   font-size: 0.8rem;
-`,y5=N.div``,v5=N(hc)``,b5=N.div`
+`,v5=N.div``,b5=N(hc)``,w5=N.div`
   width: 30%;
 
   display: flex;
@@ -1153,17 +1156,17 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   gap: 0.5rem;
 
   margin-left: auto;
-`,w5=N.span`
+`,S5=N.span`
   font-size: 0.9rem;
   font-weight: 600;
-`,S5=({status:t})=>b.jsxs(b5,{children:[b.jsx(w5,{children:`${t}%`}),b.jsx(qC,{status:t})]}),_5=({item:t,isStudying:n})=>{const{id:a,length:s,done:o,progress:u}=t,{changeSelected:c}=ni(),f=()=>{c(a)};return b.jsxs(d5,{$isStudying:n,children:[b.jsx(m5,{$status:o,children:o?b.jsx(h5,{}):b.jsx(f5,{})}),b.jsxs(y5,{children:[b.jsxs("div",{style:{display:"flex",alignItems:"center",gap:"0.5rem"},children:[b.jsx(g5,{children:`Day ${a+1}`}),n&&b.jsx("span",{style:{background:"linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)",color:"#ffffff",fontSize:"0.65rem",fontWeight:"600",padding:"0.15rem 0.4rem",borderRadius:"6px",whiteSpace:"nowrap"},children:"학습 중"})]}),b.jsx(p5,{children:`단어 ${s}개`})]}),b.jsx(S5,{status:u}),b.jsx(v5,{onClick:f})]})},E5=()=>{const{wordMap:t}=x.useContext(xa),{userData:n}=x.useContext(Ta),a=x.useMemo(()=>{const s=t.filter(Boolean);return n?[...s].sort((o,u)=>{const c=o.id===n.selected,f=u.id===n.selected;return c&&!f?-1:!c&&f?1:o.id-u.id}):s},[t,n]);return b.jsx(c5,{children:a.map(s=>{const o=n&&s.id===n.selected;return b.jsx(_5,{item:s,isStudying:o},s.id)})})},x5=N.div`
+`,_5=({status:t})=>b.jsxs(w5,{children:[b.jsx(S5,{children:`${t}%`}),b.jsx(HC,{status:t})]}),E5=({item:t,isStudying:n})=>{const{id:a,length:s,done:o,progress:u}=t,{changeSelected:c}=ni(),f=()=>{c(a)};return b.jsxs(h5,{$isStudying:n,children:[b.jsx(g5,{$status:o,children:o?b.jsx(f5,{}):b.jsx(m5,{})}),b.jsxs(v5,{children:[b.jsxs("div",{style:{display:"flex",alignItems:"center",gap:"0.5rem"},children:[b.jsx(p5,{children:`Day ${a+1}`}),n&&b.jsx("span",{style:{background:"linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)",color:"#ffffff",fontSize:"0.65rem",fontWeight:"600",padding:"0.15rem 0.4rem",borderRadius:"6px",whiteSpace:"nowrap"},children:"학습 중"})]}),b.jsx(y5,{children:`단어 ${s}개`})]}),b.jsx(_5,{status:u}),b.jsx(b5,{onClick:f})]})},x5=()=>{const{wordMap:t}=x.useContext(xa),{userData:n}=x.useContext(Ta),a=x.useMemo(()=>{const s=t.filter(Boolean);return n?[...s].sort((o,u)=>{const c=o.id===n.selected,f=u.id===n.selected;return c&&!f?-1:!c&&f?1:o.id-u.id}):s},[t,n]);return b.jsx(d5,{children:a.map(s=>{const o=n&&s.id===n.selected;return b.jsx(E5,{item:s,isStudying:o},s.id)})})},T5=N.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 
   padding-top: 1rem;
-`,T5=N.ul`
+`,R5=N.ul`
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -1173,7 +1176,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   & > :last-child {
     margin-bottom: 1rem;
   }
-`,R5=N.div`
+`,A5=N.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1191,28 +1194,28 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
   margin-bottom: 0.5rem;
   transition: all 0.3s ease;
-`,A5=N.div`
+`,C5=N.div`
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-`,C5=N.h3`
+`,O5=N.h3`
   font-size: 0.95rem;
   font-weight: 700;
   color: var(--color-font, #111827);
   display: flex;
   align-items: center;
   gap: 0.5rem;
-`,O5=N.span`
+`,j5=N.span`
   background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
   color: #ffffff;
   font-size: 0.65rem;
   font-weight: 600;
   padding: 0.15rem 0.4rem;
   border-radius: 6px;
-`,j5=N.p`
+`,k5=N.p`
   font-size: 0.77rem;
   color: var(--color-font-sub, #6b7280);
-`,k5=N.button`
+`,D5=N.button`
   background: ${t=>t.$active?"#ffffff":"linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)"};
   color: ${t=>t.$active?"#4f46e5":"#ffffff"};
   border: ${t=>t.$active?"1px solid rgba(79, 70, 229, 0.25)":"none"};
@@ -1234,7 +1237,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   &:active {
     transform: translateY(0);
   }
-`,D5=N.li`
+`,M5=N.li`
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -1243,11 +1246,11 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
 
   padding: 1rem;
   border-radius: 0.5rem;
-`,M5=N(em)`
+`,N5=N(em)`
   color: ${({theme:t})=>t.main};
-`,N5=N(Ff)`
+`,U5=N(Ff)`
   color: ${({theme:t})=>t.brand};
-`,U5=N.div`
+`,z5=N.div`
   display: flex;
   align-items: center;
   background-color: ${({theme:t})=>t.week};
@@ -1257,25 +1260,25 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   & > svg {
     fill: ${({$status:t,theme:n})=>t?n.success:n.brand};
   }
-`,z5=N.h3`
+`,$5=N.h3`
   font-size: 1rem;
   font-weight: 600;
-`,$5=N.span`
+`,L5=N.span`
   color: ${({theme:t})=>t.label};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-`,L5=N.div`
+`,B5=N.div`
   display: flex;
   flex-direction: column;
   min-width: 0;
   gap: 0.3rem;
 
   margin-left: 0.5rem;
-`,B5=N(gC)`
+`,q5=N(pC)`
   margin-left: auto;
   flex-shrink: 0;
-`,q5=N.div`
+`,H5=N.div`
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.45);
@@ -1286,7 +1289,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
     from { opacity: 0; }
     to { opacity: 1; }
   }
-`,H5=N.div`
+`,P5=N.div`
   position: fixed;
   left: 0;
   right: 0;
@@ -1310,28 +1313,28 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
     from { transform: translateY(100%); }
     to { transform: translateY(0); }
   }
-`,P5=N.div`
+`,I5=N.div`
   width: 2.5rem;
   height: 4px;
   background-color: ${({theme:t})=>t.week};
   border-radius: 2px;
   margin: 0 auto -0.5rem;
-`,I5=N.h2`
+`,G5=N.h2`
   font-size: 2rem;
   font-weight: 700;
   color: ${({theme:t})=>t.font};
   letter-spacing: 0.15rem;
-`,G5=N.div`
+`,V5=N.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
   max-height: 60vh;
   overflow-y: auto;
-`,V5=N.div`
+`,K5=N.div`
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-`,K5=N.span`
+`,Y5=N.span`
   font-size: 0.75rem;
   color: ${({theme:t})=>t.brand};
   font-weight: 600;
@@ -1339,35 +1342,35 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   padding: 0.15rem 0.5rem;
   border-radius: 1rem;
   align-self: flex-start;
-`,Y5=N.p`
+`,Q5=N.p`
   font-size: 1rem;
   font-weight: 600;
   color: ${({theme:t})=>t.font};
-`,Q5=N.p`
+`,J5=N.p`
   font-size: 0.85rem;
   color: ${({theme:t})=>t.label};
-`,J5=N.div`
+`,Z5=N.div`
   margin-top: 0.2rem;
   padding: 0.75rem;
   background-color: ${({theme:t})=>t.background};
   border-radius: 0.5rem;
   border-left: 3px solid ${({theme:t})=>t.brand};
-`,Z5=N.p`
+`,W5=N.p`
   font-size: 0.85rem;
   color: ${({theme:t})=>t.font};
   font-style: italic;
-`,W5=N.p`
+`,X5=N.p`
   font-size: 0.8rem;
   color: ${({theme:t})=>t.label};
   margin-top: 0.25rem;
-`,X5=N.hr`
+`,F5=N.hr`
   border: none;
   border-top: 1px solid ${({theme:t})=>t.week};
-`,F5=({word:t,onClose:n})=>{const{word:a,definitions:s=[]}=t;return b.jsxs(b.Fragment,{children:[b.jsx(q5,{onClick:n}),b.jsxs(H5,{children:[b.jsx(P5,{}),b.jsx(I5,{children:a}),b.jsx(G5,{children:s.map((o,u)=>b.jsxs(V5,{children:[u>0&&b.jsx(X5,{}),o.class&&b.jsx(K5,{children:o.class}),b.jsx(Y5,{children:o.value}),o.pronounce&&b.jsxs(Q5,{children:["[",o.pronounce,"]"]}),(o.example_en||o.example_ko)&&b.jsxs(J5,{children:[o.example_en&&b.jsx(Z5,{children:o.example_en}),o.example_ko&&b.jsx(W5,{children:o.example_ko})]})]},u))})]})]})},Cv=t=>t?{role:"button",tabIndex:0,onClick:t,onKeyDown:n=>{(n.key==="Enter"||n.key===" ")&&(n.preventDefault(),t(n))}}:{},ek=({word:t})=>{const{word:n,definitions:a,done:s,id:o}=t,[u,c]=x.useState(!1),{updateStatus:f}=x.useContext(xa),m=()=>{f(o,!s)};return b.jsxs(b.Fragment,{children:[b.jsxs(D5,{children:[b.jsx(U5,{$status:s,...Cv(m),children:s?b.jsx(M5,{}):b.jsx(N5,{})}),b.jsxs(L5,{children:[b.jsx(z5,{children:n}),b.jsx($5,{children:`${a[0].class}.${a[0].value}`})]}),b.jsx(B5,{...Cv(()=>c(!0))})]}),u&&b.jsx(F5,{word:t,onClose:()=>c(!1)})]})},tk=N.div`
+`,ek=({word:t,onClose:n})=>{const{word:a,definitions:s=[]}=t;return b.jsxs(b.Fragment,{children:[b.jsx(H5,{onClick:n}),b.jsxs(P5,{children:[b.jsx(I5,{}),b.jsx(G5,{children:a}),b.jsx(V5,{children:s.map((o,u)=>b.jsxs(K5,{children:[u>0&&b.jsx(F5,{}),o.class&&b.jsx(Y5,{children:o.class}),b.jsx(Q5,{children:o.value}),o.pronounce&&b.jsxs(J5,{children:["[",o.pronounce,"]"]}),(o.example_en||o.example_ko)&&b.jsxs(Z5,{children:[o.example_en&&b.jsx(W5,{children:o.example_en}),o.example_ko&&b.jsx(X5,{children:o.example_ko})]})]},u))})]})]})},Cv=t=>t?{role:"button",tabIndex:0,onClick:t,onKeyDown:n=>{(n.key==="Enter"||n.key===" ")&&(n.preventDefault(),t(n))}}:{},tk=({word:t})=>{const{word:n,definitions:a,done:s,id:o}=t,[u,c]=x.useState(!1),{updateStatus:f}=x.useContext(xa),m=()=>{f(o,!s)};return b.jsxs(b.Fragment,{children:[b.jsxs(M5,{children:[b.jsx(z5,{$status:s,...Cv(m),children:s?b.jsx(N5,{}):b.jsx(U5,{})}),b.jsxs(B5,{children:[b.jsx($5,{children:n}),b.jsx(L5,{children:`${a[0].class}.${a[0].value}`})]}),b.jsx(q5,{...Cv(()=>c(!0))})]}),u&&b.jsx(ek,{word:t,onClose:()=>c(!1)})]})},nk=N.div`
   position: relative;
   display: flex;
   align-items: center;
-`,nk=({keyword:t,setKeyword:n})=>{const a=s=>n(s.target.value);return b.jsx(tk,{children:b.jsx(hw,{icon:pC,label:"",value:t,onChange:a,notice:"",placeholder:"단어 또는 뜻 검색",$isBorder:!1,$isOutline:!1})})},rk=N.ul`
+`,rk=({keyword:t,setKeyword:n})=>{const a=s=>n(s.target.value);return b.jsx(nk,{children:b.jsx(hw,{icon:yC,label:"",value:t,onChange:a,notice:"",placeholder:"단어 또는 뜻 검색",$isBorder:!1,$isOutline:!1})})},ak=N.ul`
   height: max-content;
   display: flex;
   flex: 0 0 auto;
@@ -1380,7 +1383,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   & > :last-child {
     margin-right: 1rem;
   }
-`,ak=N.li`
+`,ik=N.li`
   display: flex;
   flex: 0 0 auto;
   color: ${({$selected:t,theme:n})=>t?n.main:n.label};
@@ -1388,7 +1391,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   background-color: ${({$selected:t,theme:n})=>t?n.brand:n.main};
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
-`,sm={default:{label:"A-Z",callback:t=>[...t].sort((n,a)=>n.word.localeCompare(a.word,"en",{sensitivity:"base"}))},complete:{label:"암기완료",callback:t=>t.filter(n=>n.done)},incomplete:{label:"미완료",callback:t=>t.filter(n=>!n.done)}},xw=Object.keys(sm),ik=({currentFilter:t,setFilterType:n})=>b.jsx(rk,{children:xw.map(a=>b.jsx(ak,{onClick:()=>n(a),$selected:a===t,children:sm[a].label},a))}),sk=N.div`
+`,sm={default:{label:"A-Z",callback:t=>[...t].sort((n,a)=>n.word.localeCompare(a.word,"en",{sensitivity:"base"}))},complete:{label:"암기완료",callback:t=>t.filter(n=>n.done)},incomplete:{label:"미완료",callback:t=>t.filter(n=>!n.done)}},xw=Object.keys(sm),sk=({currentFilter:t,setFilterType:n})=>b.jsx(ak,{children:xw.map(a=>b.jsx(ik,{onClick:()=>n(a),$selected:a===t,children:sm[a].label},a))}),lk=N.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1397,14 +1400,14 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   padding: 3rem 1rem;
   color: ${({theme:t})=>t.label};
   text-align: center;
-`,lk=N.span`
+`,ok=N.span`
   font-size: 2.5rem;
-`,ok=N.p`
+`,uk=N.p`
   font-size: 0.95rem;
   line-height: 1.6;
   white-space: pre-line;
-`,uk=()=>b.jsxs(sk,{children:[b.jsx(lk,{children:"🔍"}),b.jsx(ok,{children:`검색 결과가 없습니다.
-다른 검색어나 필터를 시도해보세요.`})]}),ck=N.div`
+`,ck=()=>b.jsxs(lk,{children:[b.jsx(ok,{children:"🔍"}),b.jsx(uk,{children:`검색 결과가 없습니다.
+다른 검색어나 필터를 시도해보세요.`})]}),dk=N.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1413,12 +1416,12 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   padding: 3rem 1rem;
   color: ${({theme:t})=>t.label};
   text-align: center;
-`,dk=N.span`
+`,hk=N.span`
   font-size: 2.5rem;
-`,hk=N.p`
+`,fk=N.p`
   font-size: 0.95rem;
   line-height: 1.6;
-`,fk=()=>b.jsxs(ck,{children:[b.jsx(dk,{children:"📭"}),b.jsx(hk,{children:"단어가 없습니다."})]}),mk=()=>{const{selected:t}=ni(),{words:n=[],loading:a}=fc(t),s=wn(),{userData:o,updateSelectedDay:u}=x.useContext(Ta),[c,f]=x.useState(xw[0]),[m,g]=x.useState(""),y=o&&o.selected===Number(t),v=()=>{u(t)},S=()=>{s(`/play/${t}/card/0`)},_=x.useMemo(()=>{let T=sm[c].callback(n);if(m.trim()){const M=m.toLowerCase();T=T.filter(z=>z.word.toLowerCase().includes(M)||z.definitions.some(k=>k.value.toLowerCase().includes(M)))}return T},[n,c,m]),E=x.useCallback(()=>a?Array.from({length:5}).map((T,M)=>b.jsxs("div",{style:{display:"flex",flexDirection:"column",gap:"0.5rem",padding:"1.25rem",borderBottom:"1px solid rgba(0,0,0,0.05)"},children:[b.jsx(Br,{height:"20px",width:"120px"}),b.jsx(Br,{height:"16px",width:"200px"})]},M)):n.length===0?b.jsx(fk,{}):_.length===0?b.jsx(uk,{}):_.map(T=>b.jsx(ek,{word:T},T.id)),[a,n,_]);return b.jsxs(x5,{children:[o&&b.jsxs(R5,{children:[b.jsxs(A5,{children:[b.jsxs(C5,{children:["Day ",Number(t)+1,y&&b.jsx(O5,{children:"학습 중"})]}),b.jsx(j5,{children:y?"오늘의 활성화된 학습 데이터입니다.":"오늘 학습할 데이로 지정하고 대시보드에 연동합니다."})]}),b.jsx(k5,{$active:y,onClick:y?S:v,children:y?"학습하러 가기":"학습일로 지정"})]}),b.jsx(nk,{keyword:m,setKeyword:g}),b.jsx(ik,{currentFilter:c,setFilterType:f}),b.jsx(T5,{children:E()})]})},gk=[{index:!0,element:b.jsx(E5,{})},{path:":selected",element:b.jsx(mk,{})}],pk=[{index:!0,loader:qR},{path:":selected",children:[{index:!0,element:b.jsx(Ul,{to:"card/0",replace:!0})},{path:"card",element:b.jsx(Ul,{to:"0",replace:!0})},{path:"card/:step",element:b.jsx(xj,{}),name:"카드"}]}],yk=[{index:!0,loader:HR},{path:":selected",element:b.jsx(r5,{}),name:"퀴즈"}],Tw=[{index:!0,element:b.jsx(Ul,{to:"/home",replace:!0})},{path:"/home",element:b.jsx(FO,{}),name:"홈",icon:b.jsx(dC,{})},{path:"/play",element:b.jsx(Rv,{}),name:"시작하기",icon:b.jsx(dw,{}),children:pk},{path:"/quiz",element:b.jsx(Rv,{}),name:"퀴즈",icon:b.jsx(uw,{}),children:yk},{path:"/voca",element:b.jsx(u5,{}),name:"단어장",icon:b.jsx(Ff,{}),children:gk},{path:"/settings",element:b.jsx(l5,{}),name:"설정",icon:b.jsx(oC,{})}],vk=[{index:!0,element:b.jsx(Ul,{to:"/onboard/nickname",replace:!0})},{path:"/onboard/nickname",element:b.jsx(jO,{}),name:"닉네임 설정"},{path:"/onboard/generate-data",element:b.jsx(EO,{}),name:"학습데이터 생성"}],bk=[{path:"/",element:b.jsx(cO,{}),hydrateFallbackElement:b.jsx(pw,{}),loader:$R,name:"App",children:Tw},{path:"/onboard",element:b.jsx(hO,{}),name:"Onboard",children:vk},{path:"*",element:b.jsx(Ul,{to:"/home",replace:!0})}],Cu="/funny-voca/",wk=Cu.endsWith("/")&&Cu!=="/"?Cu.slice(0,-1):Cu,Sk=()=>{const t=tx(bk,{basename:wk});return b.jsx(mx,{router:t})},_k=ZA`
+`,mk=()=>b.jsxs(dk,{children:[b.jsx(hk,{children:"📭"}),b.jsx(fk,{children:"단어가 없습니다."})]}),gk=()=>{const{selected:t}=ni(),{words:n=[],loading:a}=fc(t),s=wn(),{userData:o,updateSelectedDay:u}=x.useContext(Ta),[c,f]=x.useState(xw[0]),[m,g]=x.useState(""),y=o&&o.selected===Number(t),v=()=>{u(t)},S=()=>{s(`/play/${t}/card/0`)},_=x.useMemo(()=>{let T=sm[c].callback(n);if(m.trim()){const M=m.toLowerCase();T=T.filter(z=>z.word.toLowerCase().includes(M)||z.definitions.some(k=>k.value.toLowerCase().includes(M)))}return T},[n,c,m]),E=x.useCallback(()=>a?Array.from({length:5}).map((T,M)=>b.jsxs("div",{style:{display:"flex",flexDirection:"column",gap:"0.5rem",padding:"1.25rem",borderBottom:"1px solid rgba(0,0,0,0.05)"},children:[b.jsx(Br,{height:"20px",width:"120px"}),b.jsx(Br,{height:"16px",width:"200px"})]},M)):n.length===0?b.jsx(mk,{}):_.length===0?b.jsx(ck,{}):_.map(T=>b.jsx(tk,{word:T},T.id)),[a,n,_]);return b.jsxs(T5,{children:[o&&b.jsxs(A5,{children:[b.jsxs(C5,{children:[b.jsxs(O5,{children:["Day ",Number(t)+1,y&&b.jsx(j5,{children:"학습 중"})]}),b.jsx(k5,{children:y?"오늘의 활성화된 학습 데이터입니다.":"오늘 학습할 데이로 지정하고 대시보드에 연동합니다."})]}),b.jsx(D5,{$active:y,onClick:y?S:v,children:y?"학습하러 가기":"학습일로 지정"})]}),b.jsx(rk,{keyword:m,setKeyword:g}),b.jsx(sk,{currentFilter:c,setFilterType:f}),b.jsx(R5,{children:E()})]})},pk=[{index:!0,element:b.jsx(x5,{})},{path:":selected",element:b.jsx(gk,{})}],yk=[{index:!0,loader:qR},{path:":selected",children:[{index:!0,element:b.jsx(Ul,{to:"card/0",replace:!0})},{path:"card",element:b.jsx(Ul,{to:"0",replace:!0})},{path:"card/:step",element:b.jsx(Tj,{}),name:"카드"}]}],vk=[{index:!0,loader:HR},{path:":selected",element:b.jsx(a5,{}),name:"퀴즈"}],Tw=[{index:!0,element:b.jsx(Ul,{to:"/home",replace:!0})},{path:"/home",element:b.jsx(ej,{}),name:"홈",icon:b.jsx(hC,{})},{path:"/play",element:b.jsx(Rv,{}),name:"시작하기",icon:b.jsx(dw,{}),children:yk},{path:"/quiz",element:b.jsx(Rv,{}),name:"퀴즈",icon:b.jsx(uw,{}),children:vk},{path:"/voca",element:b.jsx(c5,{}),name:"단어장",icon:b.jsx(Ff,{}),children:pk},{path:"/settings",element:b.jsx(o5,{}),name:"설정",icon:b.jsx(uC,{})}],bk=[{index:!0,element:b.jsx(Ul,{to:"/onboard/nickname",replace:!0})},{path:"/onboard/nickname",element:b.jsx(kO,{}),name:"닉네임 설정"},{path:"/onboard/generate-data",element:b.jsx(xO,{}),name:"학습데이터 생성"}],wk=[{path:"/",element:b.jsx(dO,{}),hydrateFallbackElement:b.jsx(pw,{}),loader:$R,name:"App",children:Tw},{path:"/onboard",element:b.jsx(fO,{}),name:"Onboard",children:bk},{path:"*",element:b.jsx(Ul,{to:"/home",replace:!0})}],Cu="/funny-voca/",Sk=Cu.endsWith("/")&&Cu!=="/"?Cu.slice(0,-1):Cu,_k=()=>{const t=tx(wk,{basename:Sk});return b.jsx(mx,{router:t})},Ek=ZA`
   :root {
     /* 테마 값을 CSS 변수로 주입 (성능 최적화 핵심) */
     --bg-color: ${({theme:t})=>t.background};
@@ -1513,4 +1516,4 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
     fill: var(--sub-color);
     flex-shrink: 0;
   }
-`;PS.createRoot(document.getElementById("root")).render(b.jsxs(oO,{children:[b.jsx(_k,{}),b.jsx(Sk,{})]}));
+`;PS.createRoot(document.getElementById("root")).render(b.jsxs(uO,{children:[b.jsx(Ek,{}),b.jsx(_k,{})]}));
