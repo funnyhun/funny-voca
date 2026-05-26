@@ -69,33 +69,29 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   min-width: ${({theme:t})=>t.min_width};
   max-width: ${({theme:t})=>t.max_width};
   margin: 0 auto;
-`,FA=N.div`
-  height: 100dvh;
 
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
   background-color: ${({theme:t})=>t.background};
+
+  /* 전역 Safe Area 일괄 대응 */
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+`,FA=N.div`
+  flex: 1;
+  width: 100%;
 
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-
-  padding-top: calc(2.8rem + env(safe-area-inset-top, 0px));
-  padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0px));
   margin: 0 auto;
 
   overflow-y: auto;
 `,eC=N.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
-
-  max-width: ${({theme:t})=>t.max_width};
-  min-width: ${({theme:t})=>t.min_width};
   width: 100%;
-  height: calc(2.8rem + env(safe-area-inset-top, 0px));
+  height: 2.8rem;
 
-  padding-top: env(safe-area-inset-top, 0px);
   padding-left: 1rem;
   padding-right: 1rem;
 
@@ -104,7 +100,6 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   align-items: center;
 
   background-color: ${({theme:t})=>t.main};
-  margin: 0 auto;
 `,tC=N.h1`
   line-height: 1;
   font-size: 1rem;
@@ -124,24 +119,13 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   cursor: pointer;
   position: relative;
 `,aC=({notifications:t})=>{const n=wn(),[a,s]=x.useState(!1),o=()=>n("/home"),u=()=>s(c=>!c);return b.jsxs(b.Fragment,{children:[b.jsxs(eC,{children:[b.jsx(tC,{onClick:o,children:"funny-voca"}),b.jsx(nC,{children:b.jsx(rC,{$hasUnread:t?.length>0,onClick:u})})]}),a&&b.jsx(OC,{notifications:t,onClose:()=>s(!1)})]})},iC=N.ul`
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 999;
-
-  max-width: ${({theme:t})=>t.max_width};
-  min-width: ${({theme:t})=>t.min_width};
   width: 100%;
-  height: calc(3.5rem + env(safe-area-inset-bottom, 0px));
+  height: 3.5rem;
   background-color: ${({theme:t})=>t.main};
 
   display: flex;
   align-items: center;
   justify-content: space-around;
-
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  margin: 0 auto;
 `,sC=N.li`
   display: flex;
   flex: 1 1 auto;
