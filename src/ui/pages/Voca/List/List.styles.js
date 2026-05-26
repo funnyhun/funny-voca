@@ -5,7 +5,10 @@ export const Wrapper = styled.ul`
   flex-direction: column;
   gap: 1rem;
 
-  padding-top: 0rem 1rem;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
 
   overflow-y: auto;
 

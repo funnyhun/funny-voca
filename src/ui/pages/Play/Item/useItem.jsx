@@ -19,12 +19,6 @@ export const useItem = () => {
   };
 
   const nextCard = () => {
-    // 현재 단어 학습 완료 처리
-    const currentWord = words[step];
-    if (currentWord) {
-      updateStatus(currentWord.id, true);
-    }
-
     if (step === words.length - 1) {
       setMode("complete");
       return;

@@ -11,6 +11,20 @@ export const Wrapper = styled.li`
 
   padding: 1rem;
   border-radius: 0.5rem;
+  border: 2px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  ${({ $isStudying, theme }) =>
+    $isStudying &&
+    `
+    border-color: #4f46e5;
+    background-image: linear-gradient(
+      135deg,
+      rgba(79, 70, 229, 0.04) 0%,
+      rgba(147, 51, 234, 0.04) 100%
+    );
+    box-shadow: 0 8px 24px rgba(79, 70, 229, 0.08);
+  `}
 `;
 
 export const CompleteIcon = styled(CheckCircleIcon)`

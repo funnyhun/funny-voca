@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { updateStats } from '@/api/stats';
 import { getSession } from '@/api/auth';
-import { getStorage, KEYS } from '@/utils/storage';
+import { getStorage, setStorage, KEYS } from '@/utils/storage';
 
 /**
  * 학습 통계 및 사용자 메타데이터 관리를 위한 커스텀 훅
@@ -30,9 +30,19 @@ export const useStats = (initialUserData = {}) => {
     });
   };
 
+  const updateSelectedDay = (newSelected) => {
+    const updated = {
+      ...userData,
+      selected: Number(newSelected),
+    };
+    setStorage(KEYS.USER_DATA, updated);
+    setUserData(updated);
+  };
+
   return {
     userData,
     recordSession,
+    updateSelectedDay,
   };
 };
 

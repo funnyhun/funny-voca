@@ -1,5 +1,6 @@
 import * as S from "./List.styles";
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { useSelected, useWord } from "@/ui/hooks";
 import { Skeleton } from "@/ui/components";
@@ -11,13 +12,27 @@ import { NoResult } from "../NoResult";
 import { Empty } from "../Empty";
 
 import { FILTER_SET, FILTER_TYPE } from "../utils/filter";
+import { StatsContext } from "@/ui/app/App";
 
 export const List = () => {
   const { selected } = useSelected();
   const { words = [], loading } = useWord(selected);
+  const navigate = useNavigate();
+
+  const { userData, updateSelectedDay } = useContext(StatsContext);
 
   const [filterType, setFilterType] = useState(FILTER_TYPE[0]);
   const [keyword, setKeyword] = useState("");
+
+  const isTodayStudyDay = userData && userData.selected === Number(selected);
+
+  const handleSetStudyDay = () => {
+    updateSelectedDay(selected);
+  };
+
+  const handleGoToLearn = () => {
+    navigate(`/play/${selected}/card/0`);
+  };
 
   const clearCondition = () => {
     setFilterType(FILTER_SET[0]);
@@ -60,6 +75,27 @@ export const List = () => {
 
   return (
     <S.Wrapper>
+      {userData && (
+        <S.BannerContainer>
+          <S.BannerContent>
+            <S.BannerTitle>
+              Day {Number(selected) + 1}
+              {isTodayStudyDay && <S.ActiveBadge>학습 중</S.ActiveBadge>}
+            </S.BannerTitle>
+            <S.BannerDesc>
+              {isTodayStudyDay
+                ? "오늘의 활성화된 학습 데이터입니다."
+                : "오늘 학습할 데이로 지정하고 대시보드에 연동합니다."}
+            </S.BannerDesc>
+          </S.BannerContent>
+          <S.BannerButton
+            $active={isTodayStudyDay}
+            onClick={isTodayStudyDay ? handleGoToLearn : handleSetStudyDay}
+          >
+            {isTodayStudyDay ? "학습하러 가기" : "학습일로 지정"}
+          </S.BannerButton>
+        </S.BannerContainer>
+      )}
       <Search keyword={keyword} setKeyword={setKeyword} />
       <Filter currentFilter={filterType} setFilterType={setFilterType} />
       <S.Content>{renderContentUI()}</S.Content>

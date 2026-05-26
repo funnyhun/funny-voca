@@ -61,7 +61,7 @@ export const StatsDashboard = ({ userData, wordMap }) => {
           <PlayIcon />
           <span>암기하기</span>
         </ActionButton>
-        <ActionButton onClick={() => navigate(`/play/${currentDayIndex}/quiz/0`)}>
+        <ActionButton onClick={() => navigate(`/quiz/${currentDayIndex}`)}>
           <QuizIcon />
           <span>퀴즈풀기</span>
         </ActionButton>
