@@ -7,7 +7,7 @@ import { loadQuiz } from "@/app/router/quiz";
 import { App } from "@/app/App";
 
 import { Welcome, Profile, WelcomeVoca, Home, Play, Card, Quiz, Voca, VocaList, WordList, Settings } from "@app/pages";
-import { AppFallback } from "@app/components";
+import { Splash } from "@/app/layout";
 
 import { HomeIcon, PlayIcon, QuizIcon, WordIcon, AccountIcon } from "@/assets/iconList";
 
@@ -83,7 +83,7 @@ const routes = [
   {
     path: "/",
     element: <App />,
-    hydrateFallbackElement: <AppFallback />,
+    hydrateFallbackElement: <Splash />,
     loader: loadUserData,
     name: "App",
     children: pages,

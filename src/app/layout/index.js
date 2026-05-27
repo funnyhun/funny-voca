@@ -1,5 +1,6 @@
 export { Header } from "./Header/Header";
 export { Navigation } from "./Navigation/Navigation";
-export * from "./Loading";
+export { Overlay } from "./Overlay/Overlay";
+export * from "./Splash";
 export * from "./NotificationList";
 

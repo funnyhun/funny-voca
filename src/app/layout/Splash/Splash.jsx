@@ -1,6 +1,6 @@
-import * as S from "./Loading.styles";
+import * as S from "./Splash.styles";
 
-export const Loading = () => {
+export const Splash = () => {
   return (
     <S.Wrapper>
       <S.ColorBrandIcon />
