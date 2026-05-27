@@ -18,7 +18,14 @@ import { migrateVoca } from "@/api/migration";
  */
 export const loadUserData = async ({ request }) => {
   const url = new URL(request.url);
-  const isWelcomePath = url.pathname.startsWith("/welcome");
+  
+  const rawBasePath = import.meta.env.VITE_BASE_PATH || "/";
+  const basename = rawBasePath.endsWith("/") && rawBasePath !== "/" ? rawBasePath.slice(0, -1) : rawBasePath;
+  const relativePath = basename !== "/" && url.pathname.startsWith(basename)
+    ? url.pathname.slice(basename.length)
+    : url.pathname;
+
+  const isWelcomePath = relativePath.startsWith("/welcome");
 
   try {
     const session = await getSession();
