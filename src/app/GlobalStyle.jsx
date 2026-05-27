@@ -25,11 +25,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   html, body, #root {
-    height: 100%;
-    width: 100%;
-    /* iOS PWA 스크롤 흔들림/바운스 방지 */
     overscroll-behavior-y: none;
-    /* 스크롤바 숨김은 여기서 한 번만 */
     overflow: overlay; 
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -37,7 +33,11 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    background-color: var(--bg-color);
+    position: relative;
+    min-height: 100dvh;
+
+    background-color: var(--header-bottom-bg, #ffffff);
+    transition: background-color 0.3s ease;
     color: var(--font-color);
     font-size: 1rem;
     line-height: 1.5;

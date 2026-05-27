@@ -1,7 +1,7 @@
 import { useState, createContext, useContext, useEffect, useCallback } from "react";
 import { ThemeProvider as StyledThemeProvider } from "styled-components";
 
-import { LightTheme, DarkTheme } from "@/ui/app/theme";
+import { LightTheme, DarkTheme } from "@/app/theme";
 import { getStorage, setStorage, KEYS } from "@/utils/storage";
 
 const themeContext = createContext({
@@ -20,6 +20,13 @@ export const ThemeProvider = ({ children }) => {
 
   useEffect(() => {
     setStorage(KEYS.THEME, theme);
+
+    // HTML 메타 태그 theme-color 동적 연동 (노치 및 상태바 일괄 적용)
+    const currentThemeData = theme === "light" ? LightTheme : DarkTheme;
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor) {
+      metaThemeColor.setAttribute("content", currentThemeData.background);
+    }
   }, [theme]);
 
   const handleTheme = useCallback(() => {

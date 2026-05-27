@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { postVoca, updateVoca } from '@/api/voca';
 import { getMaster } from '@/api/word';
 import { getSession } from '@/api/auth';
-import { processWordMap } from '@/ui/app/router/user/utils';
+import { processWordMap } from '@/app/router/user/utils';
 import { supabase } from '@/api/client';
 import { removeStorage, KEYS } from '@/utils/storage';
 

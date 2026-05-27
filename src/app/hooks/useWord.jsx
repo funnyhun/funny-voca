@@ -1,5 +1,5 @@
-import { useMemo, useContext } from "react";
-import { VocaContext, StatsContext, AppContext } from "@/ui/app/App";
+import { useMemo } from "react";
+import { useOutletContext } from "react-router-dom";
 
 /**
  * 특정 Day의 단어 리스트와 개별 학습 상태(done)를 결합하여 반환합니다.
@@ -8,9 +8,9 @@ import { VocaContext, StatsContext, AppContext } from "@/ui/app/App";
  * @returns {Object} { words: Array }
  */
 export const useWord = (selected) => {
-  const { wordMap, wordStatusMap = {} } = useContext(VocaContext);
-  const { userData } = useContext(StatsContext);
-  const { wordData } = useContext(AppContext);
+  const { vocaState, statsState, wordData } = useOutletContext();
+  const { wordMap, wordStatusMap = {} } = vocaState;
+  const { userData } = statsState;
 
   const idx = typeof selected === "number" ? selected : userData.selected;
 
