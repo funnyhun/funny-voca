@@ -27,8 +27,7 @@ export const App = () => {
   const isWelcome = location.pathname.startsWith("/welcome");
 
   // 실제 body의 백그라운드 컬러 동적 변수 제어
-  // 오버레이 ON/OFF 시의 전환은 OverlayContext가 담당하며,
-  // 여기서는 welcome/일반 화면 전환 시 기준 색상(평상시 값)만 세팅한다.
+  // welcome/일반 화면 전환 시의 기준 배경 색상만 세팅한다.
   useEffect(() => {
     const targetColor = isWelcome ? theme.background : theme.main;
     document.documentElement.style.setProperty("--header-bottom-bg", targetColor);

@@ -2,8 +2,7 @@ import styled from "styled-components";
 
 export const Wrapper = styled.div`
   width: 100%;
-  padding-top: env(safe-area-inset-top, 0px);
-  height: calc(2.8rem + env(safe-area-inset-top, 0px));
+  height: 2.8rem;
 
   padding-left: 1rem;
   padding-right: 1rem;

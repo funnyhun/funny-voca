@@ -6,6 +6,7 @@ export const Layout = styled.div`
   height: 100dvh;
   display: flex;
   flex-direction: column;
+  padding-top: env(safe-area-inset-top, 0px);
 `;
 
 export const Wrapper = styled.div`

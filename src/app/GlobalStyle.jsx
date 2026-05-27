@@ -32,12 +32,17 @@ export const GlobalStyle = createGlobalStyle`
     &::-webkit-scrollbar { display: none; }
   }
 
+  html {
+    background-color: var(--header-bottom-bg, #ffffff);
+    transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
   body {
     position: relative;
     min-height: 100dvh;
 
     background-color: var(--header-bottom-bg, #ffffff);
-    transition: background-color 0.35s ease;
+    transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     color: var(--font-color);
     font-size: 1rem;
     line-height: 1.5;

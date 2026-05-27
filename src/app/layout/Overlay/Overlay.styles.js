@@ -3,7 +3,10 @@ import { OVERLAY_DIM_ALPHA } from "@/app/context/OverlayContext";
 
 export const Layer = styled.div`
   position: absolute;
-  inset: 0;
+  top: env(safe-area-inset-top, 0px); /* S.Layout의 padding-top 영역 침범 차단 */
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 100;
 
   pointer-events: none;
@@ -13,9 +16,9 @@ export const Layer = styled.div`
   background-color: transparent;
 
   transition:
-    opacity 0.35s ease,
-    backdrop-filter 0.35s ease,
-    background-color 0.35s ease;
+    opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    backdrop-filter 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 
   ${({ $active }) =>
     $active &&
