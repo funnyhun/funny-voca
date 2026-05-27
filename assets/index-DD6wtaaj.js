@@ -1452,7 +1452,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
     position: relative;
     min-height: 100dvh;
 
-    background-color: var(--bg-color);
+    background-color: blue;
     color: var(--font-color);
     font-size: 1rem;
     line-height: 1.5;
