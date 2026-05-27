@@ -37,7 +37,7 @@ export const GlobalStyle = createGlobalStyle`
     min-height: 100dvh;
 
     background-color: var(--header-bottom-bg, #ffffff);
-    transition: background-color 0.3s ease;
+    transition: background-color 0.35s ease;
     color: var(--font-color);
     font-size: 1rem;
     line-height: 1.5;

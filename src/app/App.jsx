@@ -3,9 +3,10 @@ import { Outlet, useLoaderData, useNavigation, useLocation } from "react-router-
 import { useTheme } from "styled-components";
 import * as S from "./App.styles";
 
-import { Header, Navigation } from "@/app/layout";
+import { Header, Navigation, Overlay } from "@/app/layout";
 import { LoadingBar, AppFallback } from "@/app/components";
 import { useVoca, useProfile, useStats } from "@/app/hooks";
+import { OverlayProvider } from "@/app/context/OverlayContext";
 
 export const App = () => {
   const location = useLocation();
@@ -26,29 +27,34 @@ export const App = () => {
   const isWelcome = location.pathname.startsWith("/welcome");
 
   // 실제 body의 백그라운드 컬러 동적 변수 제어
+  // 오버레이 ON/OFF 시의 전환은 OverlayContext가 담당하며,
+  // 여기서는 welcome/일반 화면 전환 시 기준 색상(평상시 값)만 세팅한다.
   useEffect(() => {
-    // 웰컴 화면에서는 온보딩 배경색(theme.background), 일반 화면에서는 헤더/바텀색(theme.main)을 주입
     const targetColor = isWelcome ? theme.background : theme.main;
     document.documentElement.style.setProperty("--header-bottom-bg", targetColor);
   }, [isWelcome, theme]);
 
   return (
-    <S.Layout>
-      {isNavigating && <LoadingBar />}
+    <OverlayProvider>
+      <S.Layout>
+        {isNavigating && <LoadingBar />}
 
-      {/* /welcome/* 경로일 때는 헤더를 가림 */}
-      {!isWelcome && <Header notifications={notifications} />}
+        <Overlay />
 
-      <S.Wrapper>
-        <Suspense fallback={<AppFallback />}>
-          {/* Context Provider 중첩을 완전히 날려버리고 Outlet context로 동적 상태를 다이렉트 주입 */}
-          <Outlet key={stateKey} context={{ vocaState, profileState, statsState, wordData, notifications }} />
-        </Suspense>
-      </S.Wrapper>
+        {/* /welcome/* 경로일 때는 헤더를 가림 */}
+        {!isWelcome && <Header notifications={notifications} />}
 
-      {/* /welcome/* 경로일 때는 바텀 네비게이션을 가림 */}
-      {!isWelcome && <Navigation />}
-    </S.Layout>
+        <S.Wrapper>
+          <Suspense fallback={<AppFallback />}>
+            {/* Context Provider 중첩을 완전히 날려버리고 Outlet context로 동적 상태를 다이렉트 주입 */}
+            <Outlet key={stateKey} context={{ vocaState, profileState, statsState, wordData, notifications }} />
+          </Suspense>
+        </S.Wrapper>
+
+        {/* /welcome/* 경로일 때는 바텀 네비게이션을 가림 */}
+        {!isWelcome && <Navigation />}
+      </S.Layout>
+    </OverlayProvider>
   );
 };
 
