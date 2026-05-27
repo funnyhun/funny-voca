@@ -71,6 +71,7 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   height: 100dvh;
   display: flex;
   flex-direction: column;
+  padding-top: env(safe-area-inset-top, 0px);
 `,tO=N.div`
   flex: 1;
   width: 100%;
@@ -85,8 +86,7 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   overflow-y: auto;
 `,nO=N.div`
   width: 100%;
-  padding-top: env(safe-area-inset-top, 0px);
-  height: calc(2.8rem + env(safe-area-inset-top, 0px));
+  height: 2.8rem;
 
   padding-left: 1rem;
   padding-right: 1rem;
@@ -1321,8 +1321,6 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
 
   padding-top: calc(env(safe-area-inset-top, 0px) + 1rem);
   padding-bottom: 1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
   background-color: ${({theme:t})=>t.background};
 
   display: flex;
