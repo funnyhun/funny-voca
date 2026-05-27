@@ -391,7 +391,7 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   height: 100dvh;
 
   z-index: 9999;
-  background-color: rgba(15, 23, 42, 0.4);
+  background-color: red;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(8px);
   color: white;
@@ -1454,7 +1454,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   }
 
   body {
-    background-color: var(--bg-color);
+    background-color: blue;
     color: var(--font-color);
     font-size: 1rem;
     line-height: 1.5;
