@@ -28,11 +28,10 @@ export const loadUserData = async ({ request }) => {
   const isWelcomePath = relativePath.startsWith("/welcome");
 
   try {
-    const session = await getSession();
-
-    // 1. 공통 데이터 로드 (마스터 데이터 및 알림)
-    const [wordData, dbNotisResult] = await Promise.all([
-      getMaster(),
+    // 1. 공통 데이터 로드 및 세션 조회를 병렬로 수행 (성능 최적화)
+    const [session, wordData, dbNotisResult] = await Promise.all([
+      getSession(),
+      getMaster(120, 0), // 우선 120개만 고속 로딩
       supabase.from("Notification").select("*").order("created_at", { ascending: false })
     ]);
 

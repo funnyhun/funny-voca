@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useEffect } from "react";
+import { Suspense, useMemo, useEffect, useState } from "react";
 import { Outlet, useLoaderData, useNavigation, useLocation } from "react-router-dom";
 import { useTheme } from "styled-components";
 import * as S from "./App.styles";
@@ -7,12 +7,14 @@ import { Header, Navigation, Overlay } from "@/app/layout";
 import { LoadingBar, AppFallback } from "@/app/components";
 import { useVoca, useProfile, useStats } from "@/app/hooks";
 import { OverlayProvider } from "@/app/context/OverlayContext";
+import { getMaster } from "@/api/word";
 
 export const App = () => {
   const location = useLocation();
   const theme = useTheme();
 
-  const { nick: initialNick, wordMap: initialWordMap, wordStatusMap: initialStatusMap, wordData, notifications, userData: initialUserData } = useLoaderData();
+  const { nick: initialNick, wordMap: initialWordMap, wordStatusMap: initialStatusMap, wordData: initialWordData, notifications, userData: initialUserData } = useLoaderData();
+  const [wordData, setWordData] = useState(initialWordData);
   const navigation = useNavigation();
   const isNavigating = navigation.state === "loading";
 
@@ -25,6 +27,42 @@ export const App = () => {
   const statsState = useStats(initialUserData);
 
   const isWelcome = location.pathname.startsWith("/welcome");
+
+  // 백그라운드 스트리밍 단어 로딩 엔진
+  useEffect(() => {
+    let isMounted = true;
+    const BULK_SIZE = 120;
+
+    const loadRemainingWords = async () => {
+      let currentOffset = BULK_SIZE;
+
+      while (isMounted) {
+        try {
+          const nextChunk = await getMaster(BULK_SIZE, currentOffset);
+          const nextKeys = Object.keys(nextChunk);
+
+          if (nextKeys.length === 0) break;
+          if (!isMounted) break;
+
+          setWordData(prev => ({
+            ...prev,
+            ...nextChunk
+          }));
+
+          currentOffset += BULK_SIZE;
+        } catch (error) {
+          console.error("[Background Loader] Error loading remaining words:", error);
+          break;
+        }
+      }
+    };
+
+    loadRemainingWords();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // 실제 body의 백그라운드 컬러 동적 변수 제어
   // welcome/일반 화면 전환 시의 기준 배경 색상만 세팅한다.
