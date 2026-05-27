@@ -1,8 +1,16 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useOverlay } from "@/app/context/OverlayContext";
 import * as S from "./Spinner.styles";
 
-export const Spinner = ({ fullScreen = false, message, status }) => {
+export const Spinner = ({ message, status }) => {
   const [progress, setProgress] = useState(status ?? 0);
+  const { setIsOverlay } = useOverlay();
+
+  // 마운트 시 오버레이 활성화, 언마운트 시 자동 해제
+  useEffect(() => {
+    setIsOverlay(true);
+    return () => setIsOverlay(false);
+  }, [setIsOverlay]);
 
   useEffect(() => {
     if (status !== undefined) {
@@ -29,13 +37,13 @@ export const Spinner = ({ fullScreen = false, message, status }) => {
   }, [status]);
 
   return (
-    <S.Overlay $fullScreen={fullScreen}>
+    <S.Content>
       {message && <S.Message>{message}</S.Message>}
-      <S.ProgressBar $fullScreen={fullScreen}>
-        <S.ProgressFill $fullScreen={fullScreen} $value={progress} />
+      <S.ProgressBar>
+        <S.ProgressFill $value={progress} />
       </S.ProgressBar>
       <S.PercentText>{progress}%</S.PercentText>
-    </S.Overlay>
+    </S.Content>
   );
 };
 

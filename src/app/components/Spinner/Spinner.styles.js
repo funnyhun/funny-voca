@@ -1,24 +1,22 @@
 import styled from "styled-components";
 
-export const Overlay = styled.div`
-  bottom: 0; 
-  height: 100vh;
-  height: -webkit-fill-available;
-  height: 100dvh;
-
-  z-index: 9999;
-  background-color: red;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(8px);
-  color: white;
+/* Overlay 레이어(z-index: 100) 위에 콘텐츠를 중앙 배치한다 */
+export const Content = styled.div`
+  position: absolute;
+  inset: 0;
+  z-index: 101;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 1.2rem;
+
+  color: white;
   font-weight: 600;
   font-size: 1rem;
+
+  pointer-events: none;
 `;
 
 export const Message = styled.span`
@@ -32,7 +30,7 @@ export const Message = styled.span`
 export const ProgressBar = styled.div`
   width: 200px;
   height: 8px;
-  background-color: ${({ $fullScreen }) => ($fullScreen ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.1)")};
+  background-color: rgba(255, 255, 255, 0.2);
   border-radius: 4px;
   overflow: hidden;
 `;
@@ -40,7 +38,7 @@ export const ProgressBar = styled.div`
 export const ProgressFill = styled.div`
   height: 100%;
   width: ${({ $value }) => $value}%;
-  background-color: ${({ $fullScreen, theme }) => ($fullScreen ? "white" : theme.brand || "#137FEC")};
+  background-color: white;
   transition: width 0.2s ease;
   border-radius: 4px;
 `;
@@ -50,4 +48,3 @@ export const PercentText = styled.span`
   opacity: 0.8;
   font-variant-numeric: tabular-nums;
 `;
-
