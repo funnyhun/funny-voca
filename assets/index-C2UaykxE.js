@@ -142,7 +142,7 @@ ${z}`}class Rt extends Error{constructor({message:n,code:a,cause:s,name:o}){var 
   & > svg {
     fill: ${({$located:t,theme:n})=>t?n.brand:n.sub};
   }
-`,cO=()=>{const t=wn(),n=Bn().pathname.split("/")[1],a=Cw.filter(u=>u.icon),s=u=>u.split("/")[1]===n,o=u=>{s(u)||t(u)};return b.jsx(oO,{children:a.map(u=>b.jsxs(uO,{onClick:()=>o(u.path),$located:s(u.path),children:[u.icon,b.jsx("p",{children:u.name})]},u.path))})},cw=.35,hO=(t,n)=>{const a=t.replace("#",""),s=parseInt(a.slice(0,2),16),o=parseInt(a.slice(2,4),16),u=parseInt(a.slice(4,6),16),c=1-n;return`rgb(${Math.round(s*c)}, ${Math.round(o*c)}, ${Math.round(u*c)})`},hw=x.createContext({isOverlay:!1,setIsOverlay:()=>{}}),dO=({children:t})=>{const[n,a]=x.useState(!1),s=lw();return x.useEffect(()=>{const o=n?hO(s.main,cw):s.main;document.documentElement.style.setProperty("--header-bottom-bg",o)},[n,s]),b.jsx(hw.Provider,{value:{isOverlay:n,setIsOverlay:a},children:t})},dw=()=>x.useContext(hw),fO=N.div`
+`,cO=()=>{const t=wn(),n=Bn().pathname.split("/")[1],a=Cw.filter(u=>u.icon),s=u=>u.split("/")[1]===n,o=u=>{s(u)||t(u)};return b.jsx(oO,{children:a.map(u=>b.jsxs(uO,{onClick:()=>o(u.path),$located:s(u.path),children:[u.icon,b.jsx("p",{children:u.name})]},u.path))})},cw=.35,hO=(t,n)=>{let a=t.replace("#","");a.length===3&&(a=a.split("").map(f=>f+f).join(""));const s=parseInt(a.slice(0,2),16),o=parseInt(a.slice(2,4),16),u=parseInt(a.slice(4,6),16),c=1-n;return`rgb(${Math.round(s*c)}, ${Math.round(o*c)}, ${Math.round(u*c)})`},hw=x.createContext({isOverlay:!1,setIsOverlay:()=>{}}),dO=({children:t})=>{const[n,a]=x.useState(!1),s=lw();return x.useEffect(()=>{const o=n?hO(s.main,cw):s.main;document.documentElement.style.setProperty("--header-bottom-bg",o)},[n,s]),b.jsx(hw.Provider,{value:{isOverlay:n,setIsOverlay:a},children:t})},dw=()=>x.useContext(hw),fO=N.div`
   position: absolute;
   top: env(safe-area-inset-top, 0px); /* S.Layout의 padding-top 영역 침범 차단 */
   left: 0;
@@ -1461,6 +1461,11 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(Sw,{fullS
     -ms-overflow-style: none;
     scrollbar-width: none;
     &::-webkit-scrollbar { display: none; }
+  }
+
+  html {
+    background-color: var(--header-bottom-bg, #ffffff);
+    transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   body {
