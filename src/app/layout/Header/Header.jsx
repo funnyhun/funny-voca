@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as S from "./Header.styles";
 
-import { NotificationList } from "@/ui/layout";
+import { NotificationList } from "@/app/layout";
 
 export const Header = ({ notifications }) => {
   const navigation = useNavigate();

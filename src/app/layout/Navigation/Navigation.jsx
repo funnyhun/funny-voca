@@ -1,11 +1,11 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import * as S from "./Navigation.styles";
-import { pages } from "@/ui/app/router/router";
+import { pages } from "@/app/router/router";
 
 export const Navigation = () => {
   const navigate = useNavigate();
   const located = useLocation().pathname.split("/")[1];
-  const items = pages.slice(1);
+  const items = pages.filter((item) => item.icon);
 
   const isLocated = (path) => path.split("/")[1] === located;
 

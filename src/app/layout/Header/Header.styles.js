@@ -1,18 +1,10 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
-
-  max-width: ${({ theme }) => theme.max_width};
-  min-width: ${({ theme }) => theme.min_width};
   width: 100%;
+  padding-top: env(safe-area-inset-top, 0px);
   height: calc(2.8rem + env(safe-area-inset-top, 0px));
 
-  padding-top: env(safe-area-inset-top, 0px);
   padding-left: 1rem;
   padding-right: 1rem;
 
@@ -21,7 +13,6 @@ export const Wrapper = styled.div`
   align-items: center;
 
   background-color: ${({ theme }) => theme.main};
-  margin: 0 auto;
 `;
 
 export const Title = styled.h1`

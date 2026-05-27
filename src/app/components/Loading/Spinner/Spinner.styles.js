@@ -1,26 +1,17 @@
 import styled from "styled-components";
 
 export const Overlay = styled.div`
-  ${({ $fullScreen }) =>
-    $fullScreen
-      ? `
-        position: fixed;
-        inset: 0;
-        z-index: 9999;
-        background-color: rgba(15, 23, 42, 0.4);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        color: white;
-      `
-      : `
-        position: relative;
-        width: 100%;
-        height: 100%;
-        min-height: 150px;
-        background: transparent;
-        color: ${({ theme }) => theme.font};
-      `}
-  
+  bottom: 0; 
+  height: 100vh;
+  height: -webkit-fill-available;
+  height: 100dvh;
+
+  z-index: 9999;
+  background-color: red;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(8px);
+  color: white;
+
   display: flex;
   flex-direction: column;
   justify-content: center;

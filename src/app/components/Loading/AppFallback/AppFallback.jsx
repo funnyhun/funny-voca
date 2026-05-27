@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import { Loading } from "@/ui/layout";
+import { Loading } from "@/app/layout";
 import { Spinner } from "../Spinner/Spinner";
 
 export const AppFallback = () => {

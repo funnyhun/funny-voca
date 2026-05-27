@@ -5,7 +5,6 @@ export const Spinner = ({ fullScreen = false, message, status }) => {
   const [progress, setProgress] = useState(status ?? 0);
 
   useEffect(() => {
-    // 외부에서 status를 명시적으로 주입한 경우 그 값을 사용
     if (status !== undefined) {
       setProgress(status);
       return;
@@ -19,8 +18,8 @@ export const Spinner = ({ fullScreen = false, message, status }) => {
           return 98;
         }
         // 전반부에는 좀 더 빠르고 동적으로, 후반부에는 서서히 채워지도록 설정
-        const diff = prev < 50 
-          ? Math.floor(Math.random() * 8) + 4 
+        const diff = prev < 50
+          ? Math.floor(Math.random() * 8) + 4
           : Math.floor(Math.random() * 3) + 1;
         return Math.min(prev + diff, 98);
       });

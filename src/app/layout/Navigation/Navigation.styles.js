@@ -1,24 +1,13 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.ul`
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 999;
-
-  max-width: ${({ theme }) => theme.max_width};
-  min-width: ${({ theme }) => theme.min_width};
   width: 100%;
-  height: calc(3.5rem + env(safe-area-inset-bottom, 0px));
+  height: 3.5rem;
   background-color: ${({ theme }) => theme.main};
 
   display: flex;
   align-items: center;
   justify-content: space-around;
-
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  margin: 0 auto;
 `;
 
 export const Item = styled.li`

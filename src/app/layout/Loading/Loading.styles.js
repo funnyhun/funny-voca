@@ -3,14 +3,16 @@ import { BrandIcon } from "@/assets/iconList";
 
 export const Wrapper = styled.div`
   width: 100%;
-  height: 100%;
+  height: 100vh;
+  height: -webkit-fill-available;
+  height: 100dvh;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  background-color: ${({ theme }) => theme.background};
+  background-color: var(--theme-background);
 `;
 
 export const ColorBrandIcon = styled(BrandIcon)`
