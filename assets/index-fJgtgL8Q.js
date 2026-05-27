@@ -1444,11 +1444,7 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   }
 
   html, body, #root {
-    height: 100%;
-    width: 100%;
-    /* iOS PWA 스크롤 흔들림/바운스 방지 */
     overscroll-behavior-y: none;
-    /* 스크롤바 숨김은 여기서 한 번만 */
     overflow: overlay; 
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -1456,6 +1452,9 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
   }
 
   body {
+    position: relative;
+    min-height: 100dvh;
+
     background-color: blue;
     color: var(--font-color);
     font-size: 1rem;
@@ -1463,6 +1462,24 @@ funny-voca를 시작할까요?`),b.jsxs(b.Fragment,{children:[u&&b.jsx(rm,{fullS
     user-select: none;
     touch-action: manipulation;
     -webkit-font-smoothing: antialiased;
+  }
+
+  body::before {
+    content: '';
+    /* 부모(body)의 영토를 기준으로 액정 화면 전체(inset:0)를 덮는 유리판 선언 */
+    position: fixed; 
+    inset: 0; 
+    z-index: -1; 
+
+    /* 이 유리판 자체의 색상과 블러 효과 */
+    background-color: rgba(15, 23, 42, 0.4); 
+    filter: blur(8px);
+    -webkit-filter: blur(8px);
+    
+    /* 켜고 끄기 위한 투명도 설정 */
+    opacity: 1;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
   }
 
   /* 타이포그래피 계층화 */
