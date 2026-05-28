@@ -4,12 +4,9 @@ import { supabase } from "@/api/client";
 import { getSession } from "@/api/auth";
 import { getMaster } from "@/api/word";
 import { getProfile } from "@/api/profile";
-import { getVoca, postVoca } from "@/api/voca";
+import { getVocaList, reschedule } from "@/api/voca";
 
 import { setStorage, getStorage, removeStorage, KEYS } from "@/utils/storage";
-
-import { processWordMap, createGuestStatusMap } from "./utils";
-import { migrateVoca } from "@/api/migration";
 
 /**
  * [Orchestrator] 어플리케이션 진입 시 필요한 모든 데이터를 로드하고 상태에 따라 분기합니다.
@@ -29,51 +26,14 @@ export const loadUserData = async ({ request }) => {
 
   try {
     // 1. 공통 데이터 로드 및 세션 조회를 병렬로 수행 (성능 최적화)
-    // 단어 전체 상세 데이터 대신 가벼운 카테고리 집계 정보 조회
-    const [session, categoryStatsResult, dbNotisResult] = await Promise.all([
+    const [session, dbNotisResult] = await Promise.all([
       getSession(),
-      supabase.from("Word").select("category"),
       supabase.from("Notification").select("*").order("created_at", { ascending: false })
     ]);
 
-    // DB 상의 카테고리별 단어 개수 계산
-    const dbCategories = categoryStatsResult.data || [];
-    const dbStats = {};
-    dbCategories.forEach(item => {
-      const cat = item.category || "default";
-      dbStats[cat] = (dbStats[cat] || 0) + 1;
-    });
-
-    // 로컬 스토리지 캐시 및 캐시의 카테고리별 단어 개수 계산
-    const cachedWords = getStorage(KEYS.MASTER) || {};
-    const cachedStats = {};
-    Object.values(cachedWords).forEach(item => {
-      const cat = item.category || "default";
-      cachedStats[cat] = (cachedStats[cat] || 0) + 1;
-    });
-
-    // 카테고리별 갯수가 완벽히 일치하고, 캐시 데이터가 실제 존재하는지 검증
-    const categories = Array.from(new Set([...Object.keys(dbStats), ...Object.keys(cachedStats)]));
-    const isCacheValid = categories.length > 0 && categories.every(cat => dbStats[cat] === cachedStats[cat]) && Object.keys(cachedWords).length > 0;
-
-    let wordData;
-    if (isCacheValid) {
-      // 캐시 유효: DB 조회를 스킵하고 로컬 캐시에서 상위 120개 고속 슬라이싱
-      const wordMap = {};
-      const sortedItems = Object.values(cachedWords).sort((a, b) => {
-        if (a.day !== b.day) return a.day - b.day;
-        return (a.word || "").localeCompare(b.word || "");
-      });
-      const sliced = sortedItems.slice(0, 120);
-      sliced.forEach(item => {
-        wordMap[item.id] = item;
-      });
-      wordData = wordMap;
-    } else {
-      // 캐시 무효: 로컬 캐시를 비우고 DB에서 처음 120개 고속 쿼리 진행
-      removeStorage(KEYS.MASTER);
-      wordData = await getMaster(120, 0);
-    }
+    // 캐시 유효성 임시 참값 설정 (5단계 DROP 전까지 안전 유지)
+    const isCacheValid = true;
+    const wordData = {}; // 1단계 IN 쿼리 선제 로더가 추후 처리하므로 빈 객체 처리
 
     const notifications = dbNotisResult.data || [];
     notifications.unshift(
@@ -82,22 +42,7 @@ export const loadUserData = async ({ request }) => {
         : { id: "sync_req", title: "데이터 동기화 권장", content: "로그인하여 학습 기록을 안전하게 보관하세요.", type: "sync" }
     );
 
-    // 2. 레거시 숫자 selected 인덱스를 신규 문자열 고유 영문 ID로 마이그레이션 및 자동 복구 방어 코드
-    const profile = getStorage(KEYS.PROFILE);
-    const wordMaps = getStorage(KEYS.VOCA);
-    if (profile && typeof profile.selected === "number" && wordMaps) {
-      const currentLevel = profile.level || "default";
-      const levelVoca = wordMaps[currentLevel] || [];
-      const legacyIndex = profile.selected;
-      if (levelVoca[legacyIndex]) {
-        profile.selected = levelVoca[legacyIndex].id;
-      } else {
-        profile.selected = levelVoca[0]?.id || "";
-      }
-      setStorage(KEYS.PROFILE, profile);
-    }
-
-    // 3. 세션 여부에 따른 흐름 제어
+    // 2. 세션 여부에 따른 흐름 제어
     if (session) {
       return await handleMemberLoading(session, wordData, notifications, isWelcomePath, isCacheValid);
     } else {
@@ -112,7 +57,7 @@ export const loadUserData = async ({ request }) => {
         voca: [],
         wordStatusMap: {},
         master: {},
-        profile: { level: "default" },
+        profile: { level: 700, selected: "", completed_date: null },
         notifications: [],
         isCacheValid: false
       };
@@ -126,116 +71,117 @@ export const loadUserData = async ({ request }) => {
  */
 async function handleMemberLoading(session, wordData, notifications, isWelcomePath, isCacheValid) {
   const userId = session.user.id;
-  const localUserData = getStorage(KEYS.PROFILE);
-  const currentLevel = localUserData?.level || "default";
 
-  // 난이도별 DB 코드 매핑 (초급 default -> 700)
-  const levelToNumber = { "default": 700, "800": 800, "900": 900 };
-  const dbLevel = levelToNumber[currentLevel] ?? 700;
-
-  // 1. 마이그레이션 체크 및 기본 데이터 로드
-  let wordMaps = getStorage(KEYS.VOCA);
-
-  // 레거시 로컬 데이터가 있으면 DB로 이전
-  if (wordMaps) {
-    await migrateVoca();
-    wordMaps = getStorage(KEYS.VOCA);
-  }
-
-  // 2. 프로필 및 학습 데이터 병렬 로드
-  const [userProfile, vocaData] = await Promise.all([
-    getProfile(),
-    getVoca(dbLevel)
-  ]);
-
+  // 1. 프로필 조회 (selected, completed_date, level 등 수집)
+  const userProfile = await getProfile(userId);
   if (!userProfile) throw new Error("User profile not found");
 
-  // 3. 템플릿 로드 (없으면 초기화)
-  if (!wordMaps) {
-    await postVoca(currentLevel);
-    wordMaps = getStorage(KEYS.VOCA);
+  const rawLevel = userProfile.level;
+  const currentLevel = rawLevel === "default" ? 700 : (parseInt(rawLevel) || 700);
+
+  // 2. 청크 단위 Voca 목록 조회
+  let vocaData = await getVocaList();
+
+  // 3. Voca 목록이 없다면 최초 1회 동적 정렬 배정 및 초기화 구축
+  if (!vocaData || Object.keys(vocaData).length === 0) {
+    await reschedule(currentLevel, null, false);
+    vocaData = await getVocaList();
   }
-  const baseWordMap = wordMaps?.[currentLevel] || [];
 
-  // 4. 상태 맵 생성 및 데이터 병합
-  const wordStatusMap = (vocaData || []).reduce((acc, curr) => {
-    acc[curr.word_id] = curr.status;
-    return acc;
-  }, {});
+  // 로컬 프로필 캐시 동기화
+  const currentLevelVoca = vocaData[currentLevel] || [];
+  const defaultSelected = currentLevelVoca[0]?.voca_label || "";
 
-  const processedWordMap = processWordMap(baseWordMap, wordStatusMap);
-
-  const localProfile = getStorage(KEYS.PROFILE) || {};
+  const localProfile = {
+    startedTime: new Date(userProfile.created_at).getTime(),
+    continued: 0,
+    today: 0,
+    learned: currentLevelVoca.filter((v) => v.status === true).length,
+    selected: userProfile.selected || getStorage(KEYS.PROFILE)?.selected || defaultSelected,
+    level: currentLevel,
+    completed_date: userProfile.completed_date || null,
+    nick: userProfile.nick
+  };
+  setStorage(KEYS.PROFILE, localProfile);
 
   return {
-    nick: localProfile.nick || userProfile.nick,
-    voca: processedWordMap,
-    wordStatusMap,
+    nick: userProfile.nick,
+    voca: vocaListToUI(vocaData),
+    wordStatusMap: {}, // 신규 청크 스키마 하에서 wordStatusMap은 사용되지 않음
     master: wordData,
     notifications,
     isCacheValid,
-    profile: {
-      startedTime: new Date(userProfile.created_at).getTime(),
-      continued: 0,
-      today: 0,
-      learned: (vocaData || []).filter(v => v.status).length,
-      selected: localUserData?.selected || baseWordMap[0]?.id || "",
-      level: currentLevel,
-    }
+    profile: localProfile
   };
 }
 
 /**
  * 미인증 사용자(Guest)를 위한 데이터 로딩 및 가공
  */
-function handleGuestLoading(wordData, notifications, isWelcomePath, isCacheValid) {
+async function handleGuestLoading(wordData, notifications, isWelcomePath, isCacheValid) {
   const profile = getStorage(KEYS.PROFILE);
-  const wordMaps = getStorage(KEYS.VOCA);
-
-  console.log("guest");
 
   if (!profile || !profile.nick) {
     if (isWelcomePath) {
+      // 순수 초기 진입 시점에 로더는 700 레벨의 데이터만 getVocaList() 또는 Anon-build를 통해 채워 넘겨주어야 합니다.
+      const rawVocaData = await getVocaList() || {};
+      const lvl700Data = rawVocaData["700"] || [];
+      const vocaData = {
+        700: lvl700Data,
+        800: [],
+        900: []
+      };
+
       return {
         nick: "",
-        voca: [],
+        voca: vocaListToUI(vocaData),
         wordStatusMap: {},
         master: {},
-        profile: { level: "default" },
+        profile: { level: 700, selected: "", completed_date: null },
         notifications: [],
         isCacheValid: false
       };
     }
     return redirect("/welcome/profile");
   }
-  if (!wordMaps) {
-    if (isWelcomePath) {
-      return {
-        nick: profile.nick,
-        voca: [],
-        wordStatusMap: {},
-        master: {},
-        profile,
-        notifications,
-        isCacheValid: false
-      };
+
+  // 기존 레거시 default 캐시 마이그레이션
+  if (!profile.level) {
+    if (profile.selected && String(profile.selected).startsWith("default")) {
+      profile.selected = ""; // 기본값 재배정을 위해 비움
     }
-    return redirect("/welcome/voca");
+    setStorage(KEYS.PROFILE, profile);
   }
 
-  const currentLevel = profile.level || "default";
-  const rawWordMap = wordMaps[currentLevel] || [];
-
-  const statusMap = createGuestStatusMap(rawWordMap);
-  const processedWordMap = processWordMap(rawWordMap, statusMap);
+  // 게스트 Voca 목록 로드
+  const vocaData = await getVocaList();
 
   return {
     nick: profile.nick,
-    voca: processedWordMap,
-    wordStatusMap: statusMap,
+    voca: vocaListToUI(vocaData),
+    wordStatusMap: {},
     master: wordData,
     profile,
     notifications,
     isCacheValid,
   };
+}
+
+/**
+ * Voca 목록 데이터를 종전의 UI가 자연스럽게 호환되도록 단순 가공해주는 헬퍼
+ * @param {Object} groupedList 레벨별로 그룹화된 Voca 객체
+ * @returns {Object} 가공 완료된 UI 대응 레벨별 그룹 객체
+ */
+function vocaListToUI(groupedList) {
+  const processed = {};
+  Object.keys(groupedList || {}).forEach((level) => {
+    console.log(groupedList[level]);
+    processed[level] = (groupedList[level] || []).map((item) => ({
+      ...item,
+      category: item.voca_label.split("-")[1], // 카테고리 영문
+      day: item.schedule, // 권장 순번 매핑
+      level: parseInt(level) || 700, // UI 가시성 및 편리함을 위해 level 프로퍼티 명시적 주입
+    }));
+  });
+  return processed;
 }

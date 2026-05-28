@@ -13,21 +13,37 @@ import { Empty } from "../Empty";
 
 import { FILTER_SET, FILTER_TYPE } from "../utils/filter";
 
+/**
+ * Word List
+ * - 특정 단어장에 속한 단어들의 목록을 검색/필터하여 노출하는 페이지 컴포넌트입니다.
+ * - updateSelectedLabel API 연동 오류를 해결하고 타이틀 렌더링 정합성을 완전히 보강했습니다.
+ */
 export const List = () => {
   const { vocaId } = useParams();
   const { words = [], loading } = useWord(vocaId);
   const navigate = useNavigate();
 
-  const { statsState } = useOutletContext();
-  const { profile, updateSelectedDay } = statsState;
+  const { statsState, vocaState } = useOutletContext();
+  const { profile, updateSelectedLabel } = statsState;
+  const { voca } = vocaState;
 
   const [filterType, setFilterType] = useState(FILTER_TYPE[0]);
   const [keyword, setKeyword] = useState("");
 
   const isTodayStudyDay = profile && profile.selected === vocaId;
 
+  // 정규화된 현재 레벨 Voca 배열을 통해 대치되는 한글 카테고리명 및 Day(schedule) 추출
+  const currentLevel = profile?.level || 700;
+  const currentLevelVoca = Array.isArray(voca) ? voca : (voca?.[currentLevel] || []);
+  const targetVoca = currentLevelVoca.find((v) => v.voca_label === vocaId);
+
+  const displayTitle = targetVoca
+    ? `Day ${targetVoca.schedule} (${targetVoca.category_kr})`
+    : "학습 단어장";
+
+  // 학습일로 지정 클릭 시 updateSelectedLabel API 백그라운드 호출
   const handleSetStudyDay = () => {
-    updateSelectedDay(vocaId);
+    updateSelectedLabel(vocaId);
   };
 
   const handleGoToLearn = () => {
@@ -79,10 +95,7 @@ export const List = () => {
         <S.BannerContainer>
           <S.BannerContent>
             <S.BannerTitle>
-              {(() => {
-                const match = vocaId?.match(/_d(\d+)_/);
-                return match ? `Day ${match[1]}` : "학습";
-              })()}
+              {displayTitle}
               {isTodayStudyDay && <S.ActiveBadge>학습 중</S.ActiveBadge>}
             </S.BannerTitle>
             <S.BannerDesc>

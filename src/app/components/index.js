@@ -6,3 +6,4 @@ export * from "./Spinner";
 export * from "./LoadingBar";
 export * from "./Skeleton";
 export * from "./AppFallback";
+export * from "./SelectionModal";

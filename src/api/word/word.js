@@ -38,8 +38,6 @@ export const getMaster = async (limit = null, offset = 0, forceDB = false) => {
         .select(`
           id:word_id,
           word,
-          day,
-          category,
           definitions:Definition (
             class,
             value:definition,
@@ -50,7 +48,6 @@ export const getMaster = async (limit = null, offset = 0, forceDB = false) => {
             quiz_ko
           )
         `)
-        .order("day", { ascending: true })
         .order("word", { ascending: true })
         .range(offset, offset + limit - 1);
 
@@ -77,8 +74,6 @@ export const getMaster = async (limit = null, offset = 0, forceDB = false) => {
         .select(`
           id:word_id,
           word,
-          day,
-          category,
           definitions:Definition (
             class,
             value:definition,
@@ -89,7 +84,6 @@ export const getMaster = async (limit = null, offset = 0, forceDB = false) => {
             quiz_ko
           )
         `)
-        .order("day", { ascending: true })
         .order("word", { ascending: true })
     );
 

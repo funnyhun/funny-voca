@@ -38,7 +38,7 @@ export const Quiz = () => {
       console.error("Failed to parse saved quiz state", e);
     }
 
-    const currentVocaId = profile?.selected || "default_d1_etc";
+    const currentVocaId = profile?.selected || "700-etc_1";
 
     // 저장된 vocaId와 현재 선택된 vocaId가 다르거나 세션이 없으면 새로 생성
     if (!parsed || parsed.vocaId !== currentVocaId) {

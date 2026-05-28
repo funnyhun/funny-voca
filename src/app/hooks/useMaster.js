@@ -18,8 +18,10 @@ export const useMaster = (initialMaster, isCacheValid) => {
     // 이미 모든 데이터가 로컬 스토리지에 온전하게 채워져 있다면 백그라운드 쿼리를 스킵하고 캐시 전체를 리액트 상태에 동기화
     if (isCacheValid) {
       const fullCached = getStorage(KEYS.MASTER) || {};
-      setMaster(fullCached);
-      return;
+      if (Object.keys(fullCached).length > 0) {
+        setMaster(fullCached);
+        return;
+      }
     }
 
     let isMounted = true;

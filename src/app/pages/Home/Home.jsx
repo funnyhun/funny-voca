@@ -11,7 +11,7 @@ export const Home = () => {
 
   return (
     <Wrapper>
-      <StatsDashboard profile={profile} voca={voca} />
+      <StatsDashboard profile={profile} voca={voca} statsState={statsState} />
       <Calendar mode={"compact"} now={now} profile={profile} voca={voca} />
     </Wrapper>
   );

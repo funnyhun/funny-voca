@@ -7,7 +7,6 @@ export const DashboardWrapper = styled(BorderBox)`
   gap: 1.2rem;
   background: ${({ theme }) => theme.main};
   position: relative;
-  overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 `;
 
@@ -107,5 +106,72 @@ export const ActionButton = styled.button`
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+`;
+
+export const RecommendationBanner = styled.div`
+  background: ${({ $isDone }) => $isDone
+    ? "linear-gradient(135deg, hsla(142, 72%, 29%, 0.08) 0%, hsla(142, 72%, 29%, 0.02) 100%)"
+    : "linear-gradient(135deg, hsla(243, 75%, 59%, 0.08) 0%, hsla(243, 75%, 59%, 0.02) 100%)"};
+  border: 1px dashed ${({ $isDone }) => $isDone ? "hsla(142, 72%, 29%, 0.3)" : "hsla(243, 75%, 59%, 0.3)"};
+  border-radius: 16px;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  align-items: flex-start;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-style: solid;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+  }
+`;
+
+export const BannerHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+export const BannerBadge = styled.span`
+  background: ${({ $isDone }) => $isDone ? "hsl(142, 72%, 29%)" : "hsl(243, 75%, 59%)"};
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 8px;
+  letter-spacing: 0.03em;
+`;
+
+export const BannerTitle = styled.h4`
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: ${({ theme }) => theme.font};
+  margin: 0;
+`;
+
+export const BannerDesc = styled.p`
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: ${({ theme }) => theme.label};
+  margin: 0;
+  white-space: pre-line;
+`;
+
+export const BannerButton = styled.button`
+  background: ${({ $isDone }) => $isDone ? "hsl(142, 72%, 29%)" : "hsl(243, 75%, 59%)"};
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
   }
 `;

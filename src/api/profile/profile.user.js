@@ -37,13 +37,19 @@ export const updateProfile = async (userId, data) => {
   if (!userId || !data) return false;
 
   try {
+    const updatePayload = {
+      user_id: userId,
+      updated_at: new Date().toISOString()
+    };
+
+    if (data.nick !== undefined) updatePayload.nick = data.nick;
+    if (data.level !== undefined) updatePayload.level = data.level;
+    if (data.selected !== undefined) updatePayload.selected = data.selected;
+    if (data.completed_date !== undefined) updatePayload.completed_date = data.completed_date;
+
     const { error } = await supabase
       .from("User")
-      .upsert({
-        user_id: userId,
-        nick: data.nick,
-        updated_at: new Date().toISOString()
-      }, {
+      .upsert(updatePayload, {
         onConflict: 'user_id'
       });
 

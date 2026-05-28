@@ -1,14 +1,15 @@
 import * as S from "./Voca.styles";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 import { ProgressBar, VerticalButton, Spinner } from "@app/components";
-import { useVoca } from "@app/hooks";
-import { getStorage, KEYS } from "@/utils/storage";
+import { getStorage, KEYS, setStorage } from "@/utils/storage";
 
 export const Voca = () => {
   const navigate = useNavigate();
-  const { initVoca } = useVoca();
+  const { vocaState, statsState } = useOutletContext();
+  const { initVoca } = vocaState;
+  
   const profile = getStorage(KEYS.PROFILE);
   const nick = profile?.nick || "게스트";
 
@@ -18,7 +19,33 @@ export const Voca = () => {
   const handleSelectLevel = async (level) => {
     try {
       setStatus(20); // 초기 프로그레스 설정
-      await initVoca(level);
+
+      // 1. 단어 데이터 생성 및 획득 (가짜 상태 useVoca 대신 Context API와 동기화)
+      const res = await initVoca(level);
+      
+      const activeLevel = Number(level) || 700;
+      const latestVoca = res || getStorage(KEYS.VOCA) || {};
+      const levelVocaList = latestVoca[activeLevel] || [];
+      const firstLabel = levelVocaList[0]?.voca_label || "";
+
+      // 2. 로컬 프로필 및 웰컴 진행 앵커 완성
+      const updatedProfile = {
+        nick: nick,
+        level: activeLevel,
+        startedTime: profile?.startedTime || new Date().getTime(),
+        continued: profile?.continued || 0,
+        today: profile?.today || 0,
+        learned: 0,
+        selected: firstLabel,
+        completed_date: null
+      };
+      setStorage(KEYS.PROFILE, updatedProfile);
+
+      // 3. statsState에도 반영하여 최신 상태 동기화
+      if (statsState?.updateSelectedLabel) {
+        statsState.updateSelectedLabel(firstLabel);
+      }
+
       setStatus(100); // 로드 완료
     } catch (err) {
       console.error("[Onboard] 학습데이터 초기화 실패:", err);
@@ -54,7 +81,7 @@ export const Voca = () => {
       
       {status === -1 && (
         <S.LevelSelection>
-          <VerticalButton label="초급 (Default)" color="main" bg="brand" onClick={() => handleSelectLevel('default')} />
+          <VerticalButton label="초급 (700)" color="main" bg="brand" onClick={() => handleSelectLevel('700')} />
           <VerticalButton label="중급 (800)" color="main" bg="brand" onClick={() => handleSelectLevel('800')} />
           <VerticalButton label="고급 (900)" color="main" bg="brand" onClick={() => handleSelectLevel('900')} />
         </S.LevelSelection>

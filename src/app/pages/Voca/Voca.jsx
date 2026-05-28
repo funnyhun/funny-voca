@@ -3,6 +3,7 @@ import { Outlet, useOutletContext } from "react-router-dom";
 
 export const Voca = () => {
   const context = useOutletContext();
+
   return (
     <S.Wrapper>
       <Outlet context={context} />

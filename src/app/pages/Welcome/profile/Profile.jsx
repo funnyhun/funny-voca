@@ -16,7 +16,7 @@ export const Profile = () => {
     // Guest 유저: Guest Storage에 닉네임 저장
     setStorage(KEYS.PROFILE, {
       nick: nick,
-      level: "default",
+      level: 700,
       startedTime: new Date().getTime(),
       continued: 0,
       today: 0,

@@ -21,7 +21,7 @@ export const App = () => {
   const isNavigating = navigation.state === "loading";
 
   // 데이터의 변경 여부를 식별할 수 있는 고유 키 조합
-  const stateKey = `${initialNick}-${initialProfile?.level || "default"}`;
+  const stateKey = `${initialNick}-${initialProfile?.level || 700}`;
 
   // 동적 상태 인스턴스화
   const vocaState = useVoca(initialVoca, initialStatusMap);

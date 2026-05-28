@@ -17,16 +17,21 @@ export const useWord = (selected) => {
   const words = useMemo(() => {
     if (!voca) return [];
 
-    let targetVoca = voca.find((v) => v.id === targetId);
+    const levelStr = String(targetId).split("-")[0];
+    const levelArray = voca[levelStr] || voca[profile.level] || [];
+
+    let targetVoca = levelArray.find((v) => v.voca_label === targetId);
     if (!targetVoca && !isNaN(Number(targetId))) {
       const idx = Number(targetId);
-      targetVoca = voca[idx];
+      targetVoca = levelArray[idx];
     }
 
     if (!targetVoca) {
       console.warn(`Voca ID/Index ${targetId}에 해당하는 데이터를 찾을 수 없습니다.`);
       return [];
     }
+
+    const doneList = Array.isArray(targetVoca.done) ? targetVoca.done : [];
 
     return targetVoca.word.map((i) => {
       // 숫자, 문자열, 혹은 공백이 섞인 경우를 모두 대비한 룩업
@@ -37,10 +42,12 @@ export const useWord = (selected) => {
         return null;
       }
       
-      // 유저의 학습 상태(done) 반영
+      // 해당 단어가 targetVoca.done 배열에 포함되어 있는지 확인하여 완료 여부 반영
+      const isDone = doneList.includes(i) || doneList.includes(String(i)) || doneList.includes(Number(i));
+      
       return {
         ...data,
-        done: wordStatusMap[i] || wordStatusMap[String(i)] || wordStatusMap[Number(i)] || false
+        done: isDone
       };
     }).filter(Boolean);
 
