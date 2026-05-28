@@ -8,24 +8,18 @@ import { getStorage, KEYS } from "@/utils/storage";
 export const loadQuiz = async () => {
   const { data: { session } } = await supabase.auth.getSession();
 
-  // 1. Member
-  if (session) {
-    return redirect(`/quiz/0`); // 추후 DB 정보 연동 가능
+  if (session) return null;
+
+  // Guest Onboarding Validation
+  const profile = getStorage(KEYS.PROFILE);
+  if (!profile || !profile.nick) {
+    return redirect("/welcome/profile");
   }
 
-  // 2. Guest
-  const userData = getStorage(KEYS.USER_DATA);
   const wordMaps = getStorage(KEYS.VOCA);
-  
-  if (!userData || !wordMaps) {
-    return { words: [] };
+  if (!wordMaps) {
+    return redirect("/welcome/voca");
   }
 
-  const currentLevel = userData.level || "default";
-  const wordMap = wordMaps[currentLevel] || [];
-
-  let selected = userData.selected || 0;
-  if (wordMap.length <= selected) selected = 0;
-
-  return redirect(`/quiz/${selected}`);
+  return null;
 };

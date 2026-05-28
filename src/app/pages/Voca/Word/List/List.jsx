@@ -1,8 +1,8 @@
 import * as S from "./List.styles";
 import { useState, useMemo, useCallback } from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 
-import { useSelected, useWord } from "@app/hooks";
+import { useWord } from "@app/hooks";
 import { Skeleton } from "@app/components";
 
 import { Item } from "../Item";
@@ -14,24 +14,24 @@ import { Empty } from "../Empty";
 import { FILTER_SET, FILTER_TYPE } from "../utils/filter";
 
 export const List = () => {
-  const { selected } = useSelected();
-  const { words = [], loading } = useWord(selected);
+  const { vocaId } = useParams();
+  const { words = [], loading } = useWord(vocaId);
   const navigate = useNavigate();
 
   const { statsState } = useOutletContext();
-  const { userData, updateSelectedDay } = statsState;
+  const { profile, updateSelectedDay } = statsState;
 
   const [filterType, setFilterType] = useState(FILTER_TYPE[0]);
   const [keyword, setKeyword] = useState("");
 
-  const isTodayStudyDay = userData && userData.selected === Number(selected);
+  const isTodayStudyDay = profile && profile.selected === vocaId;
 
   const handleSetStudyDay = () => {
-    updateSelectedDay(selected);
+    updateSelectedDay(vocaId);
   };
 
   const handleGoToLearn = () => {
-    navigate(`/play/${selected}/card/0`);
+    navigate(`/play`);
   };
 
   const clearCondition = () => {
@@ -75,11 +75,14 @@ export const List = () => {
 
   return (
     <S.Wrapper>
-      {userData && (
+      {profile && (
         <S.BannerContainer>
           <S.BannerContent>
             <S.BannerTitle>
-              Day {Number(selected) + 1}
+              {(() => {
+                const match = vocaId?.match(/_d(\d+)_/);
+                return match ? `Day ${match[1]}` : "학습";
+              })()}
               {isTodayStudyDay && <S.ActiveBadge>학습 중</S.ActiveBadge>}
             </S.BannerTitle>
             <S.BannerDesc>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { postVoca, updateVoca } from '@/api/voca';
 import { getMaster } from '@/api/word';
 import { getSession } from '@/api/auth';
@@ -11,17 +11,23 @@ import { removeStorage, KEYS } from '@/utils/storage';
  * - 상태(wordMap, wordStatusMap)를 소유합니다.
  * - updateStatus 액션을 호출할 때 즉시 로컬 상태를 변경하고, 비동기 영속성 동기화는 백그라운드에서 실행합니다.
  */
-export const useVoca = (initialWordMap = [], initialStatusMap = {}) => {
-  const [wordMap, setWordMap] = useState(initialWordMap);
+export const useVoca = (initialVoca = [], initialStatusMap = {}) => {
+  const [voca, setVoca] = useState(initialVoca);
   const [wordStatusMap, setWordStatusMap] = useState(initialStatusMap);
+
+  // 로더 데이터 갱신에 따른 리액트 상태 동기화 보완
+  useEffect(() => {
+    setVoca(initialVoca);
+    setWordStatusMap(initialStatusMap);
+  }, [JSON.stringify(initialVoca), JSON.stringify(initialStatusMap)]);
 
   const updateStatus = (wordId, status) => {
     // 1. 즉시 로컬 상태 변경 (낙관적 업데이트)
     setWordStatusMap(prev => {
       const nextStatus = { ...prev, [wordId]: status };
       
-      // wordMap도 새 statusMap을 기반으로 실시간 가공하여 갱신
-      setWordMap(prevMap => processWordMap(prevMap, nextStatus));
+      // voca도 새 statusMap을 기반으로 실시간 가공하여 갱신
+      setVoca(prevMap => processWordMap(prevMap, nextStatus));
       
       return nextStatus;
     });
@@ -57,7 +63,7 @@ export const useVoca = (initialWordMap = [], initialStatusMap = {}) => {
   };
 
   return {
-    wordMap,
+    voca,
     wordStatusMap,
     updateStatus,
     initVoca,

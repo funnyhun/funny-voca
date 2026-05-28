@@ -1,21 +1,19 @@
 import * as S from "./Complete.styles";
 import { Button } from "@app/components";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { useSelected } from "@app/hooks";
 import { useEffect } from "react";
 
 export const Complete = () => {
   const navigate = useNavigate();
-  const { selected } = useSelected();
   const { statsState } = useOutletContext();
-  const { recordSession } = statsState;
+  const { profile, recordSession } = statsState;
 
   useEffect(() => {
     recordSession();
   }, [recordSession]);
 
   const navigateHome = () => navigate("/home");
-  const navigateVoca = () => navigate(`/voca/${selected}`);
+  const navigateVoca = () => navigate(`/voca/${profile.selected}`);
 
   return (
     <S.Wrapper>

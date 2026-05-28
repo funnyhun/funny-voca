@@ -14,14 +14,14 @@ import {
   ActionButton,
 } from "./StatsDashboard.styles";
 
-export const StatsDashboard = ({ userData, wordMap }) => {
+export const StatsDashboard = ({ profile, voca }) => {
   const navigate = useNavigate();
-  const currentDayIndex = userData?.selected ?? 0;
+  const currentDayIndex = profile?.selected ?? 0;
 
-  const totalWords = (wordMap || [])
+  const totalWords = (voca || [])
     .filter(Boolean)
     .reduce((acc, curr) => acc + (curr.length || 0), 0);
-  const learnedWords = userData.learned || 0;
+  const learnedWords = profile.learned || 0;
   const progressPercent = totalWords > 0 ? Math.round((learnedWords / totalWords) * 100) : 0;
 
   const levelLabels = {
@@ -29,7 +29,7 @@ export const StatsDashboard = ({ userData, wordMap }) => {
     "800": "중급 (800)",
     "900": "고급 (900)"
   };
-  const currentLevelLabel = levelLabels[userData?.level] || "알 수 없음";
+  const currentLevelLabel = levelLabels[profile?.level] || "알 수 없음";
 
   return (
     <DashboardWrapper>
@@ -53,11 +53,11 @@ export const StatsDashboard = ({ userData, wordMap }) => {
       </ProgressContainer>
 
       <StreakBadge>
-        🔥 {userData.continued}일 연속 학습 중!
+        🔥 {profile.continued}일 연속 학습 중!
       </StreakBadge>
 
       <ActionContainer>
-        <ActionButton onClick={() => navigate(`/play/${currentDayIndex}/card/0`)}>
+        <ActionButton onClick={() => navigate(`/play/${currentDayIndex}`)}>
           <PlayIcon />
           <span>암기하기</span>
         </ActionButton>

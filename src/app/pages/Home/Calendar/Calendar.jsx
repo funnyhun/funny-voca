@@ -14,7 +14,7 @@ import {
   DayCircle,
 } from "./Calendar.styles";
 
-export const Calendar = ({ mode, userData, now = Date.now(), wordMap }) => {
+export const Calendar = ({ mode, profile, now = Date.now(), voca }) => {
   const DateObj = useMemo(() => new Date(now), [now]);
 
   const currentYear = DateObj.getFullYear();
@@ -25,7 +25,7 @@ export const Calendar = ({ mode, userData, now = Date.now(), wordMap }) => {
   const [month, setMonth] = useState(currentMonth);
 
   const data = useMemo(
-    () => calculateCalendarData(year, month, userData.startedTime, wordMap),
+    () => calculateCalendarData(year, month, profile.startedTime, voca),
     [year, month]
   );
 
@@ -48,7 +48,7 @@ export const Calendar = ({ mode, userData, now = Date.now(), wordMap }) => {
       <Header>
         <Title>학습기록</Title>
         <Label>
-          연속 학습 <span>{`${userData.continued ?? 0}일 째`}</span>
+          연속 학습 <span>{`${profile.continued ?? 0}일 째`}</span>
         </Label>
         <Pannel>
           <LeftIcon onClick={prevMonth} />

@@ -1,4 +1,4 @@
-import { buildWordMaps } from "./voca.shared";
+import { buildVoca } from "./voca.shared";
 import { getStorage, setStorage, KEYS } from "@/utils/storage";
 
 /**
@@ -8,7 +8,7 @@ import { getStorage, setStorage, KEYS } from "@/utils/storage";
  */
 export const postVoca = async (level) => {
   try {
-    const wordMaps = await buildWordMaps();
+    const wordMaps = await buildVoca();
     if (!wordMaps) {
       console.error("[API/Voca/Guest] 단어 목록 로드 실패");
       return null;
@@ -29,7 +29,7 @@ export const postVoca = async (level) => {
     };
     setStorage(KEYS.PROFILE, updatedProfile);
 
-    return { userData: updatedProfile, wordMap: wordMaps[level] || [] };
+    return { profile: updatedProfile, voca: wordMaps[level] || [] };
   } catch (err) {
     console.error("[API/Voca/Guest] Critical postVoca Error:", err);
     return null;
@@ -47,8 +47,8 @@ export const getVoca = (level) => {
 
   if (level) return wordMaps[level] || [];
 
-  const userData = getStorage(KEYS.PROFILE);
-  const currentLevel = userData?.level || "default";
+  const profile = getStorage(KEYS.PROFILE);
+  const currentLevel = profile?.level || "default";
   return wordMaps[currentLevel] || [];
 };
 
@@ -60,11 +60,11 @@ export const getVoca = (level) => {
  */
 export const updateVoca = (wordId, status = true) => {
   const wordMaps = getStorage(KEYS.VOCA);
-  const userData = getStorage(KEYS.PROFILE);
+  const profile = getStorage(KEYS.PROFILE);
 
-  if (!wordMaps || !userData) return false;
+  if (!wordMaps || !profile) return false;
 
-  const currentLevel = userData.level || "default";
+  const currentLevel = profile.level || "default";
   const wordMap = wordMaps[currentLevel] || [];
 
   let learnedIncrement = 0;

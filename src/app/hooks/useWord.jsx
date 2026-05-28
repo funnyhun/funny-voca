@@ -8,21 +8,29 @@ import { useOutletContext } from "react-router-dom";
  * @returns {Object} { words: Array }
  */
 export const useWord = (selected) => {
-  const { vocaState, statsState, wordData } = useOutletContext();
-  const { wordMap, wordStatusMap = {} } = vocaState;
-  const { userData } = statsState;
+  const { vocaState, statsState, master } = useOutletContext();
+  const { voca, wordStatusMap = {} } = vocaState;
+  const { profile } = statsState;
 
-  const idx = typeof selected === "number" ? selected : userData.selected;
+  const targetId = selected || profile.selected;
 
   const words = useMemo(() => {
-    if (!wordMap || !wordMap[idx]) {
-      console.warn(`Day index ${idx}에 해당하는 데이터를 찾을 수 없습니다.`);
+    if (!voca) return [];
+
+    let targetVoca = voca.find((v) => v.id === targetId);
+    if (!targetVoca && !isNaN(Number(targetId))) {
+      const idx = Number(targetId);
+      targetVoca = voca[idx];
+    }
+
+    if (!targetVoca) {
+      console.warn(`Voca ID/Index ${targetId}에 해당하는 데이터를 찾을 수 없습니다.`);
       return [];
     }
 
-    return wordMap[idx].word.map((i) => {
+    return targetVoca.word.map((i) => {
       // 숫자, 문자열, 혹은 공백이 섞인 경우를 모두 대비한 룩업
-      const data = wordData[i] || wordData[String(i)] || wordData[Number(i)];
+      const data = master[i] || master[String(i)] || master[Number(i)];
       
       if (!data) {
         console.error(`[Hook/useWord] Word Data Missing: ID ${i}`);
@@ -36,12 +44,12 @@ export const useWord = (selected) => {
       };
     }).filter(Boolean);
 
-  }, [wordMap, idx, wordData, wordStatusMap]);
+  }, [voca, targetId, master, wordStatusMap]);
 
 
   const loading = useMemo(() => {
-    return !wordMap || wordMap.length === 0 || !wordData || Object.keys(wordData).length === 0;
-  }, [wordMap, wordData]);
+    return !voca || voca.length === 0 || !master || Object.keys(master).length === 0;
+  }, [voca, master]);
 
   return { words, loading };
 };

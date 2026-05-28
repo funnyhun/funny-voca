@@ -6,13 +6,13 @@ import { Wrapper } from "./Home.styles";
 
 export const Home = () => {
   const { vocaState, statsState, now } = useOutletContext();
-  const { wordMap } = vocaState;
-  const { userData } = statsState;
+  const { voca } = vocaState;
+  const { profile } = statsState;
 
   return (
     <Wrapper>
-      <StatsDashboard userData={userData} wordMap={wordMap} />
-      <Calendar mode={"compact"} now={now} userData={userData} wordMap={wordMap} />
+      <StatsDashboard profile={profile} voca={voca} />
+      <Calendar mode={"compact"} now={now} profile={profile} voca={voca} />
     </Wrapper>
   );
 };

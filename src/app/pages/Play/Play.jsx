@@ -1,8 +1,9 @@
 import { useMemo, Suspense, useState } from "react";
-import { Outlet, useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
-import { useWord, useStep, useSelected } from "@app/hooks";
+import { useWord } from "@app/hooks";
 import { Button } from "@app/components";
+import { Item as Card } from "./Item";
 import {
   Wrapper,
   AllDoneWrapper,
@@ -12,9 +13,9 @@ import {
 
 export const Play = () => {
   const context = useOutletContext();
-  const { selected } = useSelected();
-  const { words } = useWord(selected);
-  const { step } = useStep();
+  const { statsState } = context;
+  const { profile } = statsState;
+  const { words } = useWord();
   const navigate = useNavigate();
   const [isReview, setIsReview] = useState(false);
 
@@ -41,7 +42,7 @@ export const Play = () => {
             label="단어장으로 돌아가기"
             color="font"
             bg="main"
-            onClick={() => navigate(`/voca/${selected}`)}
+            onClick={() => navigate(`/voca/${profile.selected}`)}
           />
           <Button
             label="홈으로"
@@ -57,7 +58,7 @@ export const Play = () => {
   return (
     <Wrapper>
       <Suspense fallback={<div>불러올 단어가 없습니다.</div>}>
-        <Outlet key={step} context={context} />
+        <Card />
       </Suspense>
     </Wrapper>
   );

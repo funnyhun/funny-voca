@@ -1,4 +1,4 @@
-import { buildWordMaps } from "./voca.shared";
+import { buildVoca } from "./voca.shared";
 import { supabase, fetchPages } from "@/api/client";
 import { getStorage, setStorage, KEYS } from "@/utils/storage";
 
@@ -12,7 +12,7 @@ export const postVoca = async (userId, level) => {
   if (!userId) return null;
 
   try {
-    const wordMaps = await buildWordMaps();
+    const wordMaps = await buildVoca();
     if (!wordMaps) {
       console.error("[API/Voca/User] 단어 목록 로드 실패");
       return null;
@@ -61,7 +61,7 @@ export const postVoca = async (userId, level) => {
     };
     setStorage(KEYS.PROFILE, updatedProfile);
 
-    return { userData: updatedProfile, wordMap: targetWordMap };
+    return { profile: updatedProfile, voca: targetWordMap };
   } catch (err) {
     console.error("[API/Voca/User] Critical postVoca Error:", err);
     return null;
@@ -79,8 +79,8 @@ export const getVoca = async (userId, level) => {
 
   let targetLevel = level;
   if (!targetLevel) {
-    const userData = getStorage(KEYS.PROFILE);
-    targetLevel = userData?.level || "default";
+    const profile = getStorage(KEYS.PROFILE);
+    targetLevel = profile?.level || "default";
   }
 
   try {
@@ -109,7 +109,7 @@ export const getVoca = async (userId, level) => {
       });
     }
 
-    const wordMaps = await buildWordMaps(statusMap);
+    const wordMaps = await buildVoca(statusMap);
     if (!wordMaps) {
       const cached = getStorage(KEYS.VOCA);
       return cached ? (cached[targetLevel] || []) : [];
@@ -118,8 +118,8 @@ export const getVoca = async (userId, level) => {
     // 캐시 업데이트
     setStorage(KEYS.VOCA, wordMaps);
 
-    const userData = getStorage(KEYS.PROFILE) || {};
-    setStorage(KEYS.PROFILE, { ...userData, learned: totalLearned, level: targetLevel });
+    const profile = getStorage(KEYS.PROFILE) || {};
+    setStorage(KEYS.PROFILE, { ...profile, learned: totalLearned, level: targetLevel });
 
     return wordMaps[targetLevel] || [];
   } catch (err) {
@@ -153,10 +153,10 @@ export const updateVoca = async (userId, wordId, status = true) => {
 
     // 로컬 캐시 즉시 업데이트
     const wordMaps = getStorage(KEYS.VOCA);
-    const userData = getStorage(KEYS.PROFILE);
+    const profile = getStorage(KEYS.PROFILE);
 
-    if (wordMaps && userData) {
-      const currentLevel = userData.level || "default";
+    if (wordMaps && profile) {
+      const currentLevel = profile.level || "default";
       const wordMap = wordMaps[currentLevel] || [];
       let learnedIncrement = 0;
 
@@ -190,8 +190,8 @@ export const updateVoca = async (userId, wordId, status = true) => {
       setStorage(KEYS.VOCA, wordMaps);
 
       if (learnedIncrement !== 0) {
-        userData.learned = Math.max(0, (userData.learned || 0) + learnedIncrement);
-        setStorage(KEYS.PROFILE, userData);
+        profile.learned = Math.max(0, (profile.learned || 0) + learnedIncrement);
+        setStorage(KEYS.PROFILE, profile);
       }
     }
 

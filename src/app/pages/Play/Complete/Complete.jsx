@@ -1,20 +1,18 @@
 import { Button } from "@app/components";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { useSelected } from "@app/hooks";
 import { useEffect } from "react";
 import { Wrapper, Image, Title, Content, Pannel } from "./Complete.styles";
 
 export const Complete = ({ replayCard }) => {
   const navigate = useNavigate();
-  const { selected } = useSelected();
   const { statsState } = useOutletContext();
-  const { recordSession } = statsState;
+  const { profile, recordSession } = statsState;
 
   useEffect(() => {
     recordSession();
   }, [recordSession]);
 
-  const navigateQuiz = () => navigate(`/quiz/${selected}`);
+  const navigateQuiz = () => navigate("/quiz");
 
   return (
     <Wrapper>

@@ -8,24 +8,18 @@ import { getStorage, KEYS } from "@/utils/storage";
 export const loadPlay = async () => {
   const { data: { session } } = await supabase.auth.getSession();
 
-  // 1. Member: 일단 기본 0으로 이동 (추후 DB에 마지막 학습 위치 저장 가능)
-  if (session) {
-    return redirect(`/play/0/card/0`);
+  if (session) return null;
+
+  // Guest Onboarding Validation
+  const profile = getStorage(KEYS.PROFILE);
+  if (!profile || !profile.nick) {
+    return redirect("/welcome/profile");
   }
 
-  // 2. Guest: Guest Storage 데이터 사용
-  const userData = getStorage(KEYS.USER_DATA);
   const wordMaps = getStorage(KEYS.VOCA);
-  
-  if (!userData || !wordMaps) {
-    return { words: [] };
+  if (!wordMaps) {
+    return redirect("/welcome/voca");
   }
 
-  const currentLevel = userData.level || "default";
-  const wordMap = wordMaps[currentLevel] || [];
-
-  let selected = userData.selected || 0;
-  if (wordMap.length <= selected) selected = 0;
-
-  return redirect(`/play/${selected}/card/0`);
+  return null;
 };

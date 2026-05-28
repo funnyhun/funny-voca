@@ -22,9 +22,4 @@ const useStep = () => {
   return { step, changeStep };
 };
 
-const useSelected = () => {
-  const { param: selected, navBasedParam: changeSelected } = useMyParam("selected", "");
-  return { selected, changeSelected };
-};
-
-export { useStep, useSelected };
+export { useStep };

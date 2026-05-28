@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getProfile, updateProfile } from '@/api/profile';
 import { getSession } from '@/api/auth';
 
@@ -9,6 +9,11 @@ import { getSession } from '@/api/auth';
  */
 export const useProfile = (initialNick = '') => {
   const [nick, setNick] = useState(initialNick);
+
+  // 로더 데이터 갱신에 따른 닉네임 상태 동기화 추가
+  useEffect(() => {
+    setNick(initialNick);
+  }, [initialNick]);
 
   const updateNick = (newNick) => {
     // 1. 즉시 로컬 상태 갱신 (낙관적 업데이트)

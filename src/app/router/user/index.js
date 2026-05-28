@@ -6,7 +6,7 @@ import { getMaster } from "@/api/word";
 import { getProfile } from "@/api/profile";
 import { getVoca, postVoca } from "@/api/voca";
 
-import { getStorage, removeStorage, KEYS } from "@/utils/storage";
+import { setStorage, getStorage, removeStorage, KEYS } from "@/utils/storage";
 
 import { processWordMap, createGuestStatusMap } from "./utils";
 import { migrateVoca } from "@/api/migration";
@@ -18,7 +18,7 @@ import { migrateVoca } from "@/api/migration";
  */
 export const loadUserData = async ({ request }) => {
   const url = new URL(request.url);
-  
+
   const rawBasePath = import.meta.env.VITE_BASE_PATH || "/";
   const basename = rawBasePath.endsWith("/") && rawBasePath !== "/" ? rawBasePath.slice(0, -1) : rawBasePath;
   const relativePath = basename !== "/" && url.pathname.startsWith(basename)
@@ -82,7 +82,22 @@ export const loadUserData = async ({ request }) => {
         : { id: "sync_req", title: "데이터 동기화 권장", content: "로그인하여 학습 기록을 안전하게 보관하세요.", type: "sync" }
     );
 
-    // 2. 세션 여부에 따른 흐름 제어
+    // 2. 레거시 숫자 selected 인덱스를 신규 문자열 고유 영문 ID로 마이그레이션 및 자동 복구 방어 코드
+    const profile = getStorage(KEYS.PROFILE);
+    const wordMaps = getStorage(KEYS.VOCA);
+    if (profile && typeof profile.selected === "number" && wordMaps) {
+      const currentLevel = profile.level || "default";
+      const levelVoca = wordMaps[currentLevel] || [];
+      const legacyIndex = profile.selected;
+      if (levelVoca[legacyIndex]) {
+        profile.selected = levelVoca[legacyIndex].id;
+      } else {
+        profile.selected = levelVoca[0]?.id || "";
+      }
+      setStorage(KEYS.PROFILE, profile);
+    }
+
+    // 3. 세션 여부에 따른 흐름 제어
     if (session) {
       return await handleMemberLoading(session, wordData, notifications, isWelcomePath, isCacheValid);
     } else {
@@ -94,10 +109,10 @@ export const loadUserData = async ({ request }) => {
     if (isWelcomePath) {
       return {
         nick: "",
-        wordMap: [],
+        voca: [],
         wordStatusMap: {},
-        firstBulkData: {},
-        userData: { level: "default" },
+        master: {},
+        profile: { level: "default" },
         notifications: [],
         isCacheValid: false
       };
@@ -154,17 +169,17 @@ async function handleMemberLoading(session, wordData, notifications, isWelcomePa
 
   return {
     nick: localProfile.nick || userProfile.nick,
-    wordMap: processedWordMap,
+    voca: processedWordMap,
     wordStatusMap,
-    firstBulkData: wordData,
+    master: wordData,
     notifications,
     isCacheValid,
-    userData: {
+    profile: {
       startedTime: new Date(userProfile.created_at).getTime(),
       continued: 0,
       today: 0,
       learned: (vocaData || []).filter(v => v.status).length,
-      selected: localUserData?.selected || 0,
+      selected: localUserData?.selected || baseWordMap[0]?.id || "",
       level: currentLevel,
     }
   };
@@ -183,10 +198,10 @@ function handleGuestLoading(wordData, notifications, isWelcomePath, isCacheValid
     if (isWelcomePath) {
       return {
         nick: "",
-        wordMap: [],
+        voca: [],
         wordStatusMap: {},
-        firstBulkData: {},
-        userData: { level: "default" },
+        master: {},
+        profile: { level: "default" },
         notifications: [],
         isCacheValid: false
       };
@@ -197,10 +212,10 @@ function handleGuestLoading(wordData, notifications, isWelcomePath, isCacheValid
     if (isWelcomePath) {
       return {
         nick: profile.nick,
-        wordMap: [],
+        voca: [],
         wordStatusMap: {},
-        firstBulkData: {},
-        userData: profile,
+        master: {},
+        profile,
         notifications,
         isCacheValid: false
       };
@@ -216,10 +231,10 @@ function handleGuestLoading(wordData, notifications, isWelcomePath, isCacheValid
 
   return {
     nick: profile.nick,
-    wordMap: processedWordMap,
+    voca: processedWordMap,
     wordStatusMap: statusMap,
-    firstBulkData: wordData,
-    userData: profile,
+    master: wordData,
+    profile,
     notifications,
     isCacheValid,
   };

@@ -5,26 +5,26 @@ import { Item } from "../Item";
 
 export const List = () => {
   const { vocaState, statsState } = useOutletContext();
-  const { wordMap } = vocaState;
-  const { userData } = statsState;
+  const { voca } = vocaState;
+  const { profile } = statsState;
 
   const sortedWordMap = useMemo(() => {
-    const list = wordMap.filter(Boolean);
-    if (!userData) return list;
+    const list = voca.filter(Boolean);
+    if (!profile) return list;
 
     return [...list].sort((a, b) => {
-      const aIsStudying = a.id === userData.selected;
-      const bIsStudying = b.id === userData.selected;
+      const aIsStudying = a.id === profile.selected;
+      const bIsStudying = b.id === profile.selected;
       if (aIsStudying && !bIsStudying) return -1;
       if (!aIsStudying && bIsStudying) return 1;
       return a.id - b.id;
     });
-  }, [wordMap, userData]);
+  }, [voca, profile]);
 
   return (
     <S.Wrapper>
       {sortedWordMap.map((item) => {
-        const isStudying = userData && item.id === userData.selected;
+        const isStudying = profile && item.id === profile.selected;
         return <Item item={item} key={item.id} isStudying={isStudying} />;
       })}
     </S.Wrapper>

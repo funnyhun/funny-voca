@@ -8,12 +8,12 @@ import { getStorage, setStorage, KEYS } from "@/utils/storage";
  * - Word 및 Definition 테이블을 조인하여 가져옵니다.
  * - 결과값은 O(1) 조회를 위해 객체 형태로 변환하여 반환합니다.
  */
-export const getMaster = async (limit = null, offset = 0) => {
+export const getMaster = async (limit = null, offset = 0, forceDB = false) => {
   try {
     const cachedWords = getStorage(KEYS.MASTER);
 
-    // 캐시가 존재하고 유효한 경우 로컬 캐시 데이터 슬라이싱 및 즉시 반환
-    if (cachedWords && typeof cachedWords === "object" && Object.keys(cachedWords).length > 0) {
+    // 캐시가 존재하고 유효하며 forceDB가 false인 경우 로컬 캐시 데이터 슬라이싱 및 즉시 반환
+    if (!forceDB && cachedWords && typeof cachedWords === "object" && Object.keys(cachedWords).length > 0) {
       if (limit !== null) {
         const wordMap = {};
         // day 및 알파벳 순 정렬 기준으로 정렬된 id 목록 생성

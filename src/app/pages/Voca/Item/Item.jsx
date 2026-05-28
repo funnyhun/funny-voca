@@ -1,13 +1,13 @@
 import * as S from "./Item.styles";
 import { ProgressBar } from "../ProgressBar";
-import { useSelected } from "@app/hooks";
+import { useNavigate } from "react-router-dom";
 
 export const Item = ({ item, isStudying }) => {
-  const { id, length, done, progress } = item;
-  const { changeSelected } = useSelected();
+  const { id, day, category, length, done, progress } = item;
+  const navigate = useNavigate();
 
   const navItemDetail = () => {
-    changeSelected(id);
+    navigate(`/voca/${id}`);
   };
 
   return (
@@ -15,7 +15,7 @@ export const Item = ({ item, isStudying }) => {
       <S.Status $status={done}>{done ? <S.CompleteIcon /> : <S.IncompleteIcon />}</S.Status>
       <S.Content>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          <S.Label>{`Day ${id + 1}`}</S.Label>
+          <S.Label>{`Day ${day} (${category})`}</S.Label>
           {isStudying && (
             <span style={{
               background: "linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)",

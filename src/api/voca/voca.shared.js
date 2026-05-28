@@ -1,13 +1,36 @@
 import { supabase, fetchPages } from "@/api/client";
 
 /**
- * Word 테이블에서 전체 단어를 로드하고 레벨별 누적 wordMap 구조로 빌드합니다.
+ * 한글 카테고리명을 영문 슬러그(Slug)로 변환해 주는 헬퍼 함수
+ * @param {string} korean - 한글 카테고리명
+ * @returns {string} 영문 슬러그
+ */
+const toEnglishSlug = (korean) => {
+  const map = {
+    "기타": "etc",
+    "가정": "home",
+    "가족": "family",
+    "학교": "school",
+    "음식": "food",
+    "동물": "animal",
+    "스포츠": "sports",
+    "자연": "nature",
+    "토익": "toeic",
+    "비즈니스": "business",
+    "여행": "travel",
+    "일상": "daily"
+  };
+  return map[korean] || "etc";
+};
+
+/**
+ * Word 테이블에서 전체 단어를 로드하고 레벨별 누적 학습 데이터(voca) 구조로 빌드합니다.
  * guest와 user 양쪽에서 공통으로 사용하는 핵심 로직입니다.
  * 
  * @param {Object} [statusMap={}] - word_id를 키로 하는 학습 상태 맵 (user의 경우 DB에서 조회한 값)
- * @returns {Promise<Object|null>} { wordMaps } 또는 null
+ * @returns {Promise<Object|null>} { vocaList } 또는 null
  */
-export const buildWordMaps = async (statusMap = {}) => {
+export const buildVoca = async (statusMap = {}) => {
   const words = await fetchPages(() =>
     supabase
       .from("Word")
@@ -22,7 +45,7 @@ export const buildWordMaps = async (statusMap = {}) => {
     "900": words.filter(w => ["0", "700", "800", "900"].includes(String(w.level))),
   };
 
-  const wordMaps = {};
+  const vocaList = {};
 
   Object.keys(levelGroups).forEach(l => {
     const groupWords = levelGroups[l];
@@ -48,7 +71,7 @@ export const buildWordMaps = async (statusMap = {}) => {
     const categories = Object.values(tempMap);
     categories.sort((a, b) => (a.day - b.day) || a.category.localeCompare(b.category));
 
-    wordMaps[l] = categories.map((c, idx) => {
+    vocaList[l] = categories.map((c, idx) => {
       const wordStatus = {};
       let finishedCount = 0;
 
@@ -59,10 +82,11 @@ export const buildWordMaps = async (statusMap = {}) => {
       });
 
       const length = c.length || c.word.length || 1;
+      const vocaId = `${l}_d${c.day}_${toEnglishSlug(c.category)}`;
 
       return {
         ...c,
-        id: idx,
+        id: vocaId,
         wordStatus,
         finishedCount,
         progress: Math.floor((finishedCount / length) * 100),
@@ -71,5 +95,5 @@ export const buildWordMaps = async (statusMap = {}) => {
     });
   });
 
-  return wordMaps;
+  return vocaList;
 };

@@ -12,21 +12,21 @@ export const App = () => {
   const location = useLocation();
   const theme = useTheme();
 
-  const { nick: initialNick, wordMap: initialWordMap, wordStatusMap: initialStatusMap, firstBulkData, notifications, userData: initialUserData, isCacheValid } = useLoaderData();
+  const { nick: initialNick, voca: initialVoca, wordStatusMap: initialStatusMap, master, notifications, profile: initialProfile, isCacheValid } = useLoaderData();
 
   // 백그라운드 스트리밍 로드, 동적 캐싱 및 상태 병합을 도맡는 커스텀 훅
-  const wordData = useMaster(firstBulkData, isCacheValid);
+  const masterData = useMaster(master, isCacheValid);
 
   const navigation = useNavigation();
   const isNavigating = navigation.state === "loading";
 
   // 데이터의 변경 여부를 식별할 수 있는 고유 키 조합
-  const stateKey = `${initialNick}-${initialUserData?.level || "default"}`;
+  const stateKey = `${initialNick}-${initialProfile?.level || "default"}`;
 
   // 동적 상태 인스턴스화
-  const vocaState = useVoca(initialWordMap, initialStatusMap);
+  const vocaState = useVoca(initialVoca, initialStatusMap);
   const profileState = useProfile(initialNick);
-  const statsState = useStats(initialUserData);
+  const statsState = useStats(initialProfile);
 
   const isWelcome = location.pathname.startsWith("/welcome");
 
@@ -48,7 +48,7 @@ export const App = () => {
         <S.Wrapper>
           <Suspense fallback={<AppFallback />}>
             {/* Context Provider 중첩을 완전히 날려버리고 Outlet context로 동적 상태를 다이렉트 주입 */}
-            <Outlet key={stateKey} context={{ vocaState, profileState, statsState, wordData, notifications }} />
+            <Outlet key={stateKey} context={{ vocaState, profileState, statsState, master: masterData, notifications }} />
           </Suspense>
         </S.Wrapper>
 

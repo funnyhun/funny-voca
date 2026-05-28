@@ -1,7 +1,7 @@
 import * as S from "./Quiz.styles";
 import { useState, useMemo, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
-import { useSelected, useWord } from "@app/hooks";
+import { useWord } from "@app/hooks";
 import { shuffleArray } from "@/utils/array";
 
 import { ProgressBar } from "./ProgressBar";
@@ -16,10 +16,10 @@ import { SentenceQuiz } from "./types/SentenceQuiz";
 const LS_KEY = "myvoca_quiz_state";
 
 export const Quiz = () => {
-  const { vocaState } = useOutletContext();
+  const { vocaState, statsState } = useOutletContext();
   const { updateStatus } = vocaState;
-  const { selected } = useSelected();
-  const { words, loading } = useWord(selected);
+  const { profile } = statsState;
+  const { words, loading } = useWord();
 
   // 로컬 퀴즈 상태 관리
   const [session, setSession] = useState(null);
@@ -38,17 +38,17 @@ export const Quiz = () => {
       console.error("Failed to parse saved quiz state", e);
     }
 
-    const currentDay = Number(selected);
+    const currentVocaId = profile?.selected || "default_d1_etc";
 
-    // 저장된 day와 현재 선택된 day가 다르거나 세션이 없으면 새로 생성
-    if (!parsed || parsed.day !== currentDay) {
+    // 저장된 vocaId와 현재 선택된 vocaId가 다르거나 세션이 없으면 새로 생성
+    if (!parsed || parsed.vocaId !== currentVocaId) {
       const uncompleted = words.filter((w) => !w.done);
       const targets = uncompleted.length > 0 ? uncompleted : words;
       const targetIds = targets.map((w) => w.id);
       const initialQueue = shuffleArray([...targetIds]);
 
       const newSession = {
-        day: currentDay,
+        vocaId: currentVocaId,
         phase: "SPELLING",
         doneCount: 0,
         totalCount: targetIds.length,
@@ -63,7 +63,7 @@ export const Quiz = () => {
     }
     setHasMistake(false);
     setIsAnswered(false);
-  }, [words, loading, selected]);
+  }, [words, loading, profile?.selected]);
 
   // 세션이 변경될 때마다 LocalStorage 업데이트
   const updateSession = (nextSession) => {

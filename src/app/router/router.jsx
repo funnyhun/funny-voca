@@ -13,28 +13,7 @@ import { HomeIcon, PlayIcon, QuizIcon, WordIcon, AccountIcon } from "@/assets/ic
 
 const wordContents = [
   { index: true, element: <VocaList /> },
-  { path: ":selected", element: <WordList /> },
-];
-
-const playContents = [
-  { index: true, loader: loadPlay },
-  {
-    path: ":selected",
-    children: [
-      { index: true, element: <Navigate to="card/0" replace /> },
-      { path: "card", element: <Navigate to="0" replace /> },
-      { path: "card/:step", element: <Card />, name: "카드" },
-    ],
-  },
-];
-
-const quizContents = [
-  { index: true, loader: loadQuiz },
-  {
-    path: ":selected",
-    element: <Quiz />,
-    name: "퀴즈",
-  },
+  { path: ":vocaId", element: <WordList /> },
 ];
 
 export const pages = [
@@ -53,16 +32,16 @@ export const pages = [
   {
     path: "/play",
     element: <Play />,
+    loader: loadPlay,
     name: "시작하기",
     icon: <PlayIcon />,
-    children: playContents,
   },
   {
     path: "/quiz",
-    element: <Play />,
+    element: <Quiz />,
+    loader: loadQuiz,
     name: "퀴즈",
     icon: <QuizIcon />,
-    children: quizContents,
   },
   {
     path: "/voca",

@@ -9,14 +9,16 @@ import { getStorage, setStorage, KEYS } from "@/utils/storage";
  * @param {boolean} isCacheValid - 캐시 데이터의 정합성 유효 여부
  * @returns {Object} 최종 병합 완료되었거나 수집 중인 전체 단어 맵
  */
-export const useMaster = (firstBulkData, isCacheValid) => {
-  const [wordData, setWordData] = useState(firstBulkData);
-  // firstBulkData를 1회성 스냅샷으로 캡처하여 참조 변경으로 인한 이펙트 무한 리셋 차단
-  const firstBulkRef = useRef(firstBulkData);
+export const useMaster = (initialMaster, isCacheValid) => {
+  const [master, setMaster] = useState(initialMaster);
+  // initialMaster를 1회성 스냅샷으로 캡처하여 참조 변경으로 인한 이펙트 무한 리셋 차단
+  const firstBulkRef = useRef(initialMaster);
 
   useEffect(() => {
-    // 이미 모든 데이터가 로컬 스토리지에 온전하게 채워져 있다면 백그라운드 쿼리를 완전히 스킵
+    // 이미 모든 데이터가 로컬 스토리지에 온전하게 채워져 있다면 백그라운드 쿼리를 스킵하고 캐시 전체를 리액트 상태에 동기화
     if (isCacheValid) {
+      const fullCached = getStorage(KEYS.MASTER) || {};
+      setMaster(fullCached);
       return;
     }
 
@@ -33,7 +35,7 @@ export const useMaster = (firstBulkData, isCacheValid) => {
 
       while (isMounted) {
         try {
-          const nextChunk = await getMaster(BULK_SIZE, currentOffset);
+          const nextChunk = await getMaster(BULK_SIZE, currentOffset, true);
           const nextKeys = Object.keys(nextChunk);
 
           if (nextKeys.length === 0) {
@@ -53,7 +55,7 @@ export const useMaster = (firstBulkData, isCacheValid) => {
           setStorage(KEYS.MASTER, cumulativeWords);
 
           // UI 렌더링에 동적으로 신규 추가 단어 병합 바인딩
-          setWordData(prev => ({
+          setMaster(prev => ({
             ...prev,
             ...nextChunk
           }));
@@ -73,5 +75,5 @@ export const useMaster = (firstBulkData, isCacheValid) => {
     };
   }, [isCacheValid]);
 
-  return wordData;
+  return master;
 };

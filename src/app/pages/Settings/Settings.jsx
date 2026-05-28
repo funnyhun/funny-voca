@@ -14,7 +14,7 @@ import {
 export const Settings = () => {
   const { profileState, statsState, vocaState } = useOutletContext();
   const { nick } = profileState;
-  const { userData } = statsState;
+  const { profile } = statsState;
   const { resetVoca } = vocaState;
   const [resetting, setResetting] = useState(false);
   const [resetProgress, setResetProgress] = useState(0);
@@ -42,7 +42,7 @@ export const Settings = () => {
   };
 
   const handleLevelChange = async (newLevel) => {
-    if (userData?.level === newLevel) return;
+    if (profile?.level === newLevel) return;
     const confirmed = window.confirm(
       "학습 난이도를 변경하시겠습니까?\n\n이전 난이도의 학습 진행 상황은 모두 삭제되고\n선택한 난이도를 기준으로 학습 데이터가 재설정됩니다.\n\n이 작업은 되돌릴 수 없습니다."
     );
@@ -78,7 +78,7 @@ export const Settings = () => {
     setResetProgress(30);
 
     try {
-      await resetVoca(userData?.level || "default");
+      await resetVoca(profile?.level || "default");
       setResetProgress(100);
       revalidator.revalidate();
       navigate("/home");
@@ -107,11 +107,11 @@ export const Settings = () => {
             <S.Value>{nick || "Guest"}</S.Value>
             <S.Label>상태</S.Label>
             <S.Value>{isGuest ? "게스트 모드" : "로그인 완료"}</S.Value>
-            {userData?.startedTime && (
+            {profile?.startedTime && (
               <>
                 <S.Label>학습 시작일</S.Label>
                 <S.Value>
-                  {new Date(userData.startedTime).toLocaleDateString("ko-KR")}
+                  {new Date(profile.startedTime).toLocaleDateString("ko-KR")}
                 </S.Value>
               </>
             )}
@@ -122,19 +122,19 @@ export const Settings = () => {
           <S.SectionTitle>학습 난이도</S.SectionTitle>
           <S.LevelButtons>
             <S.LevelButton 
-              $active={userData?.level === "default"} 
+              $active={profile?.level === "default"} 
               onClick={() => handleLevelChange("default")}
             >
               초급 (Default)
             </S.LevelButton>
             <S.LevelButton 
-              $active={userData?.level === "800"} 
+              $active={profile?.level === "800"} 
               onClick={() => handleLevelChange("800")}
             >
               중급 (800)
             </S.LevelButton>
             <S.LevelButton 
-              $active={userData?.level === "900"} 
+              $active={profile?.level === "900"} 
               onClick={() => handleLevelChange("900")}
             >
               고급 (900)
