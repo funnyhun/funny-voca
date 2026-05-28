@@ -1,1 +1,1 @@
-export { getMaster } from "./word";
+export { getWordsByChunk as getMaster } from "../master";

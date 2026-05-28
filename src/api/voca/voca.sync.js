@@ -1,4 +1,4 @@
-import { supabase, fetchPages } from "@/api/client";
+import { supabase } from "@/api/client";
 import { calculateNewSchedule } from "./voca.local";
 
 /**
@@ -52,13 +52,14 @@ export const syncWordStatusToRemote = async (userId, vocaLabel, doneList, status
 
       // 2.2 User.selected 자동 전진 및 Auto-Skip
       // 최신 전체 Voca 목록을 DB에서 직접 조회하여 schedule 오름차순으로 다음 청크를 식별
-      const vocaList = await fetchPages(() =>
-        supabase
-          .from("Voca")
-          .select("*")
-          .eq("user_id", userId)
-          .order("schedule", { ascending: true })
-      );
+      const { data: vocaListData, error: vocaListError } = await supabase
+        .from("Voca")
+        .select("*")
+        .eq("user_id", userId)
+        .order("schedule", { ascending: true });
+
+      if (vocaListError) console.error("[SyncVoca] vocaList 로드 오류:", vocaListError.message);
+      const vocaList = vocaListData || [];
 
       const levelStr = vocaLabel.split("-")[0];
       const currentLevelVoca = (vocaList || []).filter((v) => v.voca_label.startsWith(`${levelStr}-`));
@@ -200,13 +201,13 @@ export const syncRescheduleToRemote = async (userId, targetLevel, swapCategories
     }
     notifyProgress(40);
 
-    // 3. 기존 원격 Voca 데이터 로드
-    const oldVocaList = await fetchPages(() =>
-      supabase
-        .from("Voca")
-        .select("*")
-        .eq("user_id", userId)
-    );
+    const { data: oldVocaListData, error: oldVocaError } = await supabase
+      .from("Voca")
+      .select("*")
+      .eq("user_id", userId);
+
+    if (oldVocaError) throw oldVocaError;
+    const oldVocaList = oldVocaListData || [];
     notifyProgress(55);
 
     // 4. 초기화 모드(isReset) 시 기존 성취 데이터 제거한 상태로 세팅
@@ -330,6 +331,74 @@ export const deleteRemoteVoca = async (userId) => {
     return true;
   } catch (err) {
     console.error("[SyncVoca] deleteRemoteVoca 에러:", err);
+    return false;
+  }
+};
+
+/**
+ * 퀴즈 완료 시 특정 청크의 완료 상태(status) 및 completed_at 날짜를 Supabase Voca 테이블에 갱신하고,
+ * User 테이블의 completed_date 및 selected 다음 청크 자동 전진 처리를 수행합니다.
+ */
+export const syncVocaStatusToRemote = async (userId, vocaLabel, status = false) => {
+  if (!userId || !vocaLabel) return false;
+
+  try {
+    const todayStr = getTodayString();
+    const completedAtVal = status ? todayStr : null;
+
+    // 1. Voca 테이블의 completed_at 및 status 업데이트
+    const { error: updateError } = await supabase
+      .from("Voca")
+      .update({ status, completed_at: completedAtVal })
+      .eq("user_id", userId)
+      .eq("voca_label", vocaLabel);
+
+    if (updateError) {
+      console.error("[SyncVoca] Voca completed_at 업데이트 실패:", updateError.message);
+      return false;
+    }
+
+    // 2. 만약 청크 완료(status = true)가 발생한 경우 비즈니스 흐름 연동
+    if (status === true) {
+      // 2.1 User.completed_date 만료 일자 필드에 오늘 날짜(YYYY-MM-DD) 기록
+      const { error: dateError } = await supabase
+        .from("User")
+        .update({ completed_date: todayStr })
+        .eq("user_id", userId);
+      if (dateError) console.error("[SyncVoca] completed_date 원격 갱신 오류:", dateError.message);
+
+      const { data: vocaListData, error: vocaListError } = await supabase
+        .from("Voca")
+        .select("*")
+        .eq("user_id", userId)
+        .order("schedule", { ascending: true });
+
+      if (vocaListError) console.error("[SyncVoca] vocaList 로드 오류:", vocaListError.message);
+      const vocaList = vocaListData || [];
+
+      const levelStr = vocaLabel.split("-")[0];
+      const currentLevelVoca = (vocaList || []).filter((v) => v.voca_label.startsWith(`${levelStr}-`));
+      const sortedVoca = [...currentLevelVoca].sort((a, b) => a.schedule - b.schedule);
+      
+      const nextTodoChunk = sortedVoca.find((v) => v.status === false);
+
+      if (nextTodoChunk) {
+        const nextSelectedLabel = nextTodoChunk.voca_label;
+        
+        const { error: selectUpdateError } = await supabase
+          .from("User")
+          .update({ selected: nextSelectedLabel })
+          .eq("user_id", userId);
+
+        if (selectUpdateError) {
+          console.error("[SyncVoca] User.selected 자동 전진 원격 반영 실패:", selectUpdateError.message);
+        }
+      }
+    }
+
+    return true;
+  } catch (err) {
+    console.error("[SyncVoca] syncVocaStatusToRemote 에러:", err);
     return false;
   }
 };

@@ -93,6 +93,7 @@ export const calculateNewSchedule = (allChunks, existingVocaList = [], defaultCa
       voca_label: `${chunk.level}-${chunk.category_en}`,
       done: existing ? existing.done : [],
       status: existing ? existing.status : false,
+      completed_at: existing ? existing.completed_at : null,
       schedule: index + 1,
       word: chunk.word_ids || [],
       category_kr: chunk.category_kr || '',
@@ -225,27 +226,10 @@ export const updateLocalWordStatus = async (wordId, status) => {
 
     setStorage(KEYS.VOCA, vocaList);
 
-    if (targetChunk.status === true) {
-      const profile = getStorage(KEYS.PROFILE) || {};
-      const todayStr = getTodayString();
-      profile.completed_date = todayStr;
-
-      const currentLevelVoca = vocaList[targetLevelStr] || [];
-      const sortedVoca = [...currentLevelVoca].sort((a, b) => a.schedule - b.schedule);
-      const nextTodoChunk = sortedVoca.find((v) => v.status === false);
-
-      if (nextTodoChunk) {
-        profile.selected = nextTodoChunk.voca_label;
-      }
-
-      profile.learned = currentLevelVoca.filter((v) => v.status === true).length;
-      setStorage(KEYS.PROFILE, profile);
-    } else {
-      const profile = getStorage(KEYS.PROFILE) || {};
-      const currentLevelVoca = vocaList[targetLevelStr] || [];
-      profile.learned = currentLevelVoca.filter((v) => v.status === true).length;
-      setStorage(KEYS.PROFILE, profile);
-    }
+    const profile = getStorage(KEYS.PROFILE) || {};
+    const currentLevelVoca = vocaList[targetLevelStr] || [];
+    profile.learned = currentLevelVoca.filter((v) => v.status === true).length;
+    setStorage(KEYS.PROFILE, profile);
 
     return { targetChunk, updatedVocaList: vocaList };
   } catch (err) {
@@ -328,6 +312,80 @@ export const rescheduleLocal = async (targetLevel, swapCategories = null, isRese
     return vocaList;
   } catch (err) {
     console.error("[LocalVoca] rescheduleLocal 에러:", err);
+    return null;
+  }
+};
+
+/**
+ * 퀴즈 완료 시 특정 청크의 완료 상태(status) 및 completed_at 날짜를 로컬 스토리지에 반영하고,
+ * 연속 학습일(continued), completed_date 및 selected 다음 청크 자동 전진을 총괄적으로 수행합니다.
+ */
+export const updateLocalVocaStatus = async (vocaLabel, status = false) => {
+  try {
+    const vocaList = await getLocalVocaList();
+    if (!vocaList || Array.isArray(vocaList)) return null;
+
+    let targetChunk = null;
+    const targetLevelStr = vocaLabel.split("-")[0];
+
+    if (vocaList[targetLevelStr]) {
+      vocaList[targetLevelStr] = vocaList[targetLevelStr].map((chunk) => {
+        if (chunk.voca_label !== vocaLabel) return chunk;
+
+        const todayStr = getTodayString();
+        targetChunk = {
+          ...chunk,
+          status: status,
+          completed_at: status ? todayStr : null
+        };
+        return targetChunk;
+      });
+    }
+
+    if (!targetChunk) {
+      console.warn("[LocalVoca] 해당 청크를 로컬에서 찾을 수 없습니다:", vocaLabel);
+      return null;
+    }
+
+    setStorage(KEYS.VOCA, vocaList);
+
+    const profile = getStorage(KEYS.PROFILE) || {};
+    const currentLevelVoca = vocaList[targetLevelStr] || [];
+
+    if (status === true) {
+      const todayStr = getTodayString();
+      profile.completed_date = todayStr;
+
+      // Streak (continued) 연산: 어제 날짜(YYYY-MM-DD)로 완료된 청크가 있는지 조회
+      const msToDay = 86400000;
+      const yesterday = new Date(Date.now() - msToDay);
+      const yStr = String(yesterday.getFullYear());
+      const mStr = String(yesterday.getMonth() + 1).padStart(2, "0");
+      const dStr = String(yesterday.getDate()).padStart(2, "0");
+      const yesterdayStr = `${yStr}-${mStr}-${dStr}`;
+
+      const hasYesterdayDone = currentLevelVoca.some((c) => c.completed_at === yesterdayStr);
+
+      if (hasYesterdayDone) {
+        profile.continued = (profile.continued || 0) + 1;
+      } else {
+        profile.continued = 1;
+      }
+
+      // User.selected 자동 전진 처리
+      const sortedVoca = [...currentLevelVoca].sort((a, b) => a.schedule - b.schedule);
+      const nextTodoChunk = sortedVoca.find((v) => v.status === false);
+      if (nextTodoChunk) {
+        profile.selected = nextTodoChunk.voca_label;
+      }
+    }
+
+    profile.learned = currentLevelVoca.filter((v) => v.status === true).length;
+    setStorage(KEYS.PROFILE, profile);
+
+    return { targetChunk, updatedVocaList: vocaList };
+  } catch (err) {
+    console.error("[LocalVoca] updateLocalVocaStatus 에러:", err);
     return null;
   }
 };

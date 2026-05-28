@@ -21,12 +21,26 @@ export const calculateDate = (now, startedTime) => {
  * @param {Array} wordMap 학습 데이터 배열
  * @returns {Array} 캘린더 데이터 행렬
  */
-export const calculateCalendarData = (year, month, startedTime, wordMap) => {
+export const calculateCalendarData = (year, month, startedTime, voca, activeLevel = 700) => {
   const start = new Date(year, month, 1).getDay();
   const total = new Date(year, month + 1, 0).getDate();
   const week = Math.ceil((start + total) / 7);
 
   const data = Array.from({ length: week }, () => Array(7).fill(false));
+
+  // voca에서 모든 레벨의 completed_at 날짜 문자열(YYYY-MM-DD)들을 추출하여 유니크하게 수집
+  const completedDates = new Set();
+  if (voca) {
+    Object.values(voca).forEach((chunkList) => {
+      if (Array.isArray(chunkList)) {
+        chunkList.forEach((chunk) => {
+          if (chunk.completed_at) {
+            completedDates.add(chunk.completed_at);
+          }
+        });
+      }
+    });
+  }
 
   let counter = 1;
 
@@ -37,13 +51,17 @@ export const calculateCalendarData = (year, month, startedTime, wordMap) => {
         continue;
       }
 
-      const targetDate = new Date(year, month, counter);
-      const idx = calculateDate(targetDate, startedTime);
-      const valid = idx >= 0 && wordMap[idx];
+      // 캘린더의 각 날짜 counter를 YYYY-MM-DD 형태의 문자열로 변환
+      const yStr = String(year);
+      const mStr = String(month + 1).padStart(2, "0");
+      const dStr = String(counter).padStart(2, "0");
+      const targetDateStr = `${yStr}-${mStr}-${dStr}`;
+
+      const isLearned = completedDates.has(targetDateStr);
 
       data[m][d] = {
         value: counter,
-        status: valid ? wordMap[idx].done : null,
+        status: isLearned,
       };
       counter++;
     }

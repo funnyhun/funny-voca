@@ -2,7 +2,7 @@ import { redirect } from "react-router-dom";
 
 import { supabase } from "@/api/client";
 import { getSession } from "@/api/auth";
-import { getMaster } from "@/api/word";
+import { getWordsByChunk } from "@/api/master";
 import { getProfile } from "@/api/profile";
 import { getVocaList, reschedule } from "@/api/voca";
 
@@ -94,7 +94,7 @@ async function handleMemberLoading(session, wordData, notifications, isWelcomePa
 
   const localProfile = {
     startedTime: new Date(userProfile.created_at).getTime(),
-    continued: 0,
+    continued: userProfile.continued || 0,
     today: 0,
     learned: currentLevelVoca.filter((v) => v.status === true).length,
     selected: userProfile.selected || getStorage(KEYS.PROFILE)?.selected || defaultSelected,
@@ -119,25 +119,48 @@ async function handleMemberLoading(session, wordData, notifications, isWelcomePa
  * 미인증 사용자(Guest)를 위한 데이터 로딩 및 가공
  */
 async function handleGuestLoading(wordData, notifications, isWelcomePath, isCacheValid) {
-  const profile = getStorage(KEYS.PROFILE);
+  let profile = getStorage(KEYS.PROFILE);
 
+  // 1. 순수 극초기 진입 시점 (프로필 캐시가 아예 없는 단계)
   if (!profile || !profile.nick) {
     if (isWelcomePath) {
-      // 순수 초기 진입 시점에 로더는 700 레벨의 데이터만 getVocaList() 또는 Anon-build를 통해 채워 넘겨주어야 합니다.
-      const rawVocaData = await getVocaList() || {};
-      const lvl700Data = rawVocaData["700"] || [];
+      let rawVocaData = await getVocaList() || {};
+      let lvl700Data = rawVocaData["700"] || [];
+
+      // Voca 학습 데이터가 전혀 구축되지 않았다면 로더 단에서 700 레벨을 즉시 선제 배정 및 캐싱
+      if (lvl700Data.length === 0) {
+        console.log("[Loader/Guest] 700 레벨 학습 데이터를 선제 배정 및 초기화합니다.");
+        const newVocaList = await reschedule(700, null, false);
+        rawVocaData = newVocaList || {};
+        lvl700Data = rawVocaData["700"] || [];
+      }
+
       const vocaData = {
         700: lvl700Data,
         800: [],
         900: []
       };
 
+      const firstChunk = lvl700Data[0];
+      let initialMasterData = {};
+
+      // 1순위 학습 청크의 단어 데이터를 Supabase에서 정밀 선제 쿼리
+      if (firstChunk && firstChunk.word && firstChunk.word.length > 0) {
+        console.log(`[Loader/Guest] 1순위 청크 단어 선제 쿼리 가동 -> ${firstChunk.voca_label}`);
+        initialMasterData = await getWordsByChunk(firstChunk.word);
+        
+        // 로컬 마스터 캐시에 실시간 점진 커밋
+        const cumulativeWords = getStorage(KEYS.MASTER) || {};
+        Object.assign(cumulativeWords, initialMasterData);
+        setStorage(KEYS.MASTER, cumulativeWords);
+      }
+
       return {
         nick: "",
         voca: vocaListToUI(vocaData),
         wordStatusMap: {},
-        master: {},
-        profile: { level: 700, selected: "", completed_date: null },
+        master: initialMasterData,
+        profile: { level: 700, selected: firstChunk?.voca_label || "", completed_date: null },
         notifications: [],
         isCacheValid: false
       };
@@ -145,7 +168,7 @@ async function handleGuestLoading(wordData, notifications, isWelcomePath, isCach
     return redirect("/welcome/profile");
   }
 
-  // 기존 레거시 default 캐시 마이그레이션
+  // 2. 게스트 재진입 시
   if (!profile.level) {
     if (profile.selected && String(profile.selected).startsWith("default")) {
       profile.selected = ""; // 기본값 재배정을 위해 비움
@@ -154,13 +177,31 @@ async function handleGuestLoading(wordData, notifications, isWelcomePath, isCach
   }
 
   // 게스트 Voca 목록 로드
-  const vocaData = await getVocaList();
+  let vocaData = await getVocaList();
+  const currentLevel = profile.level || 700;
+  const levelVoca = vocaData[currentLevel] || [];
+  const selectedLabel = profile.selected || levelVoca[0]?.voca_label || "";
+
+  // 현재 암기해야 할 selected 청크 단어가 로컬 캐시에 빠져있다면 로더에서 선제 보완 쿼리
+  const currentChunk = levelVoca.find((v) => v.voca_label === selectedLabel) || levelVoca[0];
+  let cumulativeMaster = getStorage(KEYS.MASTER) || {};
+
+  if (currentChunk && currentChunk.word && currentChunk.word.length > 0) {
+    const isTargetLoaded = currentChunk.word.every((id) => cumulativeMaster[id] !== undefined || cumulativeMaster[String(id)] !== undefined);
+    
+    if (!isTargetLoaded) {
+      console.log(`[Loader/Guest] 재진입 타겟 청크 단어 캐시 누락 감지. 선제 보완 쿼리 수행 -> ${currentChunk.voca_label}`);
+      const fallbackWords = await getWordsByChunk(currentChunk.word);
+      Object.assign(cumulativeMaster, fallbackWords);
+      setStorage(KEYS.MASTER, cumulativeMaster);
+    }
+  }
 
   return {
     nick: profile.nick,
     voca: vocaListToUI(vocaData),
     wordStatusMap: {},
-    master: wordData,
+    master: cumulativeMaster,
     profile,
     notifications,
     isCacheValid,

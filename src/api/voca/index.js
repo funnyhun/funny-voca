@@ -4,11 +4,13 @@ import { getStorage, setStorage, KEYS } from "@/utils/storage";
 import {
   getLocalVocaList,
   updateLocalWordStatus,
+  updateLocalVocaStatus,
   rescheduleLocal,
   deleteLocalVoca,
 } from "./voca.local";
 import {
   syncWordStatusToRemote,
+  syncVocaStatusToRemote,
   syncRescheduleToRemote,
   deleteRemoteVoca,
 } from "./voca.sync";
@@ -217,7 +219,24 @@ export const postVoca = async (level) => {
 };
 
 export const updateVoca = async (vocaLabel, doneList, status = false) => {
-  // 구버전 updateVoca는 index.js 상에서 직접 호출되지 않으며
-  // 리팩토링된 updateWordStatus를 사용하므로 호환 래퍼를 유지해 빌드 안정성을 지킵니다.
+  // 1단계: 로컬 캐시 낙관적 갱신 즉시 수행
+  const result = await updateLocalVocaStatus(vocaLabel, status);
+  if (!result) return false;
+
+  const { targetChunk, updatedVocaList } = result;
+
+  // 2단계: 백그라운드 원격 비동기 동기화 (넌블로킹)
+  getSession().then((session) => {
+    if (session && targetChunk) {
+      syncVocaStatusToRemote(
+        session.user.id,
+        targetChunk.voca_label,
+        targetChunk.status
+      ).catch((err) => {
+        console.error("[API/Voca] updateVoca 원격 백그라운드 동기화 실패:", err);
+      });
+    }
+  });
+
   return true;
 };

@@ -25,8 +25,8 @@ export const Calendar = ({ mode, profile, now = Date.now(), voca }) => {
   const [month, setMonth] = useState(currentMonth);
 
   const data = useMemo(
-    () => calculateCalendarData(year, month, profile.startedTime, voca),
-    [year, month]
+    () => calculateCalendarData(year, month, profile.startedTime, voca, profile.level),
+    [year, month, voca, profile.level]
   );
 
   const prevMonth = () => {

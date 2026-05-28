@@ -1,1 +1,1 @@
-export { supabase, fetchPages } from "./supabase";
+export { supabase } from "./supabase";

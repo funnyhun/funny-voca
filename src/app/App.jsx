@@ -14,9 +14,6 @@ export const App = () => {
 
   const { nick: initialNick, voca: initialVoca, wordStatusMap: initialStatusMap, master, notifications, profile: initialProfile, isCacheValid } = useLoaderData();
 
-  // 백그라운드 스트리밍 로드, 동적 캐싱 및 상태 병합을 도맡는 커스텀 훅
-  const masterData = useMaster(master, isCacheValid);
-
   const navigation = useNavigation();
   const isNavigating = navigation.state === "loading";
 
@@ -27,6 +24,9 @@ export const App = () => {
   const vocaState = useVoca(initialVoca, initialStatusMap);
   const profileState = useProfile(initialNick);
   const statsState = useStats(initialProfile);
+
+  // 백그라운드 스트리밍 로드, 동적 캐싱 및 상태 병합을 도맡는 커스텀 훅
+  const masterData = useMaster(master, isCacheValid, vocaState.voca, statsState?.profile?.selected);
 
   const isWelcome = location.pathname.startsWith("/welcome");
 

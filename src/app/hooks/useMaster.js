@@ -1,81 +1,60 @@
 import { useState, useEffect, useRef } from "react";
-import { getMaster } from "@/api/word";
-import { getStorage, setStorage, KEYS } from "@/utils/storage";
+import { wordQueueManager } from "@/app/services/WordQueueManager";
+import { getStorage, KEYS } from "@/utils/storage";
 
 /**
- * 백그라운드 단어 스트리밍 데이터 수집 및 상태 병합을 처리하는 커스텀 훅입니다.
+ * 전역 Singleton WordQueueManager와 연동하여 영단어 데이터를 점진적으로 렌더링 상태에 병합하고,
+ * 리스케줄링이나 선택 청크 변경 시 큐의 우선순위를 즉시 Re-sort/Re-queue하는 고수준 브릿지 훅입니다.
  * 
- * @param {Object} firstBulkData - 진입 오케스트레이터가 로드한 초기 120개 단어 맵
- * @param {boolean} isCacheValid - 캐시 데이터의 정합성 유효 여부
- * @returns {Object} 최종 병합 완료되었거나 수집 중인 전체 단어 맵
+ * @param {Object} initialMaster - 로더에서 로드된 초기 선제 단어 데이터 맵
+ * @param {boolean} isCacheValid - 캐시 유효 여부
+ * @param {Object} vocaList - 현재 활성화된 Voca 데이터 셋 { 700: [], 800: [], 900: [] }
+ * @param {string} selectedLabel - 현재 암기 완료해야 할 타겟 청크 식별 라벨 (예: '700-marketing_1')
+ * @returns {Object} 최종 병합되었거나 계속 다운로드하여 불려지고 있는 마스터 단어 맵
  */
-export const useMaster = (initialMaster, isCacheValid) => {
+export const useMaster = (initialMaster = {}, isCacheValid = false, vocaList = {}, selectedLabel = "") => {
   const [master, setMaster] = useState(initialMaster);
-  // initialMaster를 1회성 스냅샷으로 캡처하여 참조 변경으로 인한 이펙트 무한 리셋 차단
-  const firstBulkRef = useRef(initialMaster);
 
+  // 1단계: 마운트 및 Singleton 다운로더 구독 처리
   useEffect(() => {
-    // 이미 모든 데이터가 로컬 스토리지에 온전하게 채워져 있다면 백그라운드 쿼리를 스킵하고 캐시 전체를 리액트 상태에 동기화
+    // 큐 매니저의 단어 추가 다운로드 성공 이벤트를 실시간 구독하여 React 렌더링 상태에 점진적 바인딩
+    const unsubscribe = wordQueueManager.subscribe((newWords) => {
+      setMaster((prev) => ({
+        ...prev,
+        ...newWords,
+      }));
+    });
+
+    // 언마운트 시 안전한 구독 해제
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  // 2단계: 로컬 캐시가 이미 온전히 다 받아진 경우 즉시 React 상태와 일치화
+  useEffect(() => {
     if (isCacheValid) {
       const fullCached = getStorage(KEYS.MASTER) || {};
       if (Object.keys(fullCached).length > 0) {
         setMaster(fullCached);
+        // 캐시가 유효하다면 백그라운드 큐 매니저를 강제 리셋하여 워커 중지
+        wordQueueManager.reset();
         return;
       }
     }
-
-    let isMounted = true;
-    const BULK_SIZE = 120;
-
-    const loadRemainingWords = async () => {
-      let currentOffset = BULK_SIZE;
-      // 로컬 스토리지의 현재 조각을 복사하거나 빈 객체 초기화
-      let cumulativeWords = { ...getStorage(KEYS.MASTER) };
-
-      // 최초 로드된 120개 데이터도 누적 맵에 포함
-      Object.assign(cumulativeWords, firstBulkRef.current);
-
-      while (isMounted) {
-        try {
-          const nextChunk = await getMaster(BULK_SIZE, currentOffset, true);
-          const nextKeys = Object.keys(nextChunk);
-
-          if (nextKeys.length === 0) {
-            // 더 이상 조회할 단어가 없는 최종 완료 시점에 전체 마스터 캐시 파일 저장
-            setStorage(KEYS.MASTER, cumulativeWords);
-            break;
-          }
-          if (!isMounted) break;
-
-          // 청크 병합
-          cumulativeWords = {
-            ...cumulativeWords,
-            ...nextChunk
-          };
-          
-          // 중간 네트워크 이탈 등 오작동에 대비해 매 청크 로딩 시마다 로컬에 점진적 커밋
-          setStorage(KEYS.MASTER, cumulativeWords);
-
-          // UI 렌더링에 동적으로 신규 추가 단어 병합 바인딩
-          setMaster(prev => ({
-            ...prev,
-            ...nextChunk
-          }));
-
-          currentOffset += BULK_SIZE;
-        } catch (error) {
-          console.error("[useMaster] Error loading remaining words:", error);
-          break;
-        }
-      }
-    };
-
-    loadRemainingWords();
-
-    return () => {
-      isMounted = false;
-    };
   }, [isCacheValid]);
+
+  // 3단계: vocaList 또는 selectedLabel 변경 시 동적 대기열 갱신 및 Re-sort 트리거
+  useEffect(() => {
+    if (!vocaList || Object.keys(vocaList).length === 0) return;
+
+    // 현재 프로필에서 selected 값을 식별 (파라미터 누락 대응용 백업)
+    const activeLabel = selectedLabel || getStorage(KEYS.PROFILE)?.selected || "";
+    
+    // 우선순위 큐 매니저에게 실시간 대기열 재정렬 요청
+    wordQueueManager.setVocaList(vocaList, activeLabel);
+
+  }, [JSON.stringify(vocaList), selectedLabel]);
 
   return master;
 };
