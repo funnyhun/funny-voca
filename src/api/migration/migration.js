@@ -10,8 +10,8 @@ export const migrateVoca = async () => {
   if (!session) return { success: false, message: "로그인 세션이 없습니다." };
 
   const userId = session.user.id;
-  const nick = getStorage(KEYS.NICK);
-  const wordMaps = getStorage(KEYS.WORD_MAP);
+  const nick = getStorage(KEYS.PROFILE);
+  const wordMaps = getStorage(KEYS.VOCA);
 
   try {
     // 1. User 프로필 생성/업데이트
@@ -60,8 +60,8 @@ export const migrateVoca = async () => {
     }
 
     // 3. 이전 완료 후 게스트 로컬스토리지 학습 데이터 제거
-    removeStorage(KEYS.NICK);
-    removeStorage(KEYS.WORD_MAP);
+    removeStorage(KEYS.PROFILE);
+    removeStorage(KEYS.VOCA);
     removeStorage(KEYS.USER_DATA);
 
     return { success: true };

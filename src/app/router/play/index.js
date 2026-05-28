@@ -15,7 +15,7 @@ export const loadPlay = async () => {
 
   // 2. Guest: Guest Storage 데이터 사용
   const userData = getStorage(KEYS.USER_DATA);
-  const wordMaps = getStorage(KEYS.WORD_MAP);
+  const wordMaps = getStorage(KEYS.VOCA);
   
   if (!userData || !wordMaps) {
     return { words: [] };

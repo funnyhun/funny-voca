@@ -6,7 +6,7 @@ import { getStorage, setStorage, KEYS } from "@/utils/storage";
  */
 export const getProfile = () => {
   try {
-    const nick = getStorage(KEYS.NICK);
+    const nick = getStorage(KEYS.PROFILE);
     return {
       user_id: "guest",
       nick: nick || "게스트",
@@ -25,7 +25,7 @@ export const getProfile = () => {
 export const updateProfile = (data) => {
   try {
     if (data && typeof data === "object" && data.nick !== undefined) {
-      setStorage(KEYS.NICK, data.nick);
+      setStorage(KEYS.PROFILE, data.nick);
       return true;
     }
     return false;

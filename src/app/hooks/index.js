@@ -5,3 +5,4 @@ export { useStats } from "./useStats";
 export { useTheme, ThemeProvider } from "./useTheme";
 export { useStep, useSelected } from "./useMyParam";
 export { useWord } from "./useWord";
+export { useMaster } from "./useMaster";

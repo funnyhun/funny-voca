@@ -1,4 +1,5 @@
 import { supabase, fetchPages } from "@/api/client";
+import { getStorage, setStorage, KEYS } from "@/utils/storage";
 
 /**
  * 서비스에서 사용하는 모든 단어의 마스터 데이터를 조회합니다.
@@ -9,6 +10,27 @@ import { supabase, fetchPages } from "@/api/client";
  */
 export const getMaster = async (limit = null, offset = 0) => {
   try {
+    const cachedWords = getStorage(KEYS.MASTER);
+
+    // 캐시가 존재하고 유효한 경우 로컬 캐시 데이터 슬라이싱 및 즉시 반환
+    if (cachedWords && typeof cachedWords === "object" && Object.keys(cachedWords).length > 0) {
+      if (limit !== null) {
+        const wordMap = {};
+        // day 및 알파벳 순 정렬 기준으로 정렬된 id 목록 생성
+        const sortedItems = Object.values(cachedWords).sort((a, b) => {
+          if (a.day !== b.day) return a.day - b.day;
+          return (a.word || "").localeCompare(b.word || "");
+        });
+        
+        const sliced = sortedItems.slice(offset, offset + limit);
+        sliced.forEach(item => {
+          wordMap[item.id] = item;
+        });
+        return wordMap;
+      }
+      return cachedWords;
+    }
+
     // 1. limit이 명시된 경우 특정 범위만 쿼리하여 속도 개선
     if (limit !== null) {
       const { data, error } = await supabase
@@ -17,6 +39,7 @@ export const getMaster = async (limit = null, offset = 0) => {
           id:word_id,
           word,
           day,
+          category,
           definitions:Definition (
             class,
             value:definition,
@@ -55,6 +78,7 @@ export const getMaster = async (limit = null, offset = 0) => {
           id:word_id,
           word,
           day,
+          category,
           definitions:Definition (
             class,
             value:definition,
@@ -81,6 +105,9 @@ export const getMaster = async (limit = null, offset = 0) => {
         };
       }
     });
+
+    // 전체 로딩된 결과를 한 번에 로컬에 캐싱
+    setStorage(KEYS.MASTER, wordMap);
 
     return wordMap;
   } catch (err) {

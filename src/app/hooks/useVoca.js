@@ -46,7 +46,7 @@ export const useVoca = (initialWordMap = [], initialStatusMap = {}) => {
       if (error) throw error;
     }
 
-    removeStorage(KEYS.WORD_MAP);
+    removeStorage(KEYS.VOCA);
     removeStorage(KEYS.USER_DATA);
 
     const result = await postVoca(level);

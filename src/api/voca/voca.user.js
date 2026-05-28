@@ -18,7 +18,7 @@ export const postVoca = async (userId, level) => {
       return null;
     }
 
-    setStorage(KEYS.WORD_MAP, wordMaps);
+    setStorage(KEYS.VOCA, wordMaps);
 
     // Supabase Voca 테이블에 초기값 Upsert (모두 status: false)
     const vocaInserts = [];
@@ -49,7 +49,9 @@ export const postVoca = async (userId, level) => {
     }
 
     const now = new Date();
-    const userData = {
+    const existingProfile = getStorage(KEYS.PROFILE) || {};
+    const updatedProfile = {
+      ...existingProfile,
       startedTime: now.setHours(0, 0, 0, 0),
       continued: 0,
       today: 0,
@@ -57,9 +59,9 @@ export const postVoca = async (userId, level) => {
       selected: 0,
       level,
     };
-    setStorage(KEYS.USER_DATA, userData);
+    setStorage(KEYS.PROFILE, updatedProfile);
 
-    return { userData, wordMap: targetWordMap };
+    return { userData: updatedProfile, wordMap: targetWordMap };
   } catch (err) {
     console.error("[API/Voca/User] Critical postVoca Error:", err);
     return null;
@@ -77,7 +79,7 @@ export const getVoca = async (userId, level) => {
 
   let targetLevel = level;
   if (!targetLevel) {
-    const userData = getStorage(KEYS.USER_DATA);
+    const userData = getStorage(KEYS.PROFILE);
     targetLevel = userData?.level || "default";
   }
 
@@ -93,7 +95,7 @@ export const getVoca = async (userId, level) => {
       );
     } catch (vocaError) {
       console.error("[API/Voca/User] Voca DB 조회 실패:", vocaError.message);
-      const wordMaps = getStorage(KEYS.WORD_MAP);
+      const wordMaps = getStorage(KEYS.VOCA);
       return wordMaps ? (wordMaps[targetLevel] || []) : [];
     }
 
@@ -109,20 +111,20 @@ export const getVoca = async (userId, level) => {
 
     const wordMaps = await buildWordMaps(statusMap);
     if (!wordMaps) {
-      const cached = getStorage(KEYS.WORD_MAP);
+      const cached = getStorage(KEYS.VOCA);
       return cached ? (cached[targetLevel] || []) : [];
     }
 
     // 캐시 업데이트
-    setStorage(KEYS.WORD_MAP, wordMaps);
+    setStorage(KEYS.VOCA, wordMaps);
 
-    const userData = getStorage(KEYS.USER_DATA) || {};
-    setStorage(KEYS.USER_DATA, { ...userData, learned: totalLearned, level: targetLevel });
+    const userData = getStorage(KEYS.PROFILE) || {};
+    setStorage(KEYS.PROFILE, { ...userData, learned: totalLearned, level: targetLevel });
 
     return wordMaps[targetLevel] || [];
   } catch (err) {
     console.error("[API/Voca/User] Critical getVoca Error:", err);
-    const wordMaps = getStorage(KEYS.WORD_MAP);
+    const wordMaps = getStorage(KEYS.VOCA);
     return wordMaps ? (wordMaps[targetLevel] || []) : [];
   }
 };
@@ -150,8 +152,8 @@ export const updateVoca = async (userId, wordId, status = true) => {
     }
 
     // 로컬 캐시 즉시 업데이트
-    const wordMaps = getStorage(KEYS.WORD_MAP);
-    const userData = getStorage(KEYS.USER_DATA);
+    const wordMaps = getStorage(KEYS.VOCA);
+    const userData = getStorage(KEYS.PROFILE);
 
     if (wordMaps && userData) {
       const currentLevel = userData.level || "default";
@@ -185,11 +187,11 @@ export const updateVoca = async (userId, wordId, status = true) => {
       });
 
       wordMaps[currentLevel] = updatedWordMap;
-      setStorage(KEYS.WORD_MAP, wordMaps);
+      setStorage(KEYS.VOCA, wordMaps);
 
       if (learnedIncrement !== 0) {
         userData.learned = Math.max(0, (userData.learned || 0) + learnedIncrement);
-        setStorage(KEYS.USER_DATA, userData);
+        setStorage(KEYS.PROFILE, userData);
       }
     }
 

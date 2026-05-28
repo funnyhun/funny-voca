@@ -16,7 +16,7 @@ export const useStats = (initialUserData = {}) => {
     updateStats();
 
     // 2. 업데이트된 로컬스토리지를 기준으로 즉시 UI 상태 갱신
-    const updatedUserData = getStorage(KEYS.USER_DATA);
+    const updatedUserData = getStorage(KEYS.PROFILE);
     if (updatedUserData) {
       setUserData(prev => ({
         ...prev,
@@ -35,7 +35,7 @@ export const useStats = (initialUserData = {}) => {
       ...userData,
       selected: Number(newSelected),
     };
-    setStorage(KEYS.USER_DATA, updated);
+    setStorage(KEYS.PROFILE, updated);
     setUserData(updated);
   };
 

@@ -3,10 +3,11 @@
  */
 
 export const KEYS = {
-  NICK: "nick",
-  WORD_MAP: "wordMap",
+  PROFILE: "profile",
+  VOCA: "voca",
   USER_DATA: "userData",
   THEME: "theme",
+  MASTER: "master", // 마스터 단어 상세 데이터 캐시 키
 };
 
 /**

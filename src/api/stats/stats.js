@@ -4,15 +4,15 @@ import { getStorage, setStorage, KEYS } from "@/utils/storage";
  * 게스트 사용자의 학습 통계(연속 학습일, 오늘 학습량)를 로컬스토리지에 업데이트합니다.
  */
 export const updateStats = () => {
-  const userData = getStorage(KEYS.USER_DATA);
-  if (!userData) return;
+  const profile = getStorage(KEYS.PROFILE);
+  if (!profile) return;
 
   const msToDay = 86400000;
   const now = new Date();
   const todayMidnight = new Date(now).setHours(0, 0, 0, 0);
-  const lastStudiedAt = userData.lastStudiedAt || null;
+  const lastStudiedAt = profile.lastStudiedAt || null;
 
-  let { continued = 0, today = 0 } = userData;
+  let { continued = 0, today = 0 } = profile;
 
   if (lastStudiedAt) {
     const lastDay = new Date(lastStudiedAt).setHours(0, 0, 0, 0);
@@ -37,11 +37,11 @@ export const updateStats = () => {
   }
 
   const updated = {
-    ...userData,
+    ...profile,
     today,
     continued,
     lastStudiedAt: now.toISOString(),
   };
 
-  setStorage(KEYS.USER_DATA, updated);
+  setStorage(KEYS.PROFILE, updated);
 };

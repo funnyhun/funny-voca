@@ -14,10 +14,12 @@ export const postVoca = async (level) => {
       return null;
     }
 
-    setStorage(KEYS.WORD_MAP, wordMaps);
+    setStorage(KEYS.VOCA, wordMaps);
 
     const now = new Date();
-    const userData = {
+    const existingProfile = getStorage(KEYS.PROFILE) || {};
+    const updatedProfile = {
+      ...existingProfile,
       startedTime: now.setHours(0, 0, 0, 0),
       continued: 0,
       today: 0,
@@ -25,9 +27,9 @@ export const postVoca = async (level) => {
       selected: 0,
       level,
     };
-    setStorage(KEYS.USER_DATA, userData);
+    setStorage(KEYS.PROFILE, updatedProfile);
 
-    return { userData, wordMap: wordMaps[level] || [] };
+    return { userData: updatedProfile, wordMap: wordMaps[level] || [] };
   } catch (err) {
     console.error("[API/Voca/Guest] Critical postVoca Error:", err);
     return null;
@@ -40,12 +42,12 @@ export const postVoca = async (level) => {
  * @returns {Array} 단어 학습 맵 리스트
  */
 export const getVoca = (level) => {
-  const wordMaps = getStorage(KEYS.WORD_MAP);
+  const wordMaps = getStorage(KEYS.VOCA);
   if (!wordMaps) return [];
 
   if (level) return wordMaps[level] || [];
 
-  const userData = getStorage(KEYS.USER_DATA);
+  const userData = getStorage(KEYS.PROFILE);
   const currentLevel = userData?.level || "default";
   return wordMaps[currentLevel] || [];
 };
@@ -57,8 +59,8 @@ export const getVoca = (level) => {
  * @returns {boolean} 업데이트 성공 여부
  */
 export const updateVoca = (wordId, status = true) => {
-  const wordMaps = getStorage(KEYS.WORD_MAP);
-  const userData = getStorage(KEYS.USER_DATA);
+  const wordMaps = getStorage(KEYS.VOCA);
+  const userData = getStorage(KEYS.PROFILE);
 
   if (!wordMaps || !userData) return false;
 
@@ -94,13 +96,13 @@ export const updateVoca = (wordId, status = true) => {
   });
 
   wordMaps[currentLevel] = updatedWordMap;
-  setStorage(KEYS.WORD_MAP, wordMaps);
+  setStorage(KEYS.VOCA, wordMaps);
 
   if (learnedIncrement !== 0) {
-    const latestUserData = getStorage(KEYS.USER_DATA);
+    const latestUserData = getStorage(KEYS.PROFILE);
     if (latestUserData) {
       latestUserData.learned = Math.max(0, (latestUserData.learned || 0) + learnedIncrement);
-      setStorage(KEYS.USER_DATA, latestUserData);
+      setStorage(KEYS.PROFILE, latestUserData);
     }
   }
 

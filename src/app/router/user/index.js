@@ -6,7 +6,7 @@ import { getMaster } from "@/api/word";
 import { getProfile } from "@/api/profile";
 import { getVoca, postVoca } from "@/api/voca";
 
-import { getStorage, KEYS } from "@/utils/storage";
+import { getStorage, removeStorage, KEYS } from "@/utils/storage";
 
 import { processWordMap, createGuestStatusMap } from "./utils";
 import { migrateVoca } from "@/api/migration";
@@ -29,11 +29,51 @@ export const loadUserData = async ({ request }) => {
 
   try {
     // 1. 공통 데이터 로드 및 세션 조회를 병렬로 수행 (성능 최적화)
-    const [session, wordData, dbNotisResult] = await Promise.all([
+    // 단어 전체 상세 데이터 대신 가벼운 카테고리 집계 정보 조회
+    const [session, categoryStatsResult, dbNotisResult] = await Promise.all([
       getSession(),
-      getMaster(120, 0), // 우선 120개만 고속 로딩
+      supabase.from("Word").select("category"),
       supabase.from("Notification").select("*").order("created_at", { ascending: false })
     ]);
+
+    // DB 상의 카테고리별 단어 개수 계산
+    const dbCategories = categoryStatsResult.data || [];
+    const dbStats = {};
+    dbCategories.forEach(item => {
+      const cat = item.category || "default";
+      dbStats[cat] = (dbStats[cat] || 0) + 1;
+    });
+
+    // 로컬 스토리지 캐시 및 캐시의 카테고리별 단어 개수 계산
+    const cachedWords = getStorage(KEYS.MASTER) || {};
+    const cachedStats = {};
+    Object.values(cachedWords).forEach(item => {
+      const cat = item.category || "default";
+      cachedStats[cat] = (cachedStats[cat] || 0) + 1;
+    });
+
+    // 카테고리별 갯수가 완벽히 일치하고, 캐시 데이터가 실제 존재하는지 검증
+    const categories = Array.from(new Set([...Object.keys(dbStats), ...Object.keys(cachedStats)]));
+    const isCacheValid = categories.length > 0 && categories.every(cat => dbStats[cat] === cachedStats[cat]) && Object.keys(cachedWords).length > 0;
+
+    let wordData;
+    if (isCacheValid) {
+      // 캐시 유효: DB 조회를 스킵하고 로컬 캐시에서 상위 120개 고속 슬라이싱
+      const wordMap = {};
+      const sortedItems = Object.values(cachedWords).sort((a, b) => {
+        if (a.day !== b.day) return a.day - b.day;
+        return (a.word || "").localeCompare(b.word || "");
+      });
+      const sliced = sortedItems.slice(0, 120);
+      sliced.forEach(item => {
+        wordMap[item.id] = item;
+      });
+      wordData = wordMap;
+    } else {
+      // 캐시 무효: 로컬 캐시를 비우고 DB에서 처음 120개 고속 쿼리 진행
+      removeStorage(KEYS.MASTER);
+      wordData = await getMaster(120, 0);
+    }
 
     const notifications = dbNotisResult.data || [];
     notifications.unshift(
@@ -44,9 +84,9 @@ export const loadUserData = async ({ request }) => {
 
     // 2. 세션 여부에 따른 흐름 제어
     if (session) {
-      return await handleMemberLoading(session, wordData, notifications, isWelcomePath);
+      return await handleMemberLoading(session, wordData, notifications, isWelcomePath, isCacheValid);
     } else {
-      return handleGuestLoading(wordData, notifications, isWelcomePath);
+      return handleGuestLoading(wordData, notifications, isWelcomePath, isCacheValid);
     }
 
   } catch (error) {
@@ -56,9 +96,10 @@ export const loadUserData = async ({ request }) => {
         nick: "",
         wordMap: [],
         wordStatusMap: {},
-        wordData: [],
+        firstBulkData: {},
         userData: { level: "default" },
         notifications: [],
+        isCacheValid: false
       };
     }
     return redirect("/welcome/profile");
@@ -68,9 +109,9 @@ export const loadUserData = async ({ request }) => {
 /**
  * 로그인 사용자(Member)를 위한 데이터 로딩 및 가공
  */
-async function handleMemberLoading(session, wordData, notifications, isWelcomePath) {
+async function handleMemberLoading(session, wordData, notifications, isWelcomePath, isCacheValid) {
   const userId = session.user.id;
-  const localUserData = getStorage(KEYS.USER_DATA);
+  const localUserData = getStorage(KEYS.PROFILE);
   const currentLevel = localUserData?.level || "default";
 
   // 난이도별 DB 코드 매핑 (초급 default -> 700)
@@ -78,12 +119,12 @@ async function handleMemberLoading(session, wordData, notifications, isWelcomePa
   const dbLevel = levelToNumber[currentLevel] ?? 700;
 
   // 1. 마이그레이션 체크 및 기본 데이터 로드
-  let wordMaps = getStorage(KEYS.WORD_MAP);
+  let wordMaps = getStorage(KEYS.VOCA);
 
   // 레거시 로컬 데이터가 있으면 DB로 이전
   if (wordMaps) {
     await migrateVoca();
-    wordMaps = getStorage(KEYS.WORD_MAP);
+    wordMaps = getStorage(KEYS.VOCA);
   }
 
   // 2. 프로필 및 학습 데이터 병렬 로드
@@ -97,7 +138,7 @@ async function handleMemberLoading(session, wordData, notifications, isWelcomePa
   // 3. 템플릿 로드 (없으면 초기화)
   if (!wordMaps) {
     await postVoca(currentLevel);
-    wordMaps = getStorage(KEYS.WORD_MAP);
+    wordMaps = getStorage(KEYS.VOCA);
   }
   const baseWordMap = wordMaps?.[currentLevel] || [];
 
@@ -109,12 +150,15 @@ async function handleMemberLoading(session, wordData, notifications, isWelcomePa
 
   const processedWordMap = processWordMap(baseWordMap, wordStatusMap);
 
+  const localProfile = getStorage(KEYS.PROFILE) || {};
+
   return {
-    nick: getStorage(KEYS.NICK) || userProfile.nick,
+    nick: localProfile.nick || userProfile.nick,
     wordMap: processedWordMap,
     wordStatusMap,
-    wordData,
+    firstBulkData: wordData,
     notifications,
+    isCacheValid,
     userData: {
       startedTime: new Date(userProfile.created_at).getTime(),
       continued: 0,
@@ -129,52 +173,54 @@ async function handleMemberLoading(session, wordData, notifications, isWelcomePa
 /**
  * 미인증 사용자(Guest)를 위한 데이터 로딩 및 가공
  */
-function handleGuestLoading(wordData, notifications, isWelcomePath) {
-  const nick = getStorage(KEYS.NICK);
-  const wordMaps = getStorage(KEYS.WORD_MAP);
-  const userData = getStorage(KEYS.USER_DATA);
+function handleGuestLoading(wordData, notifications, isWelcomePath, isCacheValid) {
+  const profile = getStorage(KEYS.PROFILE);
+  const wordMaps = getStorage(KEYS.VOCA);
 
   console.log("guest");
 
-  if (!nick) {
+  if (!profile || !profile.nick) {
     if (isWelcomePath) {
       return {
         nick: "",
         wordMap: [],
         wordStatusMap: {},
-        wordData,
+        firstBulkData: {},
         userData: { level: "default" },
-        notifications,
+        notifications: [],
+        isCacheValid: false
       };
     }
     return redirect("/welcome/profile");
   }
-  if (!wordMaps || !userData) {
+  if (!wordMaps) {
     if (isWelcomePath) {
       return {
-        nick,
+        nick: profile.nick,
         wordMap: [],
         wordStatusMap: {},
-        wordData,
-        userData: { level: "default" },
+        firstBulkData: {},
+        userData: profile,
         notifications,
+        isCacheValid: false
       };
     }
     return redirect("/welcome/voca");
   }
 
-  const currentLevel = userData.level || "default";
+  const currentLevel = profile.level || "default";
   const rawWordMap = wordMaps[currentLevel] || [];
 
   const statusMap = createGuestStatusMap(rawWordMap);
   const processedWordMap = processWordMap(rawWordMap, statusMap);
 
   return {
-    nick,
+    nick: profile.nick,
     wordMap: processedWordMap,
     wordStatusMap: statusMap,
-    wordData,
-    userData,
+    firstBulkData: wordData,
+    userData: profile,
     notifications,
+    isCacheValid,
   };
 }

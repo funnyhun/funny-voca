@@ -9,7 +9,8 @@ import { getStorage, KEYS } from "@/utils/storage";
 export const Voca = () => {
   const navigate = useNavigate();
   const { initVoca } = useVoca();
-  const nick = getStorage(KEYS.NICK);
+  const profile = getStorage(KEYS.PROFILE);
+  const nick = profile?.nick || "게스트";
 
   const [status, setStatus] = useState(-1);
   const [isNavigating, setIsNavigating] = useState(false);

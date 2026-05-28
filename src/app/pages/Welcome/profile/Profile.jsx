@@ -14,7 +14,15 @@ export const Profile = () => {
     if (nick.length < 2) return;
 
     // Guest 유저: Guest Storage에 닉네임 저장
-    setStorage(KEYS.NICK, nick);
+    setStorage(KEYS.PROFILE, {
+      nick: nick,
+      level: "default",
+      startedTime: new Date().getTime(),
+      continued: 0,
+      today: 0,
+      learned: 0,
+      selected: 0
+    });
     navigate("/welcome/voca");
   };
 
