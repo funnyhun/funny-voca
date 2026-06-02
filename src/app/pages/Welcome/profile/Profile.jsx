@@ -4,7 +4,7 @@ import * as S from "./Profile.styles";
 
 import { VerticalButton, Input } from "@app/components";
 
-import { setStorage, KEYS } from "@/utils/storage";
+import { setStorage, KEYS } from "@/api/common";
 
 export const Profile = () => {
   const navigate = useNavigate();

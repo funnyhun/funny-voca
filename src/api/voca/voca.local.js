@@ -1,5 +1,4 @@
-import { supabase } from "@/api/client";
-import { getStorage, setStorage, removeStorage, KEYS } from "@/utils/storage";
+import { supabase, getVocaCache, setVocaCache, getProfileCache, setProfileCache, clearAllCache } from "@/api/common";
 
 // ============================================================================
 // [내장된 Voca 정렬 및 Schedule 재배정 비즈니스 로직 (구 voca.shared.js)]
@@ -122,7 +121,7 @@ const getTodayString = () => {
  * @returns {Promise<Object>} 레벨별 그룹화된 Voca 객체 { 700: [], 800: [], 900: [] }
  */
 export const getLocalVocaList = async () => {
-  let vocaList = getStorage(KEYS.VOCA);
+  let vocaList = getVocaCache();
 
   if (!vocaList || Array.isArray(vocaList) || Object.keys(vocaList).length === 0) {
     try {
@@ -150,12 +149,11 @@ export const getLocalVocaList = async () => {
         });
 
         vocaList = grouped;
-        setStorage(KEYS.VOCA, vocaList);
+        setVocaCache(vocaList);
 
-        const profile = getStorage(KEYS.PROFILE) || {};
+        const profile = getProfileCache();
         const activeLevel = profile.level || 700;
-        setStorage(KEYS.PROFILE, {
-          ...profile,
+        setProfileCache({
           level: activeLevel,
           selected: profile.selected || vocaList[activeLevel]?.[0]?.voca_label || "",
           completed_date: null,
@@ -224,12 +222,12 @@ export const updateLocalWordStatus = async (wordId, status) => {
       return null;
     }
 
-    setStorage(KEYS.VOCA, vocaList);
+    setVocaCache(vocaList);
 
-    const profile = getStorage(KEYS.PROFILE) || {};
     const currentLevelVoca = vocaList[targetLevelStr] || [];
-    profile.learned = currentLevelVoca.filter((v) => v.status === true).length;
-    setStorage(KEYS.PROFILE, profile);
+    setProfileCache({
+      learned: currentLevelVoca.filter((v) => v.status === true).length
+    });
 
     return { targetChunk, updatedVocaList: vocaList };
   } catch (err) {
@@ -243,7 +241,7 @@ export const updateLocalWordStatus = async (wordId, status) => {
  */
 export const rescheduleLocal = async (targetLevel, swapCategories = null, isReset = false, defaultCategoryOrder = [], targetChunks = []) => {
   try {
-    let vocaList = getStorage(KEYS.VOCA) || { 700: [], 800: [], 900: [] };
+    let vocaList = getVocaCache() || { 700: [], 800: [], 900: [] };
     if (Array.isArray(vocaList)) {
       vocaList = { 700: [], 800: [], 900: [] };
     }
@@ -274,7 +272,7 @@ export const rescheduleLocal = async (targetLevel, swapCategories = null, isRese
       });
 
       vocaList[targetLevel] = currentLevelVoca;
-      setStorage(KEYS.VOCA, vocaList);
+      setVocaCache(vocaList);
       return vocaList;
     }
 
@@ -303,11 +301,11 @@ export const rescheduleLocal = async (targetLevel, swapCategories = null, isRese
     const newVocaList = calculateNewSchedule(targetChunks, filterOldList, defaultCategoryOrder);
 
     vocaList[numericLevel] = newVocaList;
-    setStorage(KEYS.VOCA, vocaList);
+    setVocaCache(vocaList);
 
-    const profile = getStorage(KEYS.PROFILE) || {};
-    profile.selected = newVocaList[0]?.voca_label || "";
-    setStorage(KEYS.PROFILE, profile);
+    setProfileCache({
+      selected: newVocaList[0]?.voca_label || ""
+    });
 
     return vocaList;
   } catch (err) {
@@ -320,7 +318,7 @@ export const rescheduleLocal = async (targetLevel, swapCategories = null, isRese
  * 퀴즈 완료 시 특정 청크의 완료 상태(status) 및 completed_at 날짜를 로컬 스토리지에 반영하고,
  * 연속 학습일(continued), completed_date 및 selected 다음 청크 자동 전진을 총괄적으로 수행합니다.
  */
-export const updateLocalVocaStatus = async (vocaLabel, status = false) => {
+export const updateLocalVocaStatus = async (vocaLabel, doneList = [], status = false) => {
   try {
     const vocaList = await getLocalVocaList();
     if (!vocaList || Array.isArray(vocaList)) return null;
@@ -335,6 +333,7 @@ export const updateLocalVocaStatus = async (vocaLabel, status = false) => {
         const todayStr = getTodayString();
         targetChunk = {
           ...chunk,
+          done: doneList || chunk.done, // 최종 완료된 단어 ID 목록 적용
           status: status,
           completed_at: status ? todayStr : null
         };
@@ -347,41 +346,51 @@ export const updateLocalVocaStatus = async (vocaLabel, status = false) => {
       return null;
     }
 
-    setStorage(KEYS.VOCA, vocaList);
+    setVocaCache(vocaList);
 
-    const profile = getStorage(KEYS.PROFILE) || {};
+    const profile = getProfileCache();
     const currentLevelVoca = vocaList[targetLevelStr] || [];
+    const updatedProfileFields = {};
 
     if (status === true) {
       const todayStr = getTodayString();
-      profile.completed_date = todayStr;
+      
+      // Streak (continued) 연산 및 중복 가산 방지
+      const isAlreadyDoneToday = profile.completed_date === todayStr;
 
-      // Streak (continued) 연산: 어제 날짜(YYYY-MM-DD)로 완료된 청크가 있는지 조회
-      const msToDay = 86400000;
-      const yesterday = new Date(Date.now() - msToDay);
-      const yStr = String(yesterday.getFullYear());
-      const mStr = String(yesterday.getMonth() + 1).padStart(2, "0");
-      const dStr = String(yesterday.getDate()).padStart(2, "0");
-      const yesterdayStr = `${yStr}-${mStr}-${dStr}`;
-
-      const hasYesterdayDone = currentLevelVoca.some((c) => c.completed_at === yesterdayStr);
-
-      if (hasYesterdayDone) {
-        profile.continued = (profile.continued || 0) + 1;
+      if (isAlreadyDoneToday) {
+        // 오늘 이미 학습을 완료한 상태라면 completed_date만 유지하고 Streak 가산 생략
+        updatedProfileFields.completed_date = todayStr;
       } else {
-        profile.continued = 1;
+        updatedProfileFields.completed_date = todayStr;
+
+        // 어제 날짜(YYYY-MM-DD)로 완료된 청크가 있는지 조회
+        const msToDay = 86400000;
+        const yesterday = new Date(Date.now() - msToDay);
+        const yStr = String(yesterday.getFullYear());
+        const mStr = String(yesterday.getMonth() + 1).padStart(2, "0");
+        const dStr = String(yesterday.getDate()).padStart(2, "0");
+        const yesterdayStr = `${yStr}-${mStr}-${dStr}`;
+
+        const hasYesterdayDone = currentLevelVoca.some((c) => c.completed_at === yesterdayStr);
+
+        if (hasYesterdayDone) {
+          updatedProfileFields.continued = (profile.continued || 0) + 1;
+        } else {
+          updatedProfileFields.continued = 1;
+        }
       }
 
       // User.selected 자동 전진 처리
       const sortedVoca = [...currentLevelVoca].sort((a, b) => a.schedule - b.schedule);
       const nextTodoChunk = sortedVoca.find((v) => v.status === false);
       if (nextTodoChunk) {
-        profile.selected = nextTodoChunk.voca_label;
+        updatedProfileFields.selected = nextTodoChunk.voca_label;
       }
     }
 
-    profile.learned = currentLevelVoca.filter((v) => v.status === true).length;
-    setStorage(KEYS.PROFILE, profile);
+    updatedProfileFields.learned = currentLevelVoca.filter((v) => v.status === true).length;
+    setProfileCache(updatedProfileFields);
 
     return { targetChunk, updatedVocaList: vocaList };
   } catch (err) {
@@ -394,7 +403,5 @@ export const updateLocalVocaStatus = async (vocaLabel, status = false) => {
  * 로컬 캐시를 완전히 청소합니다 (공장 초기화).
  */
 export const deleteLocalVoca = () => {
-  removeStorage(KEYS.PROFILE);
-  removeStorage(KEYS.VOCA);
-  removeStorage(KEYS.USER_DATA);
+  clearAllCache();
 };

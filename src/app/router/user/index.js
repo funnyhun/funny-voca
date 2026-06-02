@@ -1,12 +1,10 @@
 import { redirect } from "react-router-dom";
 
-import { supabase } from "@/api/client";
+import { supabase, getProfileCache, setProfileCache, getVocaCache, getMasterCache, setMasterCache } from "@/api/common";
 import { getSession } from "@/api/auth";
 import { getWordsByChunk } from "@/api/master";
 import { getProfile } from "@/api/profile";
 import { getVocaList, reschedule } from "@/api/voca";
-
-import { setStorage, getStorage, removeStorage, KEYS } from "@/utils/storage";
 
 /**
  * [Orchestrator] 어플리케이션 진입 시 필요한 모든 데이터를 로드하고 상태에 따라 분기합니다.
@@ -97,12 +95,12 @@ async function handleMemberLoading(session, wordData, notifications, isWelcomePa
     continued: userProfile.continued || 0,
     today: 0,
     learned: currentLevelVoca.filter((v) => v.status === true).length,
-    selected: userProfile.selected || getStorage(KEYS.PROFILE)?.selected || defaultSelected,
+    selected: userProfile.selected || getProfileCache().selected || defaultSelected,
     level: currentLevel,
     completed_date: userProfile.completed_date || null,
     nick: userProfile.nick
   };
-  setStorage(KEYS.PROFILE, localProfile);
+  setProfileCache(localProfile);
 
   return {
     nick: userProfile.nick,
@@ -119,7 +117,7 @@ async function handleMemberLoading(session, wordData, notifications, isWelcomePa
  * 미인증 사용자(Guest)를 위한 데이터 로딩 및 가공
  */
 async function handleGuestLoading(wordData, notifications, isWelcomePath, isCacheValid) {
-  let profile = getStorage(KEYS.PROFILE);
+  let profile = getProfileCache();
 
   // 1. 순수 극초기 진입 시점 (프로필 캐시가 아예 없는 단계)
   if (!profile || !profile.nick) {
@@ -150,9 +148,9 @@ async function handleGuestLoading(wordData, notifications, isWelcomePath, isCach
         initialMasterData = await getWordsByChunk(firstChunk.word);
         
         // 로컬 마스터 캐시에 실시간 점진 커밋
-        const cumulativeWords = getStorage(KEYS.MASTER) || {};
+        const cumulativeWords = getMasterCache();
         Object.assign(cumulativeWords, initialMasterData);
-        setStorage(KEYS.MASTER, cumulativeWords);
+        setMasterCache(cumulativeWords);
       }
 
       return {
@@ -173,7 +171,7 @@ async function handleGuestLoading(wordData, notifications, isWelcomePath, isCach
     if (profile.selected && String(profile.selected).startsWith("default")) {
       profile.selected = ""; // 기본값 재배정을 위해 비움
     }
-    setStorage(KEYS.PROFILE, profile);
+    setProfileCache(profile);
   }
 
   // 게스트 Voca 목록 로드
@@ -184,7 +182,7 @@ async function handleGuestLoading(wordData, notifications, isWelcomePath, isCach
 
   // 현재 암기해야 할 selected 청크 단어가 로컬 캐시에 빠져있다면 로더에서 선제 보완 쿼리
   const currentChunk = levelVoca.find((v) => v.voca_label === selectedLabel) || levelVoca[0];
-  let cumulativeMaster = getStorage(KEYS.MASTER) || {};
+  let cumulativeMaster = getMasterCache();
 
   if (currentChunk && currentChunk.word && currentChunk.word.length > 0) {
     const isTargetLoaded = currentChunk.word.every((id) => cumulativeMaster[id] !== undefined || cumulativeMaster[String(id)] !== undefined);
@@ -193,7 +191,7 @@ async function handleGuestLoading(wordData, notifications, isWelcomePath, isCach
       console.log(`[Loader/Guest] 재진입 타겟 청크 단어 캐시 누락 감지. 선제 보완 쿼리 수행 -> ${currentChunk.voca_label}`);
       const fallbackWords = await getWordsByChunk(currentChunk.word);
       Object.assign(cumulativeMaster, fallbackWords);
-      setStorage(KEYS.MASTER, cumulativeMaster);
+      setMasterCache(cumulativeMaster);
     }
   }
 

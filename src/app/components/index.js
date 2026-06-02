@@ -1,9 +1,9 @@
-export * from "./Button";
-export * from "./Input";
-export * from "./ProgressBar";
-export * from "./StyledBox";
-export * from "./Spinner";
-export * from "./LoadingBar";
-export * from "./Skeleton";
-export * from "./AppFallback";
-export * from "./SelectionModal";
+export { Button } from "./Button/Button";
+export { Input } from "./Input/Input";
+export { ProgressBar } from "./ProgressBar/ProgressBar";
+export { BorderBox } from "./StyledBox/StyledBox";
+export { Spinner } from "./Spinner/Spinner";
+export { LoadingBar } from "./LoadingBar/LoadingBar";
+export { Skeleton } from "./Skeleton/Skeleton";
+export { AppFallback } from "./AppFallback/AppFallback";
+export { SelectionModal } from "./SelectionModal/SelectionModal";

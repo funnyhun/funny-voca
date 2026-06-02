@@ -1,4 +1,4 @@
-import { getStorage, setStorage, KEYS } from "@/utils/storage";
+import { getProfileCache, setProfileCache } from "@/api/common";
 
 /**
  * 게스트 사용자의 프로필 정보를 조회합니다.
@@ -6,10 +6,11 @@ import { getStorage, setStorage, KEYS } from "@/utils/storage";
  */
 export const getProfile = () => {
   try {
-    const nick = getStorage(KEYS.PROFILE);
+    const profile = getProfileCache();
     return {
       user_id: "guest",
-      nick: nick || "게스트",
+      nick: profile.nick || "게스트",
+      ...profile,
     };
   } catch (err) {
     console.error("[API/Guest] Get Profile Error:", err);
@@ -24,8 +25,8 @@ export const getProfile = () => {
  */
 export const updateProfile = (data) => {
   try {
-    if (data && typeof data === "object" && data.nick !== undefined) {
-      setStorage(KEYS.PROFILE, data.nick);
+    if (data && typeof data === "object") {
+      setProfileCache(data);
       return true;
     }
     return false;

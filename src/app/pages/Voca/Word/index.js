@@ -1,7 +1,7 @@
-export * from "./List";
-export * from "./Detail";
-export * from "./Empty";
-export * from "./Filter";
-export * from "./Item";
-export * from "./NoResult";
-export * from "./Search";
+export { List } from "./List/List";
+export { Detail } from "./Detail/Detail";
+export { Empty } from "./Empty/Empty";
+export { Filter } from "./Filter/Filter";
+export { Item } from "./Item/Item";
+export { NoResult } from "./NoResult/NoResult";
+export { Search } from "./Search/Search";

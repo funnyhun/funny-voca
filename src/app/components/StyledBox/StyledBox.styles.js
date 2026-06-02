@@ -15,7 +15,3 @@ export const BorderBox = styled.div`
   border-radius: 0.5rem;
 `;
 
-export const BoxGroup = styled.div`
-  display: flex;
-  gap: 1rem;
-`;

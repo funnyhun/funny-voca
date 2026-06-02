@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { wordQueueManager } from "@/app/services/WordQueueManager";
-import { getStorage, KEYS } from "@/utils/storage";
+import { getMasterCache, getProfileCache } from "@/api/common";
 
 /**
  * 전역 Singleton WordQueueManager와 연동하여 영단어 데이터를 점진적으로 렌더링 상태에 병합하고,
@@ -34,7 +34,7 @@ export const useMaster = (initialMaster = {}, isCacheValid = false, vocaList = {
   // 2단계: 로컬 캐시가 이미 온전히 다 받아진 경우 즉시 React 상태와 일치화
   useEffect(() => {
     if (isCacheValid) {
-      const fullCached = getStorage(KEYS.MASTER) || {};
+      const fullCached = getMasterCache();
       if (Object.keys(fullCached).length > 0) {
         setMaster(fullCached);
         // 캐시가 유효하다면 백그라운드 큐 매니저를 강제 리셋하여 워커 중지
@@ -49,7 +49,7 @@ export const useMaster = (initialMaster = {}, isCacheValid = false, vocaList = {
     if (!vocaList || Object.keys(vocaList).length === 0) return;
 
     // 현재 프로필에서 selected 값을 식별 (파라미터 누락 대응용 백업)
-    const activeLabel = selectedLabel || getStorage(KEYS.PROFILE)?.selected || "";
+    const activeLabel = selectedLabel || getProfileCache().selected || "";
     
     // 우선순위 큐 매니저에게 실시간 대기열 재정렬 요청
     wordQueueManager.setVocaList(vocaList, activeLabel);

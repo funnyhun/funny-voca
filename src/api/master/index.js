@@ -1,4 +1,4 @@
-import { supabase } from "@/api/client";
+import { supabase } from "@/api/common";
 
 /**
  * 1. 특정 청크의 단어 ID 배열을 전달받아, 해당 단어 및 Definition 데이터를 단 1회의 Supabase 쿼리로 일괄 조회합니다.

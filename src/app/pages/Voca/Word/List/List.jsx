@@ -5,11 +5,11 @@ import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { useWord } from "@app/hooks";
 import { Skeleton } from "@app/components";
 
-import { Item } from "../Item";
-import { Search } from "../Search";
-import { Filter } from "../Filter";
-import { NoResult } from "../NoResult";
-import { Empty } from "../Empty";
+import { Item } from "../Item/Item";
+import { Search } from "../Search/Search";
+import { Filter } from "../Filter/Filter";
+import { NoResult } from "../NoResult/NoResult";
+import { Empty } from "../Empty/Empty";
 
 import { FILTER_SET, FILTER_TYPE } from "../utils/filter";
 

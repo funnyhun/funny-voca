@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getStorage, setStorage, KEYS } from '@/utils/storage';
+import { getProfileCache, setProfileCache } from "@/api/common";
 import { updateProfile } from '@/api/profile';
 
 /**
@@ -55,12 +55,7 @@ export const useStats = (initialProfile = {}) => {
    * 사용자가 현재 선택해서 학습 중인 voca_label 앵커 갱신
    */
   const updateSelectedLabel = (newLabel) => {
-    const latestProfile = getStorage(KEYS.PROFILE) || profile || {};
-    const updated = {
-      ...latestProfile,
-      selected: newLabel,
-    };
-    setStorage(KEYS.PROFILE, updated);
+    const updated = setProfileCache({ selected: newLabel });
     setProfile(updated);
 
     // DB 영속성 백그라운드 동기화 (오류 발생 시 로그 출력)

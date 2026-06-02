@@ -1,1 +1,1 @@
-export { BorderBox, BoxGroup } from "./StyledBox.styles";
+export { BorderBox } from "./StyledBox.styles";

@@ -17,7 +17,7 @@ const LS_KEY = "myvoca_quiz_state";
 
 export const Quiz = () => {
   const { vocaState, statsState } = useOutletContext();
-  const { updateStatus } = vocaState;
+  const { updateStatus, updateVocaBulk } = vocaState;
   const { profile } = statsState;
   const { words, loading } = useWord();
 
@@ -131,14 +131,18 @@ export const Quiz = () => {
 
     let nextQueue = [];
     let nextDoneCount = session.doneCount;
+    const currentWordId = currentWord.id;
 
     if (hasMistake) {
-      // 오답이 발생했던 경우 -> 현재 단어를 맨 뒤로 이동
+      // 오답이 발생했던 경우 -> 현재 단어를 맨 뒤로 이동 (이 퀴즈 세션에서는 done에 절대 추가되지 않음)
       nextQueue = [...session.queue.slice(1), session.queue[0]];
     } else {
       // 한 번에 맞춘 경우 -> 현재 단어를 큐에서 완전히 제거하고 완료 개수 증가
       nextQueue = session.queue.slice(1);
       nextDoneCount += 1;
+
+      // [실시간 Local-First 캐싱] 오답 없이 한번에 맞춘 단어이므로 즉시 done 적재 및 백싱크 수행
+      updateStatus(currentWordId, true);
     }
 
     setHasMistake(false);
@@ -155,15 +159,33 @@ export const Quiz = () => {
       }
 
       if (nextPhase === "COMPLETE") {
-        // 모든 페이즈를 완료했으므로 대상 단어들 일괄 done = true 업데이트
-        session.targetWordIds.forEach((id) => {
-          updateStatus(id, true);
-        });
+        // [원샷 벌크 업데이트 리팩토링] 40-loop 개별 호출 방식을 완전히 제거
+        const currentLevel = profile.level || 700;
+        const currentLevelVoca = Array.isArray(vocaState.voca) ? vocaState.voca : (vocaState.voca?.[currentLevel] || []);
+        const activeLabel = profile.selected || currentLevelVoca[0]?.voca_label;
+
+        if (activeLabel) {
+          const targetVoca = currentLevelVoca.find((v) => v.voca_label === activeLabel);
+          if (targetVoca) {
+            // 이번 문항을 완벽히 맞춤으로써 추가된 최종 done 리스트 확보
+            let finalDoneList = Array.isArray(targetVoca.done) ? [...targetVoca.done] : [];
+            if (!hasMistake && !finalDoneList.includes(currentWordId)) {
+              finalDoneList.push(currentWordId);
+            }
+
+            const totalWordsCount = targetVoca.word?.length || 0;
+            const isPerfect = finalDoneList.length === totalWordsCount;
+
+            // 벌크 업데이트 단 1회 커밋 실행 (100% 무결점 완수 시 status = true)
+            updateVocaBulk(activeLabel, finalDoneList, isPerfect);
+          }
+        }
+
         updateSession({
           ...session,
           phase: "COMPLETE",
           queue: [],
-          doneCount: session.targetWordIds.length,
+          doneCount: session.totalCount, // 성과 게이지 풀 표시용
         });
       } else {
         // 다음 페이즈 진입을 위한 세션 초기화

@@ -1,4 +1,4 @@
-import { supabase } from "@/api/client";
+import { supabase } from "@/api/common";
 import { clearSessionCache } from "./session";
 
 /**

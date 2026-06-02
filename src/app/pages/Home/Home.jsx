@@ -1,7 +1,7 @@
 import { useOutletContext } from "react-router-dom";
 
-import { Calendar } from "./Calendar";
-import { StatsDashboard } from "./StatsDashboard";
+import { Calendar } from "./Calendar/Calendar";
+import { StatsDashboard } from "./StatsDashboard/StatsDashboard";
 import { Wrapper } from "./Home.styles";
 
 export const Home = () => {

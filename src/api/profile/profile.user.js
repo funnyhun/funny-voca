@@ -1,4 +1,4 @@
-import { supabase } from "@/api/client";
+import { supabase } from "@/api/common";
 
 /**
  * 특정 사용자의 프로필 정보를 조회합니다.
@@ -46,6 +46,7 @@ export const updateProfile = async (userId, data) => {
     if (data.level !== undefined) updatePayload.level = data.level;
     if (data.selected !== undefined) updatePayload.selected = data.selected;
     if (data.completed_date !== undefined) updatePayload.completed_date = data.completed_date;
+    if (data.continued !== undefined) updatePayload.continued = data.continued;
 
     const { error } = await supabase
       .from("User")

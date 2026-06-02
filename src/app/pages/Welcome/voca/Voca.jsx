@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 
 import { ProgressBar, VerticalButton, Spinner } from "@app/components";
-import { getStorage, KEYS, setStorage } from "@/utils/storage";
+import { getStorage, KEYS, setStorage } from "@/api/common";
 
 export const Voca = () => {
   const navigate = useNavigate();

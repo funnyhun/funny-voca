@@ -1,1 +1,0 @@
-export { migrateVoca } from "./migration";

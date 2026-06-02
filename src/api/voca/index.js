@@ -1,15 +1,12 @@
 import { getSession } from "@/api/auth";
-import { supabase } from "@/api/client";
-import { getStorage, setStorage, KEYS } from "@/utils/storage";
+import { supabase, getProfileCache, setProfileCache } from "@/api/common";
 import {
   getLocalVocaList,
-  updateLocalWordStatus,
   updateLocalVocaStatus,
   rescheduleLocal,
   deleteLocalVoca,
 } from "./voca.local";
 import {
-  syncWordStatusToRemote,
   syncVocaStatusToRemote,
   syncRescheduleToRemote,
   deleteRemoteVoca,
@@ -25,36 +22,7 @@ export const getVocaList = async () => {
   return getLocalVocaList();
 };
 
-/**
- * 2. 단어의 학습 완료 상태 변경 (낙관적 로컬 우선 갱신 + 백그라운드 원격 동기화)
- * 
- * @param {number|string} wordId - 변경 대상 단어 ID
- * @param {boolean} status - 완료 여부 (true/false)
- * @returns {Promise<Object|null>} 갱신 완료된 대상 청크 및 전체 리스트 정보
- */
-export const updateWordStatus = async (wordId, status) => {
-  // 1단계: 로컬 캐시 낙관적 갱신 즉시 수행
-  const result = await updateLocalWordStatus(wordId, status);
-  if (!result) return null;
 
-  const { targetChunk, updatedVocaList } = result;
-
-  // 2단계: 백그라운드 원격 비동기 동기화 (넌블로킹)
-  getSession().then((session) => {
-    if (session && targetChunk) {
-      syncWordStatusToRemote(
-        session.user.id,
-        targetChunk.voca_label,
-        targetChunk.done,
-        targetChunk.status
-      ).catch((err) => {
-        console.error("[API/Voca] 원격 백그라운드 동기화 실패:", err);
-      });
-    }
-  });
-
-  return updatedVocaList;
-};
 
 /**
  * 3. 스케줄 재배정 및 초기화 (로컬 우선 반영 + 비동기 마이그레이션 및 실시간 진행률 콜백 연동)
@@ -132,9 +100,7 @@ export const updateLevel = async (newLevel, onProgress = null) => {
 
   try {
     // 1단계: 로컬 프로필 레벨 캐시 즉시 변경
-    const profile = getStorage(KEYS.PROFILE) || {};
-    profile.level = newLevel;
-    setStorage(KEYS.PROFILE, profile);
+    setProfileCache({ level: newLevel });
 
     // 2단계: 로컬 스케줄 재배정 실행
     const success = await reschedule(newLevel, null, false, onProgress);
@@ -220,7 +186,7 @@ export const postVoca = async (level) => {
 
 export const updateVoca = async (vocaLabel, doneList, status = false) => {
   // 1단계: 로컬 캐시 낙관적 갱신 즉시 수행
-  const result = await updateLocalVocaStatus(vocaLabel, status);
+  const result = await updateLocalVocaStatus(vocaLabel, doneList, status);
   if (!result) return false;
 
   const { targetChunk, updatedVocaList } = result;
@@ -231,6 +197,7 @@ export const updateVoca = async (vocaLabel, doneList, status = false) => {
       syncVocaStatusToRemote(
         session.user.id,
         targetChunk.voca_label,
+        targetChunk.done,
         targetChunk.status
       ).catch((err) => {
         console.error("[API/Voca] updateVoca 원격 백그라운드 동기화 실패:", err);

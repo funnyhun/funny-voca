@@ -1,4 +1,4 @@
-import { supabase } from "@/api/client";
+import { supabase, getProfileCache } from "@/api/common";
 import { calculateNewSchedule } from "./voca.local";
 
 /**
@@ -339,33 +339,37 @@ export const deleteRemoteVoca = async (userId) => {
  * 퀴즈 완료 시 특정 청크의 완료 상태(status) 및 completed_at 날짜를 Supabase Voca 테이블에 갱신하고,
  * User 테이블의 completed_date 및 selected 다음 청크 자동 전진 처리를 수행합니다.
  */
-export const syncVocaStatusToRemote = async (userId, vocaLabel, status = false) => {
+export const syncVocaStatusToRemote = async (userId, vocaLabel, doneList = [], status = false) => {
   if (!userId || !vocaLabel) return false;
 
   try {
     const todayStr = getTodayString();
     const completedAtVal = status ? todayStr : null;
 
-    // 1. Voca 테이블의 completed_at 및 status 업데이트
+    // 1. Voca 테이블의 completed_at, status, done 업데이트 (원샷 벌크 업데이트)
     const { error: updateError } = await supabase
       .from("Voca")
-      .update({ status, completed_at: completedAtVal })
+      .update({ status, completed_at: completedAtVal, done: doneList })
       .eq("user_id", userId)
       .eq("voca_label", vocaLabel);
 
     if (updateError) {
-      console.error("[SyncVoca] Voca completed_at 업데이트 실패:", updateError.message);
+      console.error("[SyncVoca] Voca completed_at 및 done 업데이트 실패:", updateError.message);
       return false;
     }
 
     // 2. 만약 청크 완료(status = true)가 발생한 경우 비즈니스 흐름 연동
     if (status === true) {
-      // 2.1 User.completed_date 만료 일자 필드에 오늘 날짜(YYYY-MM-DD) 기록
+      // 로컬 프로필 캐시에서 최신 Streak(continued) 값 로드
+      const profile = getProfileCache();
+      const continuedVal = profile?.continued || 0;
+
+      // 2.1 User.completed_date 및 continued 필드 원격 동기화
       const { error: dateError } = await supabase
         .from("User")
-        .update({ completed_date: todayStr })
+        .update({ completed_date: todayStr, continued: continuedVal })
         .eq("user_id", userId);
-      if (dateError) console.error("[SyncVoca] completed_date 원격 갱신 오류:", dateError.message);
+      if (dateError) console.error("[SyncVoca] completed_date 및 continued 원격 갱신 오류:", dateError.message);
 
       const { data: vocaListData, error: vocaListError } = await supabase
         .from("Voca")

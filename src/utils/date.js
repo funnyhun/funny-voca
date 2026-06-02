@@ -1,17 +1,4 @@
-// 1000 * 60 * 60 * 24
-const msToDay = 86400000;
 
-/**
- * 특정 시점으로부터 경과한 일수를 계산합니다.
- * @param {Date|string} now 현재 시점
- * @param {Date|string} startedTime 시작 시점
- * @returns {number} 경과 일수
- */
-export const calculateDate = (now, startedTime) => {
-  const currentTime = new Date(now).setHours(0, 0, 0, 0);
-  const diff = currentTime - startedTime;
-  return Math.floor(diff / msToDay);
-};
 
 /**
  * 연도와 월에 해당하는 캘린더 데이터를 생성하고 학습 완료 상태를 매핑합니다.

@@ -1,5 +1,5 @@
 import { getWordsByChunk } from "@/api/master";
-import { getStorage, setStorage, KEYS } from "@/utils/storage";
+import { getMasterCache, setMasterCache } from "@/api/common";
 
 class WordQueueManager {
   constructor() {
@@ -37,7 +37,7 @@ class WordQueueManager {
   setVocaList(vocaList, selectedLabel) {
     if (!vocaList || Array.isArray(vocaList)) return;
 
-    const cachedWords = getStorage(KEYS.MASTER) || {};
+    const cachedWords = getMasterCache();
     this.loadedChunks.clear();
 
     // 1단계: 플랫(Flat)한 모든 청크 리스트를 취합합니다.
@@ -113,9 +113,9 @@ class WordQueueManager {
           
           if (Object.keys(nextChunkWords).length > 0) {
             // 로컬 마스터 캐시에 점진적 병합 및 로컬 스토리지 실시간 커밋
-            const cumulativeWords = getStorage(KEYS.MASTER) || {};
+            const cumulativeWords = getMasterCache();
             Object.assign(cumulativeWords, nextChunkWords);
-            setStorage(KEYS.MASTER, cumulativeWords);
+            setMasterCache(cumulativeWords);
 
             this.loadedChunks.add(label);
 

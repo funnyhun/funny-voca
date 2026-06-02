@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { updateWordStatus, reschedule, deleteVoca } from '@/api/voca';
-import { getMaster } from '@/api/word';
+import { reschedule, deleteVoca, updateVoca } from '@/api/voca';
+import { updateWordStatus } from '@/api/master/word';
 
 /**
  * 학습 단어 데이터(Voca) 관리 및 사용자의 학습 라이프사이클 시나리오를 전담하는 커스텀 훅
@@ -136,12 +136,71 @@ export const useVoca = (initialVoca = {}, initialStatusMap = {}) => {
     }
   };
 
+  /**
+   * [시나리오 4] 퀴즈 완수 시점에 청크의 학습 완료 상태(done 리스트, status, completed_at)를 원자적으로 벌크 업데이트
+   * 
+   * @param {string} vocaLabel - 완료 대상 청크 라벨
+   * @param {Array} doneList - 최종 정답 단어 ID 목록
+   * @param {boolean} status - 청크 최종 완료 여부 (100% 무결점인 경우 true)
+   */
+  const updateVocaBulk = async (vocaLabel, doneList, status = false) => {
+    try {
+      // 1단계: API 호출 (LocalStorage 캐시 즉시 갱신 및 백그라운드 원격 동기화 트리거)
+      const success = await updateVoca(vocaLabel, doneList, status);
+      if (!success) {
+        throw new Error("voca 벌크 업데이트 API 처리 실패");
+      }
+
+      // 2단계: 리액트 voca 상태 일괄 동기화
+      setVoca((prevVoca) => {
+        if (!prevVoca || Array.isArray(prevVoca)) return prevVoca;
+        
+        const nextVoca = { ...prevVoca };
+        Object.keys(nextVoca).forEach((level) => {
+          if (!Array.isArray(nextVoca[level])) return;
+
+          nextVoca[level] = nextVoca[level].map((chunk) => {
+            if (chunk.voca_label !== vocaLabel) return chunk;
+
+            const today = new Date();
+            const yStr = String(today.getFullYear());
+            const mStr = String(today.getMonth() + 1).padStart(2, "0");
+            const dStr = String(today.getDate()).padStart(2, "0");
+            const todayStr = `${yStr}-${mStr}-${dStr}`;
+
+            return {
+              ...chunk,
+              done: doneList,
+              status: status,
+              completed_at: status ? todayStr : null
+            };
+          });
+        });
+        return nextVoca;
+      });
+
+      // 3단계: 리액트 단어별 완료 상태 맵(wordStatusMap) 일괄 동기화
+      setWordStatusMap((prev) => {
+        const next = { ...prev };
+        doneList.forEach((id) => {
+          next[id] = true;
+        });
+        return next;
+      });
+
+      return true;
+    } catch (err) {
+      console.error("[useVoca] updateVocaBulk 에러:", err);
+      return false;
+    }
+  };
+
   return {
     voca,
     wordStatusMap,
     updateStatus,
+    updateVocaBulk,
     initVoca,
     resetVoca,
-    getMaster,
   };
 };

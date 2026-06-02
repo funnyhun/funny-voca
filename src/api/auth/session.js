@@ -1,4 +1,4 @@
-import { supabase } from "@/api/client";
+import { supabase } from "@/api/common";
 
 /**
  * 현재 사용자의 세션 정보를 가져옵니다.
@@ -39,17 +39,7 @@ export const getUserId = async () => {
   return session?.user?.id || null;
 };
 
-/**
- * 현재 사용자가 게스트인지 동기적으로 확인합니다 (로컬스토리지 토큰 존재 여부 기준).
- * @returns {boolean}
- */
-export const checkIsGuest = () => {
-  try {
-    return !Object.keys(window.localStorage).some((k) => k.includes("auth-token"));
-  } catch (err) {
-    return true;
-  }
-};
+
 
 /**
  * 세션 캐시를 초기화합니다. 로그아웃 시 호출됩니다.
