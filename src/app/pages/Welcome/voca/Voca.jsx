@@ -3,14 +3,14 @@ import { useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 
 import { ProgressBar, VerticalButton, Spinner } from "@app/components";
-import { getStorage, KEYS, setStorage } from "@/api/common";
+import { getProfileCache, getVocaCache, setProfileCache } from "@/api/common";
 
 export const Voca = () => {
   const navigate = useNavigate();
   const { vocaState, statsState } = useOutletContext();
   const { initVoca } = vocaState;
   
-  const profile = getStorage(KEYS.PROFILE);
+  const profile = getProfileCache();
   const nick = profile?.nick || "게스트";
 
   const [status, setStatus] = useState(-1);
@@ -24,7 +24,7 @@ export const Voca = () => {
       const res = await initVoca(level);
       
       const activeLevel = Number(level) || 700;
-      const latestVoca = res || getStorage(KEYS.VOCA) || {};
+      const latestVoca = res || getVocaCache() || {};
       const levelVocaList = latestVoca[activeLevel] || [];
       const firstLabel = levelVocaList[0]?.voca_label || "";
 
@@ -39,7 +39,7 @@ export const Voca = () => {
         selected: firstLabel,
         completed_date: null
       };
-      setStorage(KEYS.PROFILE, updatedProfile);
+      setProfileCache(updatedProfile);
 
       // 3. statsState에도 반영하여 최신 상태 동기화
       if (statsState?.updateSelectedLabel) {

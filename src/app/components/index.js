@@ -1,6 +1,6 @@
-export { Button } from "./Button/Button";
+export { Button, SmallButton, VerticalButton } from "./Button/Button";
 export { Input } from "./Input/Input";
-export { ProgressBar } from "./ProgressBar/ProgressBar";
+export { ProgressBar, SmallProgressBar } from "./ProgressBar/ProgressBar";
 export { BorderBox } from "./StyledBox/StyledBox";
 export { Spinner } from "./Spinner/Spinner";
 export { LoadingBar } from "./LoadingBar/LoadingBar";

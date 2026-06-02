@@ -4,7 +4,7 @@ import * as S from "./Profile.styles";
 
 import { VerticalButton, Input } from "@app/components";
 
-import { setStorage, KEYS } from "@/api/common";
+import { setProfileCache } from "@/api/common";
 
 export const Profile = () => {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ export const Profile = () => {
     if (nick.length < 2) return;
 
     // Guest 유저: Guest Storage에 닉네임 저장
-    setStorage(KEYS.PROFILE, {
+    setProfileCache({
       nick: nick,
       level: 700,
       startedTime: new Date().getTime(),

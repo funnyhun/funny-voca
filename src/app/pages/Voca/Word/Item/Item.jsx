@@ -2,7 +2,7 @@ import * as S from "./Item.styles";
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 
-import { Detail } from "../Detail";
+import { Detail } from "../Detail/Detail";
 import { clickableProps } from "@/utils/accessibility";
 
 export const Item = ({ word }) => {
