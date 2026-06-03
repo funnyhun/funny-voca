@@ -26,7 +26,7 @@ export const App = () => {
   const statsState = useStats(initialProfile);
 
   // 백그라운드 스트리밍 로드, 동적 캐싱 및 상태 병합을 도맡는 커스텀 훅
-  const masterData = useMaster(master, isCacheValid, vocaState.voca, statsState?.profile?.selected);
+  const { getMaster, progress } = useMaster(master, isCacheValid, vocaState.voca, statsState?.profile?.selected);
 
   const isWelcome = location.pathname.startsWith("/welcome");
 
@@ -43,12 +43,12 @@ export const App = () => {
         <Overlay />
 
         {/* /welcome/* 경로일 때는 헤더를 가림 */}
-        {!isWelcome && <Header notifications={notifications} />}
+        {!isWelcome && <Header notifications={notifications} progress={progress} />}
 
         <S.Wrapper>
           <Suspense fallback={<AppFallback />}>
             {/* Context Provider 중첩을 완전히 날려버리고 Outlet context로 동적 상태를 다이렉트 주입 */}
-            <Outlet key={stateKey} context={{ vocaState, profileState, statsState, master: masterData, notifications }} />
+            <Outlet key={stateKey} context={{ vocaState, profileState, statsState, master: getMaster, notifications }} />
           </Suspense>
         </S.Wrapper>
 

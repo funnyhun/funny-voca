@@ -1,13 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
-import { useWord } from "@app/hooks";
+import { useMaster } from "@app/hooks";
 
 export const useItem = () => {
   const { vocaState, statsState } = useOutletContext();
   const { updateStatus } = vocaState;
   const { profile } = statsState;
 
-  const { words } = useWord();
+  const { getChunk } = useMaster();
+  const [playWords, setPlayWords] = useState([]);
+
+  const currentVocaId = profile?.selected;
+
+  const { words, isLoaded } = getChunk(currentVocaId);
+
+  // 최초 로드 시 혹은 청크 ID 변경 시에만 깊은 복사본 단어 목록을 격리 고정
+  useEffect(() => {
+    if (isLoaded && words.length > 0 && playWords.length === 0) {
+      setPlayWords(words);
+    }
+  }, [currentVocaId, isLoaded, words, playWords.length]);
 
   const [step, setStep] = useState(0);
   const [mode, setMode] = useState("word");
@@ -22,7 +34,7 @@ export const useItem = () => {
   };
 
   const nextCard = () => {
-    if (step === words.length - 1) {
+    if (step === playWords.length - 1) {
       setMode("complete");
       return;
     }
@@ -36,9 +48,9 @@ export const useItem = () => {
 
   return {
     mode,
-    total: words.length,
+    total: playWords.length,
     done: step,
-    wordSet: words[step],
+    wordSet: playWords[step],
     events: { changeMode, prevCard, nextCard, replayCard },
   };
 };

@@ -1,7 +1,7 @@
 import * as S from "./Quiz.styles";
 import { useState, useMemo, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
-import { useWord } from "@app/hooks";
+import { useMaster } from "@app/hooks";
 import { shuffleArray } from "@/utils/array";
 
 import { ProgressBar } from "./ProgressBar";
@@ -19,16 +19,28 @@ export const Quiz = () => {
   const { vocaState, statsState } = useOutletContext();
   const { updateStatus, updateVocaBulk } = vocaState;
   const { profile } = statsState;
-  const { words, loading } = useWord();
+  const { getChunk } = useMaster();
 
-  // 로컬 퀴즈 상태 관리
+  // 로컬 퀴즈 상태 및 격리된 단어 목록 관리
+  const [quizWords, setQuizWords] = useState([]);
   const [session, setSession] = useState(null);
   const [hasMistake, setHasMistake] = useState(false);
   const [isAnswered, setIsAnswered] = useState(false);
 
-  // 단어 데이터가 준비되었을 때 LocalStorage 로드 또는 신규 세션 생성
+  const currentVocaId = profile?.selected || "700-etc_1";
+
+  const { words, isLoaded } = getChunk(currentVocaId);
+
+  // 1. 최초 로딩 완료 시 혹은 청크 ID 변경 시에만 깊은 복사본 단어 목록을 딱 1회 주입 및 완전히 고정
   useEffect(() => {
-    if (loading || !words || words.length === 0) return;
+    if (isLoaded && words.length > 0 && quizWords.length === 0) {
+      setQuizWords(words);
+    }
+  }, [currentVocaId, isLoaded, words, quizWords.length]);
+
+  // 2. 고정된 단어 데이터(quizWords)가 준비되었을 때 LocalStorage 로드 또는 신규 세션 생성
+  useEffect(() => {
+    if (!quizWords || quizWords.length === 0) return;
 
     const saved = localStorage.getItem(LS_KEY);
     let parsed = null;
@@ -38,12 +50,10 @@ export const Quiz = () => {
       console.error("Failed to parse saved quiz state", e);
     }
 
-    const currentVocaId = profile?.selected || "700-etc_1";
-
     // 저장된 vocaId와 현재 선택된 vocaId가 다르거나 세션이 없으면 새로 생성
     if (!parsed || parsed.vocaId !== currentVocaId) {
-      const uncompleted = words.filter((w) => !w.done);
-      const targets = uncompleted.length > 0 ? uncompleted : words;
+      const uncompleted = quizWords.filter((w) => !w.done);
+      const targets = uncompleted.length > 0 ? uncompleted : quizWords;
       const targetIds = targets.map((w) => w.id);
       const initialQueue = shuffleArray([...targetIds]);
 
@@ -63,7 +73,7 @@ export const Quiz = () => {
     }
     setHasMistake(false);
     setIsAnswered(false);
-  }, [words, loading, profile?.selected]);
+  }, [quizWords, currentVocaId]);
 
   // 세션이 변경될 때마다 LocalStorage 업데이트
   const updateSession = (nextSession) => {
@@ -79,10 +89,10 @@ export const Quiz = () => {
   const currentWord = useMemo(() => {
     if (!session || !session.queue || session.queue.length === 0) return null;
     const currentId = session.queue[0];
-    return words.find((w) => w.id === currentId);
-  }, [session, words]);
+    return quizWords.find((w) => w.id === currentId);
+  }, [session, quizWords]);
 
-  if (loading || !words || words.length === 0) {
+  if (!isLoaded || quizWords.length === 0) {
     return (
       <S.Wrapper style={{ padding: "20px" }}>
         <div style={{ width: "100%", marginBottom: "20px" }}>
@@ -91,7 +101,7 @@ export const Quiz = () => {
             <Skeleton height="20px" width="200px" />
           </div>
         </div>
-        
+
         <S.Content style={{ display: "flex", flexDirection: "column", gap: "1.5rem", alignItems: "center", padding: "40px 20px" }}>
           <Skeleton height="24px" width="150px" />
           <Skeleton height="60px" width="100%" />
@@ -117,6 +127,7 @@ export const Quiz = () => {
       </S.Wrapper>
     );
   }
+
 
   const handleCorrect = () => {
     setIsAnswered(true);
@@ -213,7 +224,7 @@ export const Quiz = () => {
         return (
           <SpellingQuiz
             currentWord={currentWord}
-            allWords={words}
+            allWords={quizWords}
             onCorrect={handleCorrect}
             onWrong={handleWrong}
             isAnswered={isAnswered}
@@ -232,7 +243,7 @@ export const Quiz = () => {
         return (
           <SentenceQuiz
             currentWord={currentWord}
-            allWords={words}
+            allWords={quizWords}
             onCorrect={handleCorrect}
             onWrong={handleWrong}
             isAnswered={isAnswered}
@@ -265,13 +276,12 @@ export const Quiz = () => {
           textAlign: "center",
           fontWeight: "bold",
           fontSize: "1.1rem",
-          color: "var(--color-brand, #4f46e5)",
-          marginTop: "12px"
+          color: "var(--color-brand, #4f46e5)"
         }}>
           {getPhaseTitle(session.phase)}
         </div>
       </div>
-      
+
       <S.Content>
         <div style={{ width: "100%", padding: "20px" }}>
           {renderQuizComponent()}

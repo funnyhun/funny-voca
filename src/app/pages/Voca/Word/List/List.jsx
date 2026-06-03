@@ -1,8 +1,8 @@
 import * as S from "./List.styles";
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 
-import { useWord } from "@app/hooks";
+import { useMaster } from "@app/hooks";
 import { Skeleton } from "@app/components";
 
 import { Item } from "../Item/Item";
@@ -20,7 +20,8 @@ import { FILTER_SET, FILTER_TYPE } from "../utils/filter";
  */
 export const List = () => {
   const { vocaId } = useParams();
-  const { words = [], loading } = useWord(vocaId);
+  const { getChunk } = useMaster();
+  const [listWords, setListWords] = useState([]);
   const navigate = useNavigate();
 
   const { statsState, vocaState } = useOutletContext();
@@ -31,6 +32,15 @@ export const List = () => {
   const [keyword, setKeyword] = useState("");
 
   const isTodayStudyDay = profile && profile.selected === vocaId;
+
+  const { words, isLoaded } = getChunk(vocaId);
+
+  // 최초 로드 시 혹은 vocaId 변경 시에만 깊은 복사본 단어 목록을 격리 고정
+  useEffect(() => {
+    if (isLoaded && words.length > 0 && listWords.length === 0) {
+      setListWords(words);
+    }
+  }, [vocaId, isLoaded, words, listWords.length]);
 
   // 정규화된 현재 레벨 Voca 배열을 통해 대치되는 한글 카테고리명 및 Day(schedule) 추출
   const currentLevel = profile?.level || 700;
@@ -56,7 +66,7 @@ export const List = () => {
   };
 
   const filteredWords = useMemo(() => {
-    let result = FILTER_SET[filterType].callback(words);
+    let result = FILTER_SET[filterType].callback(listWords);
     if (keyword.trim()) {
       const lowerKeyword = keyword.toLowerCase();
       result = result.filter(
@@ -68,10 +78,10 @@ export const List = () => {
       );
     }
     return result;
-  }, [words, filterType, keyword]);
+  }, [listWords, filterType, keyword]);
 
   const renderContentUI = useCallback(() => {
-    if (loading) {
+    if (!isLoaded) {
       return Array.from({ length: 5 }).map((_, i) => (
         <div key={i} style={{ display: "flex", flexDirection: "column", gap: "0.5rem", padding: "1.25rem", borderBottom: "1px solid rgba(0,0,0,0.05)" }}>
           <Skeleton height="20px" width="120px" />
@@ -80,14 +90,14 @@ export const List = () => {
       ));
     }
 
-    if (words.length === 0) return <Empty />;
+    if (listWords.length === 0) return <Empty />;
 
     if (filteredWords.length === 0) return <NoResult />;
 
     return filteredWords.map((word) => {
       return <Item word={word} key={word.id} />;
     });
-  }, [loading, words, filteredWords]);
+  }, [isLoaded, listWords, filteredWords]);
 
   return (
     <S.Wrapper>

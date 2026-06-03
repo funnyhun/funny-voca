@@ -1,7 +1,7 @@
-import { useMemo, Suspense, useState } from "react";
+import { useMemo, Suspense, useState, useEffect } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 
-import { useWord } from "@app/hooks";
+import { useMaster } from "@app/hooks";
 import { Button } from "@app/components";
 import { Item as Card } from "./Item";
 import {
@@ -15,17 +15,38 @@ export const Play = () => {
   const context = useOutletContext();
   const { statsState } = context;
   const { profile } = statsState;
-  const { words } = useWord();
+  const { getChunk } = useMaster();
+  const [playWords, setPlayWords] = useState([]);
   const navigate = useNavigate();
   const [isReview, setIsReview] = useState(false);
 
+  const currentVocaId = profile?.selected;
+
+  const { words, isLoaded } = getChunk(currentVocaId);
+
+  // 최초 로드 시 혹은 청크 ID 변경 시에만 깊은 복사본 단어 목록을 격리 고정
+  useEffect(() => {
+    if (isLoaded && words.length > 0 && playWords.length === 0) {
+      setPlayWords(words);
+    }
+  }, [currentVocaId, isLoaded, words, playWords.length]);
+
   const remainingQuizs = useMemo(() => {
-    return words.filter((w) => w.done === false);
-  }, [words]);
+    return playWords.filter((w) => w.done === false);
+  }, [playWords]);
 
   // 퀴즈 진입 시 모든 단어가 이미 암기 완료인 경우
   const isQuizRoute = window.location.pathname.includes("/quiz");
-  if (!isQuizRoute && words.length > 0 && remainingQuizs.length === 0 && !isReview) {
+
+  if (!isLoaded || playWords.length === 0) {
+    return (
+      <Wrapper style={{ justifyContent: "center", alignItems: "center" }}>
+        <div>단어를 불러오는 중입니다...</div>
+      </Wrapper>
+    );
+  }
+
+  if (!isQuizRoute && playWords.length > 0 && remainingQuizs.length === 0 && !isReview) {
     return (
       <Wrapper>
         <AllDoneWrapper>

@@ -25,6 +25,19 @@ export const Wrapper = styled.li`
     );
     box-shadow: 0 8px 24px rgba(79, 70, 229, 0.08);
   `}
+
+  ${({ $isLocked }) =>
+    $isLocked &&
+    `
+    opacity: 0.6;
+    filter: grayscale(30%);
+    cursor: not-allowed;
+    
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  `}
 `;
 
 export const CompleteIcon = styled(CheckCircleIcon)`
@@ -59,3 +72,10 @@ export const Length = styled.span`
 export const Content = styled.div``;
 
 export const NextButton = styled(RightIcon)``;
+
+export const LockButton = styled.div`
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

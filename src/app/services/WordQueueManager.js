@@ -86,6 +86,50 @@ class WordQueueManager {
   }
 
   /**
+   * 전체 청크 대비 단어 다운로드가 완료된 청크의 진행률을 계산해 반환합니다.
+   * @param {Object} vocaList
+   * @returns {number} 0 ~ 100 사이의 진행률 수치
+   */
+  getProgress(vocaList) {
+    if (!vocaList) return 100;
+    const allChunks = Object.values(vocaList).flat().filter(Boolean);
+    const total = allChunks.length;
+    if (total === 0) return 100;
+
+    const cachedWords = getMasterCache();
+    let completed = 0;
+    allChunks.forEach((chunk) => {
+      const wordIds = chunk.word || [];
+      const isLoaded = wordIds.length > 0 && wordIds.every(
+        (id) => cachedWords[id] !== undefined || cachedWords[String(id)] !== undefined || cachedWords[Number(id)] !== undefined
+      );
+      if (isLoaded) {
+        completed++;
+      }
+    });
+
+    return Math.round((completed / total) * 100);
+  }
+
+  /**
+   * 지정한 청크를 다운로드 대기 큐의 최우선 순위(맨 앞)로 격상시킵니다.
+   * @param {string} targetId - 최우선 격상할 청크 voca_label
+   */
+  prioritizeChunk(targetId) {
+    if (!targetId) return;
+    const idx = this.queue.findIndex((chunk) => chunk.voca_label === targetId);
+    if (idx > 0) {
+      const targetChunk = this.queue.splice(idx, 1)[0];
+      this.queue.unshift(targetChunk);
+      console.log(`[WordQueueManager] 청크 다운로드 최우선 순위 격상 -> ${targetId}`);
+      
+      if (!this.isWorking) {
+        this.startWorker();
+      }
+    }
+  }
+
+  /**
    * 백그라운드 다운로드 워커를 트리거합니다.
    */
   startWorker() {

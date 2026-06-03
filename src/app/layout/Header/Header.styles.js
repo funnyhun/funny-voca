@@ -12,6 +12,23 @@ export const Wrapper = styled.div`
   align-items: center;
 
   background-color: ${({ theme }) => theme.main};
+  position: relative;
+`;
+
+export const ProgressBar = styled.div.attrs(({ $width, $visible }) => ({
+  style: {
+    width: `${$width}%`,
+    opacity: $visible ? 1 : 0,
+  },
+}))`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background-color: ${({ theme }) => theme.brand || "#4f46e5"};
+  transition: width 0.3s ease-out, opacity 0.5s ease-in-out;
+  z-index: 9999;
+  pointer-events: none;
 `;
 
 export const Title = styled.h1`
