@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Selection } from "../Selection";
 import { getWrongWords } from "../utils";
 
@@ -15,9 +15,13 @@ export const SentenceQuiz = ({ currentWord, allWords, onCorrect, onWrong, isAnsw
     return `[  ] : ${def.value || "뜻 정보 없음"}`;
   }, [def]);
 
-  const wrongs = useMemo(() => {
-    return getWrongWords(answer, allWords);
-  }, [answer, allWords]);
+  const [wrongs, setWrongs] = useState([]);
+
+  useEffect(() => {
+    if (currentWord && allWords && allWords.length > 0) {
+      setWrongs(getWrongWords(answer, allWords));
+    }
+  }, [currentWord?.id, answer]);
 
   return (
     <>

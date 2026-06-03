@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useState, useEffect } from "react";
 import { Selection } from "../Selection";
 import { getWrongWords } from "../utils";
 
@@ -7,9 +7,13 @@ export const SpellingQuiz = ({ currentWord, allWords, onCorrect, onWrong, isAnsw
   const question = definition.value || "뜻 정보가 없습니다.";
   const answer = currentWord.word;
 
-  const wrongs = useMemo(() => {
-    return getWrongWords(answer, allWords);
-  }, [answer, allWords]);
+  const [wrongs, setWrongs] = useState([]);
+
+  useEffect(() => {
+    if (currentWord && allWords && allWords.length > 0) {
+      setWrongs(getWrongWords(answer, allWords));
+    }
+  }, [currentWord?.id, answer]);
 
   return (
     <>

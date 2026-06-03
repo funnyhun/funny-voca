@@ -5,8 +5,9 @@ export const Wrapper = styled.div`
 
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
   justify-content: space-between;
+  padding: 1rem;
 `;
 
 export const Content = styled.div`
