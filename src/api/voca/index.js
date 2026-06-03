@@ -42,7 +42,7 @@ export const reschedule = async (targetLevel, swapCategories = null, isReset = f
     if (!swapCategories) {
       const [schedResult, chunkResult] = await Promise.all([
         supabase.from("Schedule").select("category_en").order("schedule", { ascending: true }),
-        supabase.from("Chunk").select("*").eq("level", Number(targetLevel) || 700)
+        supabase.from("Chunk").select("*").lte("level", Number(targetLevel) || 700)
       ]);
       
       if (schedResult.error) throw new Error(`[Schedule Load Failed]: ${schedResult.error.message}`);

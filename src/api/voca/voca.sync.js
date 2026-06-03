@@ -192,7 +192,7 @@ export const syncRescheduleToRemote = async (userId, targetLevel, swapCategories
     const { data: targetChunks } = await supabase
       .from("Chunk")
       .select("*")
-      .eq("level", numericLevel);
+      .lte("level", numericLevel);
 
     if (!targetChunks || targetChunks.length === 0) {
       console.error("[SyncVoca] 원격 레벨의 Chunk 데이터 로드 실패");

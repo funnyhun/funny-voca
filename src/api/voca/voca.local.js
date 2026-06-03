@@ -142,7 +142,7 @@ export const getLocalVocaList = async () => {
 
       if (targetChunks && targetChunks.length > 0) {
         [700, 800, 900].forEach((lvl) => {
-          const levelChunks = targetChunks.filter((c) => String(c.level) === String(lvl));
+          const levelChunks = targetChunks.filter((c) => Number(c.level) <= Number(lvl));
           if (levelChunks.length > 0) {
             grouped[lvl] = calculateNewSchedule(levelChunks, [], defaultCategoryOrder);
           }
@@ -281,7 +281,7 @@ export const rescheduleLocal = async (targetLevel, swapCategories = null, isRese
       const numericLevel = Number(targetLevel) || 700;
       const [schedResult, chunkResult] = await Promise.all([
         supabase.from("Schedule").select("category_en").order("schedule", { ascending: true }),
-        supabase.from("Chunk").select("*").eq("level", numericLevel)
+        supabase.from("Chunk").select("*").lte("level", numericLevel)
       ]);
       
       if (schedResult.error) throw new Error(`[Schedule Load Failed (Local)]: ${schedResult.error.message}`);
@@ -297,7 +297,7 @@ export const rescheduleLocal = async (targetLevel, swapCategories = null, isRese
     }
 
     const numericLevel = Number(targetLevel) || 700;
-    const filterOldList = isReset ? [] : (vocaList[numericLevel] || []);
+    const filterOldList = isReset ? [] : Object.values(vocaList).flat().filter(Boolean);
     const newVocaList = calculateNewSchedule(targetChunks, filterOldList, defaultCategoryOrder);
 
     vocaList[numericLevel] = newVocaList;
