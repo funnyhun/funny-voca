@@ -22,16 +22,16 @@ export const Item = () => {
 
   const { changeMode, prevCard, nextCard, replayCard } = events;
 
-  // wordSet이 없는 경우 (데이터 로딩 중 혹은 빈 Day) 렌더링 건너뜀
-  if (!wordSet) return null;
-
-  const { word, definitions } = wordSet;
-
   const AUDIO = useMemo(() => createAudio(), []);
 
   useEffect(() => {
     return () => window.speechSynthesis.cancel();
   });
+
+  // wordSet이 없는 경우 (데이터 로딩 중 혹은 빈 Day) 렌더링 건너뜀
+  if (!wordSet) return null;
+
+  const { word, definitions } = wordSet;
 
   const playAudio = () => {
     window.speechSynthesis.cancel();
