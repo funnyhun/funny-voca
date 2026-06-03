@@ -397,6 +397,15 @@ export const syncVocaStatusToRemote = async (userId, vocaLabel, doneList = [], s
         if (selectUpdateError) {
           console.error("[SyncVoca] User.selected 자동 전진 원격 반영 실패:", selectUpdateError.message);
         }
+      } else {
+        const { error: selectUpdateError } = await supabase
+          .from("User")
+          .update({ selected: "" })
+          .eq("user_id", userId);
+
+        if (selectUpdateError) {
+          console.error("[SyncVoca] User.selected 빈 값 갱신 원격 반영 실패:", selectUpdateError.message);
+        }
       }
     }
 

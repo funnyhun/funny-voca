@@ -80,6 +80,84 @@ async function handleMemberLoading(session, wordData, notifications, isWelcomePa
   // 2. 청크 단위 Voca 목록 조회
   let vocaData = await getVocaList();
 
+  // 2.1 원격 DB Voca 목록 조회
+  const { data: remoteVocaListData, error: remoteVocaError } = await supabase
+    .from("Voca")
+    .select("*")
+    .eq("user_id", userId);
+
+  // 2.2 로컬 데이터와 원격 데이터의 양방향 합집합 병합 (Union Merge)
+  if (remoteVocaListData && remoteVocaListData.length > 0 && vocaData && !Array.isArray(vocaData)) {
+    const todayStr = new Date().toISOString().split("T")[0];
+    let hasMergedChanges = false;
+    const mergePromises = [];
+
+    Object.keys(vocaData).forEach((level) => {
+      const levelChunks = vocaData[level] || [];
+      vocaData[level] = levelChunks.map((localChunk) => {
+        const remoteChunk = remoteVocaListData.find((rv) => rv.voca_label === localChunk.voca_label);
+        if (!remoteChunk) return localChunk;
+
+        // done 배열 병합 (중복 제거)
+        const localDone = Array.isArray(localChunk.done) ? localChunk.done : [];
+        const remoteDone = Array.isArray(remoteChunk.done) ? remoteChunk.done : [];
+        const mergedDoneSet = new Set([
+          ...localDone.map(String),
+          ...remoteDone.map(String)
+        ]);
+        const mergedDone = Array.from(mergedDoneSet).map(Number);
+
+        // status 판별: 합집합된 done 수가 전체 단어 수와 같거나, 한쪽이라도 status가 true인 경우
+        const isCompleted = mergedDone.length === (localChunk.word?.length || 0) || localChunk.status || remoteChunk.status;
+        const completedAt = isCompleted
+          ? (localChunk.completed_at || remoteChunk.completed_at || todayStr)
+          : null;
+
+        // 로컬 데이터에 변경이 생겼는지 확인
+        const isLocalChanged = (localChunk.done || []).length !== mergedDone.length || localChunk.status !== isCompleted;
+        // 원격 데이터에 변경이 생겼는지 확인
+        const isRemoteChanged = (remoteChunk.done || []).length !== mergedDone.length || remoteChunk.status !== isCompleted;
+
+        if (isLocalChanged) {
+          hasMergedChanges = true;
+        }
+
+        if (isRemoteChanged) {
+          // 백그라운드 원격 업데이트 큐잉
+          mergePromises.push(
+            supabase
+              .from("Voca")
+              .upsert({
+                user_id: userId,
+                voca_label: localChunk.voca_label,
+                done: mergedDone,
+                status: isCompleted,
+                completed_at: completedAt,
+                schedule: localChunk.schedule
+              }, { onConflict: "user_id,voca_label" })
+          );
+        }
+
+        return {
+          ...localChunk,
+          done: mergedDone,
+          status: isCompleted,
+          completed_at: completedAt
+        };
+      });
+    });
+
+    if (hasMergedChanges) {
+      setVocaCache(vocaData);
+    }
+
+    if (mergePromises.length > 0) {
+      Promise.all(mergePromises).catch((err) => {
+        console.error("[Sync] Background bidirectional merge failed:", err);
+      });
+    }
+  }
+
   // 3. Voca 목록이 없다면 최초 1회 동적 정렬 배정 및 초기화 구축
   if (!vocaData || Object.keys(vocaData).length === 0) {
     await reschedule(currentLevel, null, false);
@@ -90,9 +168,12 @@ async function handleMemberLoading(session, wordData, notifications, isWelcomePa
   const currentLevelVoca = vocaData[currentLevel] || [];
   const defaultSelected = currentLevelVoca[0]?.voca_label || "";
 
+  // Streak 최댓값 병합
+  const mergedContinued = Math.max(userProfile.continued || 0, getProfileCache()?.continued || 0);
+
   const localProfile = {
     startedTime: new Date(userProfile.created_at).getTime(),
-    continued: userProfile.continued || 0,
+    continued: mergedContinued,
     today: 0,
     learned: currentLevelVoca.filter((v) => v.status === true).length,
     selected: userProfile.selected || getProfileCache().selected || defaultSelected,

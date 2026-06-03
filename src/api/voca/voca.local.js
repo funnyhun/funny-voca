@@ -386,6 +386,8 @@ export const updateLocalVocaStatus = async (vocaLabel, doneList = [], status = f
       const nextTodoChunk = sortedVoca.find((v) => v.status === false);
       if (nextTodoChunk) {
         updatedProfileFields.selected = nextTodoChunk.voca_label;
+      } else {
+        updatedProfileFields.selected = "";
       }
     }
 

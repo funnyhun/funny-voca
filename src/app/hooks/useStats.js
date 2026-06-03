@@ -48,7 +48,7 @@ export const useStats = (initialProfile = {}) => {
     const sorted = [...array].sort((a, b) => a.schedule - b.schedule);
     
     // 완료되지 않은(status가 false) 첫 번째 청크 탐색
-    return sorted.find((v) => v.status === false) || sorted[0] || null;
+    return sorted.find((v) => v.status === false) || null;
   };
 
   /**
