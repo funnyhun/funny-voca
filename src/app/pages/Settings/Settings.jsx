@@ -22,12 +22,10 @@ export const Settings = () => {
   // 게스트 여부 판별 (startedTime 속성이 없거나 닉네임 유무, 또는 로컬스토리지에 세션 유무로 판단)
   const isGuest = profile.user_id === "guest" || !profile?.startedTime;
 
-  // 1. 로그아웃 처리
+  // 1. 로그아웃 처리 (회원 로그인 상태에서만 호출 가능)
   const handleLogout = async () => {
     const confirmed = window.confirm(
-      isGuest
-        ? "게스트 데이터를 삭제하고 나가시겠어요?\n저장된 모든 학습 기록이 사라집니다."
-        : "로그아웃 하시겠어요?\n데이터는 서버에 안전하게 보관됩니다."
+      "로그아웃 하시겠어요?\n데이터는 서버에 안전하게 보관됩니다."
     );
     if (!confirmed) return;
 
@@ -185,14 +183,16 @@ export const Settings = () => {
           />
         </S.Section>
 
-        <S.Section style={{ marginTop: "auto" }}>
-          <Button
-            label={isGuest ? "데이터 삭제 및 나가기" : "로그아웃"}
-            color="main"
-            bg="brand"
-            onClick={handleLogout}
-          />
-        </S.Section>
+        {!isGuest && (
+          <S.Section style={{ marginTop: "auto" }}>
+            <Button
+              label="로그아웃"
+              color="main"
+              bg="brand"
+              onClick={handleLogout}
+            />
+          </S.Section>
+        )}
       </S.Wrapper>
     </>
   );
