@@ -25,11 +25,11 @@ export const AllDoneWrapper = styled.div`
 export const AllDoneTitle = styled.h3`
   font-size: 1.4rem;
   font-weight: 700;
-  color: ${({ theme }) => theme.font};
+  color: ${({ theme }) => theme.text_main};
 `;
 
 export const AllDoneDesc = styled.p`
-  color: ${({ theme }) => theme.label};
+  color: ${({ theme }) => theme.text_sub};
   line-height: 1.8;
   white-space: pre-line;
 `;

@@ -5,6 +5,6 @@ export const Display = styled.span`
 
   font-size: 0.8rem;
   font-weight: 600;
-  color: ${({ theme }) => theme.week_success};
+  color: ${({ theme }) => theme.success_lite};
   line-height: 1;
 `;

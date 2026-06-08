@@ -71,21 +71,21 @@ export const BannerDesc = styled.p`
 `;
 
 export const BannerButton = styled.button`
-  background: ${props => props.$active ? '#ffffff' : 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)'};
-  color: ${props => props.$active ? '#4f46e5' : '#ffffff'};
-  border: ${props => props.$active ? '1px solid rgba(79, 70, 229, 0.25)' : 'none'};
+  background: ${props => props.$active ? '#fff' : `linear-gradient(135deg, ${props.theme.brand} 0%, #7c3aed 100%)`};
+  color: ${props => props.$active ? props.theme.brand : '#fff'};
+  border: ${props => props.$active ? `1px solid ${props.theme.brand}40` : 'none'};
   padding: 0.5rem 1rem;
   border-radius: 12px;
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.08);
+  box-shadow: 0 4px 12px ${props => props.theme.brand}14;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.15);
+    box-shadow: 0 6px 16px ${props => props.theme.brand}26;
     filter: brightness(1.05);
   }
 

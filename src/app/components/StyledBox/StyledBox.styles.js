@@ -9,9 +9,9 @@ export const BorderBox = styled.div`
   padding: 1rem;
 
   text-align: left;
-  background-color: ${({ theme }) => theme.main};
+  background-color: ${({ theme }) => theme.bg_main};
 
-  border: 0.1rem solid ${({ theme }) => theme.main};
+  border: 0.1rem solid ${({ theme }) => theme.bg_main};
   border-radius: 0.5rem;
 `;
 

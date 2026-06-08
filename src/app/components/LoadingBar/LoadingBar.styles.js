@@ -32,7 +32,7 @@ export const Bar = styled.div`
   background: linear-gradient(
     90deg,
     ${({ theme }) => theme.brand || "#137FEC"} 0%,
-    ${({ theme }) => theme.week_success || "#7ED321"} 50%,
+    ${({ theme }) => theme.success_lite || "#7ED321"} 50%,
     ${({ theme }) => theme.brand || "#137FEC"} 100%
   );
   box-shadow: 0 0 8px ${({ theme }) => theme.brand || "#137FEC"};

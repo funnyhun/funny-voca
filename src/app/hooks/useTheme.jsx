@@ -1,7 +1,7 @@
 import { useState, createContext, useContext, useEffect, useCallback } from "react";
 import { ThemeProvider as StyledThemeProvider } from "styled-components";
 
-import { LightTheme, DarkTheme } from "@/app/theme";
+import { getTheme } from "@/app/theme";
 import { getThemeCache, setThemeCache } from "@/api/common";
 
 const themeContext = createContext({
@@ -22,10 +22,10 @@ export const ThemeProvider = ({ children }) => {
     setThemeCache(theme);
 
     // HTML 메타 태그 theme-color 동적 연동 (노치 및 상태바 일괄 적용)
-    const currentThemeData = theme === "light" ? LightTheme : DarkTheme;
+    const currentThemeData = getTheme(theme);
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
     if (metaThemeColor) {
-      metaThemeColor.setAttribute("content", currentThemeData.background);
+      metaThemeColor.setAttribute("content", currentThemeData.bg_app);
     }
   }, [theme]);
 
@@ -35,7 +35,7 @@ export const ThemeProvider = ({ children }) => {
 
   return (
     <themeContext.Provider value={{ theme, handleTheme }}>
-      <StyledThemeProvider theme={theme === "light" ? LightTheme : DarkTheme}>{children}</StyledThemeProvider>
+      <StyledThemeProvider theme={getTheme(theme)}>{children}</StyledThemeProvider>
     </themeContext.Provider>
   );
 };

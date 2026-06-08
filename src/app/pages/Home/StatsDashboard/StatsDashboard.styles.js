@@ -5,7 +5,7 @@ export const DashboardWrapper = styled(BorderBox)`
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-  background: ${({ theme }) => theme.main};
+  background: ${({ theme }) => theme.bg_main};
   position: relative;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 `;
@@ -19,14 +19,14 @@ export const HeaderContainer = styled.div`
 export const Title = styled.h2`
   font-size: 1.1rem;
   font-weight: 700;
-  color: ${({ theme }) => theme.font};
+  color: ${({ theme }) => theme.text_main};
 `;
 
 export const LevelBadge = styled.div`
   font-size: 0.8rem;
   font-weight: 600;
   padding: 0.3rem 0.6rem;
-  background-color: ${({ theme }) => theme.week};
+  background-color: ${({ theme }) => theme.brand_lite};
   color: ${({ theme }) => theme.brand};
   border-radius: 1rem;
 `;
@@ -41,14 +41,14 @@ export const ProgressLabel = styled.div`
   display: flex;
   justify-content: space-between;
   font-size: 0.9rem;
-  color: ${({ theme }) => theme.label};
+  color: ${({ theme }) => theme.text_sub};
   font-weight: 600;
 `;
 
 export const ProgressBarBackground = styled.div`
   width: 100%;
   height: 12px;
-  background-color: ${({ theme }) => theme.background};
+  background-color: ${({ theme }) => theme.bg_app};
   border-radius: 10px;
   overflow: hidden;
 `;
@@ -56,7 +56,7 @@ export const ProgressBarBackground = styled.div`
 export const ProgressBarFill = styled.div`
   height: 100%;
   width: ${({ $progress }) => $progress}%;
-  background: linear-gradient(90deg, ${({ theme }) => theme.brand}, ${({ theme }) => theme.week_success});
+  background: linear-gradient(90deg, ${({ theme }) => theme.brand}, ${({ theme }) => theme.success_lite});
   border-radius: 10px;
   transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
 `;
@@ -65,7 +65,7 @@ export const StreakBadge = styled.div`
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  background-color: ${({ theme }) => theme.week};
+  background-color: ${({ theme }) => theme.brand_lite};
   color: ${({ theme }) => theme.brand};
   padding: 0.5rem 1rem;
   border-radius: 2rem;
@@ -90,8 +90,8 @@ export const ActionButton = styled.button`
   padding: 1rem;
   border-radius: 12px;
   border: none;
-  background: ${({ theme }) => theme.background};
-  color: ${({ theme }) => theme.font};
+  background: ${({ theme }) => theme.bg_app};
+  color: ${({ theme }) => theme.text_main};
   font-weight: 700;
   font-size: 1rem;
   cursor: pointer;
@@ -147,14 +147,14 @@ export const BannerBadge = styled.span`
 export const BannerTitle = styled.h4`
   font-size: 0.95rem;
   font-weight: 700;
-  color: ${({ theme }) => theme.font};
+  color: ${({ theme }) => theme.text_main};
   margin: 0;
 `;
 
 export const BannerDesc = styled.p`
   font-size: 0.85rem;
   line-height: 1.5;
-  color: ${({ theme }) => theme.label};
+  color: ${({ theme }) => theme.text_sub};
   margin: 0;
   white-space: pre-line;
 `;

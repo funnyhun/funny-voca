@@ -6,14 +6,14 @@ export const Wrapper = styled.li`
   align-items: center;
   gap: 0.5rem;
 
-  background-color: ${({ theme }) => theme.main};
+  background-color: ${({ theme }) => theme.bg_main};
 
   padding: 1rem;
   border-radius: 0.5rem;
 `;
 
 export const CompleteIcon = styled(CheckCircleIcon)`
-  color: ${({ theme }) => theme.main};
+  color: ${({ theme }) => theme.bg_main};
 `;
 
 export const InCompleteIcon = styled(WordIcon)`
@@ -23,7 +23,7 @@ export const InCompleteIcon = styled(WordIcon)`
 export const Status = styled.div`
   display: flex;
   align-items: center;
-  background-color: ${({ theme }) => theme.week};
+  background-color: ${({ theme }) => theme.brand_lite};
   padding: 0.75rem 0.7rem;
   border-radius: 3rem;
 
@@ -38,7 +38,7 @@ export const Label = styled.h3`
 `;
 
 export const Explain = styled.span`
-  color: ${({ theme }) => theme.label};
+  color: ${({ theme }) => theme.text_sub};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

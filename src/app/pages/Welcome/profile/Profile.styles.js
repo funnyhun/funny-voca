@@ -21,7 +21,7 @@ export const Image = styled.div`
   width: 10rem;
   height: 10rem;
 
-  background-color: ${({ theme }) => theme.week};
+  background-color: ${({ theme }) => theme.brand_lite};
   border-radius: 5rem;
 `;
 
@@ -45,7 +45,7 @@ export const CustomHiIcon = styled(HiIcon)`
 `;
 
 export const Content = styled.p`
-  color: ${({ theme }) => theme.label};
+  color: ${({ theme }) => theme.text_sub};
   text-align: center;
   line-height: 1.7;
 `;

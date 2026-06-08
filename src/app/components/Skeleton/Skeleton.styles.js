@@ -17,9 +17,9 @@ export const Base = styled.div`
   /* 테마 컬러에 어울리는 쉬머 백그라운드 색상 선택 */
   background: linear-gradient(
     90deg,
-    ${({ theme }) => (theme.main === "#000" ? "#222" : "#e0e0e0")} 25%,
-    ${({ theme }) => (theme.main === "#000" ? "#333" : "#f0f0f0")} 37%,
-    ${({ theme }) => (theme.main === "#000" ? "#222" : "#e0e0e0")} 63%
+    ${({ theme }) => (theme.bg_main === "#000000" ? "#222" : "#e0e0e0")} 25%,
+    ${({ theme }) => (theme.bg_main === "#000000" ? "#333" : "#f0f0f0")} 37%,
+    ${({ theme }) => (theme.bg_main === "#000000" ? "#222" : "#e0e0e0")} 63%
   );
   background-size: 400% 100%;
   animation: ${shimmer} 1.4s ease infinite;

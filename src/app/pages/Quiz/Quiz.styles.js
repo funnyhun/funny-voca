@@ -19,8 +19,8 @@ export const Content = styled.div`
   border-radius: 0.5rem;
 
   font-size: 1rem;
-  color: ${({ theme }) => theme.font};
+  color: ${({ theme }) => theme.text_main};
   font-weight: 600;
 
-  background-color: ${({ theme }) => theme.main};
+  background-color: ${({ theme }) => theme.bg_main};
 `;

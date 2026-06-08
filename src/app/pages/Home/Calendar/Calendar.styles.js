@@ -39,7 +39,7 @@ export const DayContainer = styled.div`
   height: 2.5rem;
 
   text-align: center;
-  color: ${({ $isSunday, theme }) => ($isSunday ? theme.danger : theme.sub)};
+  color: ${({ $isSunday, theme }) => ($isSunday ? theme.danger : theme.text_muted)};
 
   padding: 0.5rem;
 `;
@@ -54,10 +54,10 @@ export const DayCircle = styled.div`
   line-height: 1;
   font-size: 0.9rem;
   font-weight: 600;
-  color: ${({ $isToday, $isSunday, theme }) => ($isToday ? theme.main : $isSunday && theme.danger)};
+  color: ${({ $isToday, $isSunday, theme }) => ($isToday ? theme.bg_main : $isSunday && theme.danger)};
 
   background-color: ${({ $isToday, $isLearned, theme }) =>
-    $isToday ? theme.brand : $isLearned && theme.week};
+    $isToday ? theme.brand : $isLearned && theme.brand_lite};
 
   padding-top: 0.8rem;
   border-radius: 2.5rem;

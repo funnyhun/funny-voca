@@ -21,7 +21,7 @@ export const Image = styled.div`
   width: 10rem;
   height: 10rem;
 
-  background-color: ${({ theme }) => theme.week};
+  background-color: ${({ theme }) => theme.brand_lite};
   border-radius: 5rem;
 `;
 
@@ -35,7 +35,7 @@ export const Greet = styled.p`
 `;
 
 export const Content = styled.p`
-  color: ${({ theme }) => theme.label};
+  color: ${({ theme }) => theme.text_sub};
   text-align: center;
   line-height: 1.7;
 
@@ -72,5 +72,5 @@ export const ProgressTitle = styled.span`
 export const ProgressStatus = styled.span`
   font-size: 1rem;
   font-weight: 600;
-  color: ${({ theme }) => theme.font};
+  color: ${({ theme }) => theme.text_main};
 `;

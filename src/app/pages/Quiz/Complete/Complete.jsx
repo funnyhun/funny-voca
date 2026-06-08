@@ -186,8 +186,8 @@ export const Complete = () => {
       {renderCardContent()}
 
       <S.Pannel>
-        <Button label="단어장 확인하기" color="main" bg="brand" onClick={navigateVoca} />
-        <Button label="홈으로 돌아가기" color="font" bg="main" onClick={navigateHome} />
+        <Button label="단어장 확인하기" color="bg_main" bg="brand" onClick={navigateVoca} />
+        <Button label="홈으로 돌아가기" color="text_main" bg="bg_main" onClick={navigateHome} />
       </S.Pannel>
 
       <SelectionModal

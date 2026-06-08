@@ -1,10 +1,11 @@
 import { redirect } from "react-router-dom";
 
-import { supabase, getProfileCache, setProfileCache, getVocaCache, getMasterCache, setMasterCache } from "@/api/common";
+import { getProfileCache, setProfileCache, getVocaCache, getMasterCache, setMasterCache } from "@/api/common";
 import { getSession } from "@/api/auth";
 import { getWordsByChunk } from "@/api/master";
 import { getProfile } from "@/api/profile";
-import { getVocaList, reschedule } from "@/api/voca";
+import { getVocaList, reschedule, getRemoteVocaList, upsertRemoteVoca } from "@/api/voca";
+import { getNotifications } from "@/api/notification";
 
 /**
  * [Orchestrator] 어플리케이션 진입 시 필요한 모든 데이터를 로드하고 상태에 따라 분기합니다.
@@ -24,16 +25,16 @@ export const loadUserData = async ({ request }) => {
 
   try {
     // 1. 공통 데이터 로드 및 세션 조회를 병렬로 수행 (성능 최적화)
-    const [session, dbNotisResult] = await Promise.all([
+    const [session, notificationsData] = await Promise.all([
       getSession(),
-      supabase.from("Notification").select("*").order("created_at", { ascending: false })
+      getNotifications()
     ]);
 
     // 캐시 유효성 임시 참값 설정 (5단계 DROP 전까지 안전 유지)
     const isCacheValid = true;
     const wordData = {}; // 1단계 IN 쿼리 선제 로더가 추후 처리하므로 빈 객체 처리
 
-    const notifications = dbNotisResult.data || [];
+    const notifications = notificationsData || [];
     notifications.unshift(
       session
         ? { id: "sync_ok", title: "동기화 완료", content: "계정 데이터와 실시간 동기화 중입니다.", type: "status" }
@@ -81,10 +82,7 @@ async function handleMemberLoading(session, wordData, notifications, isWelcomePa
   let vocaData = await getVocaList();
 
   // 2.1 원격 DB Voca 목록 조회
-  const { data: remoteVocaListData, error: remoteVocaError } = await supabase
-    .from("Voca")
-    .select("*")
-    .eq("user_id", userId);
+  const remoteVocaListData = await getRemoteVocaList(userId);
 
   // 2.2 로컬 데이터와 원격 데이터의 양방향 합집합 병합 (Union Merge)
   if (remoteVocaListData && remoteVocaListData.length > 0 && vocaData && !Array.isArray(vocaData)) {
@@ -125,16 +123,13 @@ async function handleMemberLoading(session, wordData, notifications, isWelcomePa
         if (isRemoteChanged) {
           // 백그라운드 원격 업데이트 큐잉
           mergePromises.push(
-            supabase
-              .from("Voca")
-              .upsert({
-                user_id: userId,
-                voca_label: localChunk.voca_label,
-                done: mergedDone,
-                status: isCompleted,
-                completed_at: completedAt,
-                schedule: localChunk.schedule
-              }, { onConflict: "user_id,voca_label" })
+            upsertRemoteVoca(userId, {
+              voca_label: localChunk.voca_label,
+              done: mergedDone,
+              status: isCompleted,
+              completed_at: completedAt,
+              schedule: localChunk.schedule
+            })
           );
         }
 

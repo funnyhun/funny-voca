@@ -19,7 +19,7 @@ export const Svg = styled.svg`
 
 export const BackgroundCircle = styled.circle`
   fill: none;
-  stroke: ${({ theme }) => theme.sub};
+  stroke: ${({ theme }) => theme.text_muted};
   stroke-width: 6;
 `;
 
@@ -34,7 +34,7 @@ export const progress = keyframes`
 
 export const ProgressCircle = styled.circle`
   fill: none;
-  stroke: ${({ theme }) => theme.week_success};
+  stroke: ${({ theme }) => theme.success_lite};
   stroke-width: 6;
   stroke-linecap: round;
 

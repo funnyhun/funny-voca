@@ -18,9 +18,9 @@ export const Wrapper = styled.ul`
 export const FilterItem = styled.li`
   display: flex;
   flex: 0 0 auto;
-  color: ${({ $selected, theme }) => ($selected ? theme.main : theme.label)};
+  color: ${({ $selected, theme }) => ($selected ? theme.bg_main : theme.text_sub)};
 
-  background-color: ${({ $selected, theme }) => ($selected ? theme.brand : theme.main)};
+  background-color: ${({ $selected, theme }) => ($selected ? theme.brand : theme.bg_main)};
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
 `;

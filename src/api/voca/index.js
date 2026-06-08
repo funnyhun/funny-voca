@@ -10,6 +10,8 @@ import {
   syncVocaStatusToRemote,
   syncRescheduleToRemote,
   deleteRemoteVoca,
+  getRemoteVocaList,
+  upsertRemoteVoca,
 } from "./voca.sync";
 
 /**
@@ -207,3 +209,5 @@ export const updateVoca = async (vocaLabel, doneList, status = false) => {
 
   return true;
 };
+
+export { getRemoteVocaList, upsertRemoteVoca };

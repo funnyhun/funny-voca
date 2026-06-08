@@ -7,7 +7,7 @@ export const Wrapper = styled.li`
   align-items: center;
   gap: 1rem;
 
-  background-color: ${({ theme }) => theme.main};
+  background-color: ${({ theme }) => theme.bg_main};
 
   padding: 1rem;
   border-radius: 0.5rem;
@@ -17,13 +17,13 @@ export const Wrapper = styled.li`
   ${({ $isStudying, theme }) =>
     $isStudying &&
     `
-    border-color: #4f46e5;
+    border-color: ${theme.brand};
     background-image: linear-gradient(
       135deg,
-      rgba(79, 70, 229, 0.04) 0%,
+      ${theme.brand}0a 0%,
       rgba(147, 51, 234, 0.04) 100%
     );
-    box-shadow: 0 8px 24px rgba(79, 70, 229, 0.08);
+    box-shadow: 0 8px 24px ${theme.brand}14;
   `}
 
   ${({ $isLocked }) =>
@@ -41,7 +41,7 @@ export const Wrapper = styled.li`
 `;
 
 export const CompleteIcon = styled(CheckCircleIcon)`
-  color: ${({ theme }) => theme.main};
+  color: ${({ theme }) => theme.bg_main};
 `;
 
 export const IncompleteIcon = styled(WordIcon)`
@@ -51,7 +51,7 @@ export const IncompleteIcon = styled(WordIcon)`
 export const Status = styled.div`
   display: flex;
   align-items: center;
-  background-color: ${({ theme }) => theme.week};
+  background-color: ${({ theme }) => theme.brand_lite};
   padding: 0.75rem 0.7rem;
   border-radius: 3rem;
 
@@ -65,7 +65,7 @@ export const Label = styled.h3`
 `;
 
 export const Length = styled.span`
-  color: ${({ theme }) => theme.label};
+  color: ${({ theme }) => theme.text_sub};
   font-size: 0.8rem;
 `;
 

@@ -18,12 +18,12 @@ export const Section = styled.div`
 export const SectionTitle = styled.h2`
   font-size: 1.2rem;
   font-weight: 600;
-  color: ${({ theme }) => theme.font};
+  color: ${({ theme }) => theme.text_main};
 `;
 
 export const UserInfo = styled.div`
   padding: 1rem;
-  background-color: ${({ theme }) => theme.main};
+  background-color: ${({ theme }) => theme.bg_main};
   border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
@@ -32,13 +32,13 @@ export const UserInfo = styled.div`
 
 export const Label = styled.span`
   font-size: 0.8rem;
-  color: ${({ theme }) => theme.label};
+  color: ${({ theme }) => theme.text_sub};
 `;
 
 export const Value = styled.span`
   font-size: 1rem;
   font-weight: 500;
-  color: ${({ theme }) => theme.font};
+  color: ${({ theme }) => theme.text_main};
 `;
 
 export const LevelButtons = styled.div`
@@ -51,8 +51,8 @@ export const LevelButton = styled.button`
   padding: 0.8rem;
   border-radius: 0.5rem;
   border: 1px solid ${({ theme, $active }) => ($active ? theme.brand : "transparent")};
-  background-color: ${({ theme, $active }) => ($active ? theme.week : theme.main)};
-  color: ${({ theme, $active }) => ($active ? theme.brand : theme.font)};
+  background-color: ${({ theme, $active }) => ($active ? theme.brand_lite : theme.bg_main)};
+  color: ${({ theme, $active }) => ($active ? theme.brand : theme.text_main)};
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;

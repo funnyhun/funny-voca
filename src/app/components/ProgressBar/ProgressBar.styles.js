@@ -12,7 +12,7 @@ export const Bar = styled.div`
   width: 100%;
   height: 1rem;
 
-  background-color: ${({ theme }) => theme.week};
+  background-color: ${({ theme }) => theme.brand_lite};
   border-radius: 1rem;
 `;
 

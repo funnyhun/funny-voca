@@ -11,7 +11,7 @@ export const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  background-color: ${({ theme }) => theme.main};
+  background-color: ${({ theme }) => theme.bg_main};
   position: relative;
 `;
 
@@ -49,7 +49,7 @@ export const RightSection = styled.div`
 export const NotificationBtn = styled.div`
   width: 1.2rem;
   height: 1.2rem;
-  background-color: ${({ theme, $hasUnread }) => ($hasUnread ? theme.brand : theme.sub)};
+  background-color: ${({ theme, $hasUnread }) => ($hasUnread ? theme.brand : theme.text_muted)};
   border-radius: 50%;
   cursor: pointer;
   position: relative;

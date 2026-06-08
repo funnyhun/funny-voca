@@ -31,7 +31,7 @@ export const App = () => {
   const isWelcome = location.pathname.startsWith("/welcome");
 
   useEffect(() => {
-    const targetColor = isWelcome ? theme.background : theme.main;
+    const targetColor = isWelcome ? theme.bg_app : theme.bg_main;
     document.documentElement.style.setProperty("--header-bottom-bg", targetColor);
   }, [isWelcome, theme]);
 

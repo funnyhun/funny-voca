@@ -5,7 +5,6 @@
 export const KEYS = {
   PROFILE: "profile",
   VOCA: "voca",
-  USER_DATA: "userData",
   THEME: "theme",
   MASTER: "master", // 마스터 단어 상세 데이터 캐시 키
 };
@@ -109,20 +108,6 @@ export const setMasterCache = (masterData) => {
 };
 
 /**
- * 사용자 정보 데이터를 조회합니다 (userData).
- */
-export const getUserDataCache = () => {
-  return getStorage(KEYS.USER_DATA);
-};
-
-/**
- * 사용자 정보 데이터를 저장합니다 (userData).
- */
-export const setUserDataCache = (userData) => {
-  setStorage(KEYS.USER_DATA, userData);
-};
-
-/**
  * 테마 설정을 조회합니다.
  */
 export const getThemeCache = () => {
@@ -142,6 +127,5 @@ export const setThemeCache = (theme) => {
 export const clearAllCache = () => {
   removeStorage(KEYS.PROFILE);
   removeStorage(KEYS.VOCA);
-  removeStorage(KEYS.USER_DATA);
   removeStorage(KEYS.MASTER);
 };

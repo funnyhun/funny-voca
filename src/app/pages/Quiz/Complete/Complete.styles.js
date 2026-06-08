@@ -24,12 +24,12 @@ export const Image = styled.div`
 
 export const Title = styled.h2`
   font-weight: 700;
-  color: ${({ theme }) => theme.font || "#ffffff"};
+  color: ${({ theme }) => theme.text_main || "#ffffff"};
   margin: 0;
 `;
 
 export const Content = styled.div`
-  color: ${({ theme }) => theme.label || "#aaaaaa"};
+  color: ${({ theme }) => theme.text_sub || "#aaaaaa"};
   text-align: center;
   line-height: 2;
   white-space: pre-wrap;
@@ -75,12 +75,12 @@ export const StreakTitle = styled.h3`
   font-size: 1.35rem;
   font-weight: 800;
   margin: 0;
-  color: #ffffff;
+  color: ${({ theme }) => theme.text_main};
 `;
 
 export const StreakDesc = styled.p`
   font-size: 0.9rem;
-  color: #bbbbbb;
+  color: ${({ theme }) => theme.text_sub};
   line-height: 1.6;
   margin: 0;
   white-space: pre-wrap;
@@ -118,7 +118,7 @@ export const MistakeScore = styled.div`
 
 export const WarningText = styled.div`
   font-size: 0.8rem;
-  color: #999999;
+  color: ${({ theme }) => theme.text_muted};
   margin-top: 0.5rem;
   line-height: 1.4;
 `;

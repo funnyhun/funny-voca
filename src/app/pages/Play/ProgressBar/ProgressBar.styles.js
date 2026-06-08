@@ -11,5 +11,5 @@ export const Step = styled.div`
   font-size: 1.5rem;
   font-weight: 600;
   line-height: 1;
-  color: ${({ theme }) => theme.label};
+  color: ${({ theme }) => theme.text_sub};
 `;

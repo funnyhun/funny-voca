@@ -28,7 +28,7 @@ export const Title = styled.h3`
 `;
 
 export const Content = styled.div`
-  color: ${({ theme }) => theme.label};
+  color: ${({ theme }) => theme.text_sub};
   text-align: center;
   line-height: 2;
   white-space: pre-wrap;

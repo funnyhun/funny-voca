@@ -35,7 +35,7 @@ export const ModalWrapper = styled.div`
 `;
 
 export const ModalCard = styled.div`
-  background: ${({ theme }) => theme.main || "#ffffff"};
+  background: ${({ theme }) => theme.bg_main || "#ffffff"};
   border: 1px solid ${({ theme }) => theme.border || "rgba(229, 231, 235, 0.5)"};
   border-radius: 20px;
   width: 100%;
@@ -70,14 +70,14 @@ export const AlertBadge = styled.div`
 export const ModalTitle = styled.h3`
   font-size: 1.25rem;
   font-weight: 700;
-  color: ${({ theme }) => theme.font || "#111827"};
+  color: ${({ theme }) => theme.text_main || "#111827"};
   margin: 0;
 `;
 
 export const BodySection = styled.div`
   font-size: 0.95rem;
   line-height: 1.6;
-  color: ${({ theme }) => theme.subFont || "#4b5563"};
+  color: ${({ theme }) => theme.text_sub || "#4b5563"};
   text-align: center;
 `;
 

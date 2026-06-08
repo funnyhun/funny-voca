@@ -1,11 +1,12 @@
 import { redirect } from "react-router-dom";
-import { supabase, getProfileCache, getVocaCache } from "@/api/common";
+import { getProfileCache, getVocaCache } from "@/api/common";
+import { getSession } from "@/api/auth";
 
 /**
  * 학습(Play) 페이지 진입 시 마지막 학습 위치 또는 기본 위치로 리다이렉트합니다.
  */
 export const loadPlay = async () => {
-  const { data: { session } } = await supabase.auth.getSession();
+  const session = await getSession();
 
   if (session) return null;
 

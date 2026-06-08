@@ -19,10 +19,10 @@ export const Pannel = ({ changeEvent, prevEvent, nextEvent }) => {
 
   return (
     <Wrapper>
-      <Button label={"뒤집기"} color={"main"} bg={"success"} onClick={changeEvent} />
+      <Button label={"뒤집기"} color={"bg_main"} bg={"success"} onClick={changeEvent} />
       <StepButtons>
-        <Button label={buttonLabels.left} color="main" bg="brand" onClick={prevEvent} />
-        <Button label={buttonLabels.right} color="main" bg="brand" onClick={nextEvent} />
+        <Button label={buttonLabels.left} color="bg_main" bg="brand" onClick={prevEvent} />
+        <Button label={buttonLabels.right} color="bg_main" bg="brand" onClick={nextEvent} />
       </StepButtons>
     </Wrapper>
   );

@@ -415,3 +415,52 @@ export const syncVocaStatusToRemote = async (userId, vocaLabel, doneList = [], s
     return false;
   }
 };
+
+/**
+ * 원격 데이터베이스에서 사용자의 Voca 목록 전체를 조회합니다.
+ * @param {string} userId - 사용자 UUID
+ * @returns {Promise<Array>} Voca 테이블 레코드 목록
+ */
+export const getRemoteVocaList = async (userId) => {
+  if (!userId) return [];
+  try {
+    const { data, error } = await supabase
+      .from("Voca")
+      .select("*")
+      .eq("user_id", userId);
+    
+    if (error) throw error;
+    return data || [];
+  } catch (err) {
+    console.error("[SyncVoca] getRemoteVocaList 에러:", err);
+    return [];
+  }
+};
+
+/**
+ * 원격 데이터베이스에 특정 청크의 병합된 Voca 진행 데이터를 upsert합니다.
+ * @param {string} userId - 사용자 UUID
+ * @param {Object} chunkData - upsert할 청크 데이터
+ * @returns {Promise<boolean>} 성공 여부
+ */
+export const upsertRemoteVoca = async (userId, chunkData) => {
+  if (!userId || !chunkData) return false;
+  try {
+    const { error } = await supabase
+      .from("Voca")
+      .upsert({
+        user_id: userId,
+        voca_label: chunkData.voca_label,
+        done: chunkData.done,
+        status: chunkData.status,
+        completed_at: chunkData.completed_at,
+        schedule: chunkData.schedule
+      }, { onConflict: "user_id,voca_label" });
+
+    if (error) throw error;
+    return true;
+  } catch (err) {
+    console.error("[SyncVoca] upsertRemoteVoca 에러:", err);
+    return false;
+  }
+};

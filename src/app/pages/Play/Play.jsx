@@ -55,20 +55,20 @@ export const Play = () => {
           <AllDoneDesc>{"이 단어장의 모든 단어를\n이미 학습 완료했습니다."}</AllDoneDesc>
           <Button
             label="복습하기"
-            color="main"
+            color="bg_main"
             bg="brand"
             onClick={() => setIsReview(true)}
           />
           <Button
             label="단어장으로 돌아가기"
-            color="font"
-            bg="main"
+            color="text_main"
+            bg="bg_main"
             onClick={() => navigate(`/voca/${profile.selected}`)}
           />
           <Button
             label="홈으로"
-            color="font"
-            bg="main"
+            color="text_main"
+            bg="bg_main"
             onClick={() => navigate("/home")}
           />
         </AllDoneWrapper>

@@ -40,8 +40,8 @@ export const OverlayProvider = ({ children }) => {
 
   useEffect(() => {
     const targetColor = isOverlay
-      ? calcDimmedColor(theme.main, OVERLAY_DIM_ALPHA)
-      : theme.main;
+      ? calcDimmedColor(theme.bg_main, OVERLAY_DIM_ALPHA)
+      : theme.bg_main;
 
     // document.documentElement(html) 수준에 CSS 변수를 동적으로 할당하여 html, body 양측에 상속시킵니다.
     document.documentElement.style.setProperty("--header-bottom-bg", targetColor);

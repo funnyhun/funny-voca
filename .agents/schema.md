@@ -84,12 +84,12 @@ description: "데이터베이스 테이블 정의 및 로컬 스토리지 캐시
 ```json
 {
   "1637": {
-    "word_id": 1637,
+    "id": 1637,
     "word": "resume",
     "definitions": [
       {
         "class": "n",
-        "definition": "이력서",
+        "value": "이력서",
         "pronounce": "rɪˈzuːm",
         "example_en": "Send your resume to our office.",
         "example_ko": "우리 사무실로 이력서를 보내주세요.",

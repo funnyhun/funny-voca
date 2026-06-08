@@ -7,7 +7,7 @@ export const Wrapper = styled.div`
   justify-content: center;
   gap: 0.75rem;
   padding: 3rem 1rem;
-  color: ${({ theme }) => theme.label};
+  color: ${({ theme }) => theme.text_sub};
   text-align: center;
 `;
 

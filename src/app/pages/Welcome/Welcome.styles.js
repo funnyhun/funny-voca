@@ -7,7 +7,7 @@ export const Wrapper = styled.div`
 
   padding-top: calc(env(safe-area-inset-top, 0px) + 1rem);
   padding-bottom: 1rem;
-  background-color: ${({ theme }) => theme.background};
+  background-color: ${({ theme }) => theme.bg_app};
 
   display: flex;
   flex-direction: column;

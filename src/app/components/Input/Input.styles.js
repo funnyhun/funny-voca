@@ -14,29 +14,29 @@ export const Wrapper = styled.div`
 export const Label = styled.label`
   font-size: 0.8rem;
   font-weight: 600;
-  color: ${({ theme }) => theme.label};
+  color: ${({ theme }) => theme.text_sub};
 `;
 
 export const CustomInput = styled.input`
   padding: 0.5rem 1rem;
   padding-left: ${({ $hasIcon }) => ($hasIcon ? "2rem" : "0.5rem")};
 
-  border: ${({ $isBorder, theme }) => ($isBorder ? `0.1rem solid ${theme.sub}` : "none")};
+  border: ${({ $isBorder, theme }) => ($isBorder ? `0.1rem solid ${theme.text_muted}` : "none")};
   border-radius: 0.5rem;
 
   &:focus {
-    outline: ${({ $isOutline, theme }) => ($isOutline ? `0.1rem solid ${theme.label}` : "none")};
+    outline: ${({ $isOutline, theme }) => ($isOutline ? `0.1rem solid ${theme.text_sub}` : "none")};
   }
 
   &::placeholder {
     font-size: 0.8rem;
-    color: ${({ theme }) => theme.sub};
+    color: ${({ theme }) => theme.text_muted};
   }
 `;
 
 export const Notice = styled.p`
   font-size: 0.8rem;
-  color: ${({ theme }) => theme.label};
+  color: ${({ theme }) => theme.text_sub};
   padding-left: 0.2rem;
 `;
 

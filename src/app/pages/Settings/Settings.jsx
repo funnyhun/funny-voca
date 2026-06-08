@@ -177,8 +177,8 @@ export const Settings = () => {
           <S.SectionTitle>데이터 관리</S.SectionTitle>
           <Button
             label="학습 데이터 초기화"
-            color="font"
-            bg="main"
+            color="text_main"
+            bg="bg_main"
             onClick={handleReset}
           />
         </S.Section>
@@ -187,7 +187,7 @@ export const Settings = () => {
           <S.Section style={{ marginTop: "auto" }}>
             <Button
               label="로그아웃"
-              color="main"
+              color="bg_main"
               bg="brand"
               onClick={handleLogout}
             />

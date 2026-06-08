@@ -17,7 +17,7 @@ export const Wrapper = styled.div`
   align-items: center;
   gap: 0.5rem;
 
-  background-color: ${({ theme }) => theme.main};
+  background-color: ${({ theme }) => theme.bg_main};
 
   margin: 0 auto;
   padding: 0.5rem 1rem;
@@ -37,7 +37,7 @@ export const Text = styled.div`
 export const CheckIcon = styled(CheckCircleIcon)`
   width: 1rem;
   height: 1rem;
-  color: ${({ theme }) => theme.week_success};
+  color: ${({ theme }) => theme.success_lite};
 `;
 
 export const Content = styled.span`
@@ -45,14 +45,14 @@ export const Content = styled.span`
   align-items: center;
   gap: 0.1rem;
 
-  color: ${({ theme }) => theme.week_success};
+  color: ${({ theme }) => theme.success_lite};
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.1rem;
 `;
 
 export const Label = styled.span`
-  color: ${({ theme }) => theme.label};
+  color: ${({ theme }) => theme.text_sub};
   font-size: 0.7rem;
 `;
 

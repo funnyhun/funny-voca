@@ -41,15 +41,15 @@ export const SelectionModal = ({ isOpen, categoryKr, onKeep, onAdapt }) => {
         <S.FooterSection>
           <Button
             label="학습 계획 수정"
-            color="main"
+            color="bg_main"
             bg="brand"
             onClick={onAdapt}
             style={{ width: "100%", padding: "14px", fontWeight: "bold" }}
           />
           <Button
             label="기존 계획 유지"
-            color="font"
-            bg="main"
+            color="text_main"
+            bg="bg_main"
             onClick={onKeep}
             style={{ width: "100%", padding: "14px" }}
           />
