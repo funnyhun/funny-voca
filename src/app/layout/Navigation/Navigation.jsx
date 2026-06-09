@@ -5,7 +5,13 @@ import { pages } from "@/app/router/router";
 export const Navigation = () => {
   const navigate = useNavigate();
   const located = useLocation().pathname.split("/")[1];
-  const items = pages.filter((item) => item.icon);
+  const items = pages.flatMap((item) => {
+    const mainItem = item.icon ? [item] : [];
+    const childItems = Array.isArray(item.children)
+      ? item.children.filter((child) => child.icon)
+      : [];
+    return [...mainItem, ...childItems];
+  });
 
   const isLocated = (path) => path.split("/")[1] === located;
 
