@@ -1,7 +1,6 @@
-import { createBrowserRouter, RouterProvider, Navigate, Outlet, useOutletContext } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 
 import { loadUserData } from "@/app/router/loader/AppLoader";
-import { WelcomeLoader } from "@/app/router/loader/WelcomeLoader";
 
 import { App } from "@/app/App";
 
@@ -10,11 +9,6 @@ import { Splash } from "@/app/layout";
 
 import { HomeIcon, PlayIcon, QuizIcon, WordIcon, AccountIcon } from "@/assets/iconList";
 
-const WelcomeLayout = () => {
-  const context = useOutletContext();
-  return <Outlet context={context} />;
-};
-
 export const pages = [
   {
     path: "/welcome",
@@ -22,38 +16,32 @@ export const pages = [
     name: "Welcome",
     children: welcomeChildren,
   },
+  { index: true, element: <Navigate to="/home" replace /> },
+  { path: "/home", element: <Home />, name: "홈", icon: <HomeIcon /> },
   {
-    element: <WelcomeLayout />,
-    loader: WelcomeLoader,
-    children: [
-      { index: true, element: <Navigate to="/home" replace /> },
-      { path: "/home", element: <Home />, name: "홈", icon: <HomeIcon /> },
-      {
-        path: "/play",
-        element: <Play />,
-        name: "시작하기",
-        icon: <PlayIcon />,
-      },
-      {
-        path: "/quiz",
-        element: <Quiz />,
-        name: "퀴즈",
-        icon: <QuizIcon />,
-      },
-      {
-        path: "/voca",
-        element: <Voca />,
-        name: "단어장",
-        icon: <WordIcon />,
-        children: vocaChildren,
-      },
-      {
-        path: "/settings",
-        element: <Settings />,
-        name: "설정",
-        icon: <AccountIcon />,
-      },
-    ],
+    path: "/play",
+    element: <Play />,
+    name: "시작하기",
+    icon: <PlayIcon />,
+  },
+  {
+    path: "/quiz",
+    element: <Quiz />,
+    name: "퀴즈",
+    icon: <QuizIcon />,
+  },
+  {
+    path: "/voca",
+    element: <Voca />,
+    name: "단어장",
+    icon: <WordIcon />,
+    children: vocaChildren,
+  },
+  {
+    path: "/settings",
+    element: <Settings />,
+    name: "설정",
+    icon: <AccountIcon />,
   },
 ];
 
