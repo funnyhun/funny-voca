@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider, Navigate, Outlet } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate, Outlet, useOutletContext } from "react-router-dom";
 
 import { loadUserData } from "@/app/router/loader/AppLoader";
 import { WelcomeLoader } from "@/app/router/loader/WelcomeLoader";
@@ -10,6 +10,11 @@ import { Splash } from "@/app/layout";
 
 import { HomeIcon, PlayIcon, QuizIcon, WordIcon, AccountIcon } from "@/assets/iconList";
 
+const WelcomeLayout = () => {
+  const context = useOutletContext();
+  return <Outlet context={context} />;
+};
+
 export const pages = [
   {
     path: "/welcome",
@@ -18,7 +23,7 @@ export const pages = [
     children: welcomeChildren,
   },
   {
-    element: <Outlet />,
+    element: <WelcomeLayout />,
     loader: WelcomeLoader,
     children: [
       { index: true, element: <Navigate to="/home" replace /> },
