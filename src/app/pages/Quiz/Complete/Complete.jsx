@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { Button, SelectionModal } from "@app/components";
-import { reschedule, getVocaList } from "@/api/voca";
+import { reschedule, getVoca } from "@/api/voca";
 import { getBaseCategoryFromLabel } from "@/api/voca/voca.local";
 import * as S from "./Complete.styles";
 
@@ -111,7 +111,7 @@ export const Complete = () => {
     // 카테고리 스왑 실행
     const swapSuccess = await reschedule(currentLevel, { catA, catB }, false);
     if (swapSuccess) {
-      const updatedVocaList = await getVocaList();
+      const updatedVocaList = await getVoca();
       const nextLevelVoca = updatedVocaList[currentLevel] || [];
       const sortedVoca = [...nextLevelVoca].sort((a, b) => a.schedule - b.schedule);
       const nextTodoChunk = sortedVoca.find((v) => v.status === false);

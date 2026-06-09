@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { Button, SelectionModal } from "@app/components";
-import { updateVoca, reschedule, getVocaList } from "@/api/voca";
+import { updateVoca, reschedule, getVoca } from "@/api/voca";
 import { getBaseCategoryFromLabel } from "@/api/voca/voca.local";
 import { Wrapper, Image, Title, Content, Pannel } from "./Complete.styles";
 
@@ -74,7 +74,7 @@ export const Complete = ({ replayCard }) => {
     const swapSuccess = await reschedule(currentLevel, { catA, catB }, false);
     if (swapSuccess) {
       // 최신 Voca 리스트를 다시 조회하여 다음 미완료 청크로 selected 갱신
-      const updatedVocaList = await getVocaList();
+      const updatedVocaList = await getVoca();
       const nextLevelVoca = updatedVocaList[currentLevel] || [];
       const sortedVoca = [...nextLevelVoca].sort((a, b) => a.schedule - b.schedule);
       const nextTodoChunk = sortedVoca.find((v) => v.status === false);

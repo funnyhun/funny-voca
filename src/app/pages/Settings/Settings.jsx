@@ -1,6 +1,7 @@
 import * as S from "./Settings.styles";
 import { Button, Spinner } from "@app/components";
-import { updateLevel, reschedule, logout } from "@/api/voca";
+import { updateLevel, reschedule } from "@/api/voca";
+import { signOut } from "@/api/auth";
 import { useState } from "react";
 import { useNavigate, useRevalidator, useOutletContext } from "react-router-dom";
 
@@ -33,7 +34,7 @@ export const Settings = () => {
     setResetProgress(30);
 
     try {
-      await logout();
+      await signOut();
       setResetProgress(100);
       navigate("/welcome");
     } catch (err) {

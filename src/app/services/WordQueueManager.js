@@ -1,4 +1,4 @@
-import { getWordsByChunk } from "@/api/master";
+import { getMaster } from "@/api/master";
 import { getMasterCache, setMasterCache } from "@/api/common";
 
 class WordQueueManager {
@@ -153,7 +153,7 @@ class WordQueueManager {
           console.log(`[WordQueueManager] 청크 다운로드 시작 -> ${label} (단어수: ${wordIds.length}개)`);
           
           // 고수준 마스터 API를 통해 단 1회의 최적 IN 쿼리로 청크 단어 데이터 일괄 조회
-          const nextChunkWords = await getWordsByChunk(wordIds);
+          const nextChunkWords = await getMaster(wordIds);
           
           if (Object.keys(nextChunkWords).length > 0) {
             // 로컬 마스터 캐시에 점진적 병합 및 로컬 스토리지 실시간 커밋
