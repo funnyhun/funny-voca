@@ -1,60 +1,54 @@
-import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate, Outlet } from "react-router-dom";
 
-import { loadUserData } from "@/app/router/user";
-import { loadPlay } from "@/app/router/play";
-import { loadQuiz } from "@/app/router/quiz";
+import { loadUserData } from "@/app/router/loader/AppLoader";
+import { WelcomeLoader } from "@/app/router/loader/WelcomeLoader";
 
 import { App } from "@/app/App";
 
-import { Welcome, Profile, WelcomeVoca, Home, Play, Card, Quiz, Voca, VocaList, WordList, Settings } from "@app/pages";
+import { Welcome, welcomeChildren, Home, Play, Quiz, Voca, vocaChildren, Settings } from "@app/pages";
 import { Splash } from "@/app/layout";
 
 import { HomeIcon, PlayIcon, QuizIcon, WordIcon, AccountIcon } from "@/assets/iconList";
-
-const wordContents = [
-  { index: true, element: <VocaList /> },
-  { path: ":vocaId", element: <WordList /> },
-];
 
 export const pages = [
   {
     path: "/welcome",
     element: <Welcome />,
     name: "Welcome",
+    children: welcomeChildren,
+  },
+  {
+    element: <Outlet />,
+    loader: WelcomeLoader,
     children: [
-      { index: true, element: <Navigate to="/welcome/profile" replace /> },
-      { path: "profile", element: <Profile />, name: "닉네임 설정" },
-      { path: "voca", element: <WelcomeVoca />, name: "학습데이터 생성" },
+      { index: true, element: <Navigate to="/home" replace /> },
+      { path: "/home", element: <Home />, name: "홈", icon: <HomeIcon /> },
+      {
+        path: "/play",
+        element: <Play />,
+        name: "시작하기",
+        icon: <PlayIcon />,
+      },
+      {
+        path: "/quiz",
+        element: <Quiz />,
+        name: "퀴즈",
+        icon: <QuizIcon />,
+      },
+      {
+        path: "/voca",
+        element: <Voca />,
+        name: "단어장",
+        icon: <WordIcon />,
+        children: vocaChildren,
+      },
+      {
+        path: "/settings",
+        element: <Settings />,
+        name: "설정",
+        icon: <AccountIcon />,
+      },
     ],
-  },
-  { index: true, element: <Navigate to="/home" replace /> },
-  { path: "/home", element: <Home />, name: "홈", icon: <HomeIcon /> },
-  {
-    path: "/play",
-    element: <Play />,
-    loader: loadPlay,
-    name: "시작하기",
-    icon: <PlayIcon />,
-  },
-  {
-    path: "/quiz",
-    element: <Quiz />,
-    loader: loadQuiz,
-    name: "퀴즈",
-    icon: <QuizIcon />,
-  },
-  {
-    path: "/voca",
-    element: <Voca />,
-    name: "단어장",
-    icon: <WordIcon />,
-    children: wordContents,
-  },
-  {
-    path: "/settings",
-    element: <Settings />,
-    name: "설정",
-    icon: <AccountIcon />,
   },
 ];
 
