@@ -4,6 +4,8 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import { useMaster } from "@app/hooks";
 import { Button } from "@app/components";
 import { Item as Card } from "./Item";
+import { withSkeleton } from "@/app/components/HOC";
+import { SkeletonPlay } from "@/app/components/Skeleton/templates";
 import {
   Wrapper,
   AllDoneWrapper,
@@ -11,7 +13,7 @@ import {
   AllDoneDesc,
 } from "./Play.styles";
 
-export const Play = () => {
+const PlayComponent = () => {
   const context = useOutletContext();
   const { statsState } = context;
   const { profile } = statsState;
@@ -37,14 +39,6 @@ export const Play = () => {
 
   // 퀴즈 진입 시 모든 단어가 이미 암기 완료인 경우
   const isQuizRoute = window.location.pathname.includes("/quiz");
-
-  if (!isLoaded || playWords.length === 0) {
-    return (
-      <Wrapper style={{ justifyContent: "center", alignItems: "center" }}>
-        <div>단어를 불러오는 중입니다...</div>
-      </Wrapper>
-    );
-  }
 
   if (!isQuizRoute && playWords.length > 0 && remainingQuizs.length === 0 && !isReview) {
     return (
@@ -84,5 +78,8 @@ export const Play = () => {
     </Wrapper>
   );
 };
+
+export const Play = withSkeleton(PlayComponent, SkeletonPlay);
+
 
 

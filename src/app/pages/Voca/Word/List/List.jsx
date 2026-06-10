@@ -3,13 +3,15 @@ import { useState, useMemo, useCallback, useEffect } from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 
 import { useMaster } from "@app/hooks";
-import { Skeleton } from "@app/components";
+import { withSkeleton } from "@/app/components/HOC";
+import { SkeletonList } from "@/app/components/Skeleton/templates";
 
 import { Item } from "../Item/Item";
 import { Search } from "../Search/Search";
 import { Filter } from "../Filter/Filter";
 import { NoResult } from "../NoResult/NoResult";
 import { Empty } from "../Empty/Empty";
+import { Banner } from "../../Banner/Banner";
 
 import { FILTER_SET, FILTER_TYPE } from "../utils/filter";
 
@@ -18,7 +20,7 @@ import { FILTER_SET, FILTER_TYPE } from "../utils/filter";
  * - 특정 단어장에 속한 단어들의 목록을 검색/필터하여 노출하는 페이지 컴포넌트입니다.
  * - updateSelectedLabel API 연동 오류를 해결하고 타이틀 렌더링 정합성을 완전히 보강했습니다.
  */
-export const List = () => {
+const ListComponent = () => {
   const { vocaId } = useParams();
   const { getChunk } = useMaster();
   const [listWords, setListWords] = useState([]);
@@ -81,15 +83,6 @@ export const List = () => {
   }, [listWords, filterType, keyword]);
 
   const renderContentUI = useCallback(() => {
-    if (!isLoaded) {
-      return Array.from({ length: 5 }).map((_, i) => (
-        <div key={i} style={{ display: "flex", flexDirection: "column", gap: "0.5rem", padding: "1.25rem", borderBottom: "1px solid rgba(0,0,0,0.05)" }}>
-          <Skeleton height="20px" width="120px" />
-          <Skeleton height="16px" width="200px" />
-        </div>
-      ));
-    }
-
     if (listWords.length === 0) return <Empty />;
 
     if (filteredWords.length === 0) return <NoResult />;
@@ -97,30 +90,17 @@ export const List = () => {
     return filteredWords.map((word) => {
       return <Item word={word} key={word.id} />;
     });
-  }, [isLoaded, listWords, filteredWords]);
+  }, [listWords, filteredWords]);
 
   return (
     <S.Wrapper>
       {profile && (
-        <S.BannerContainer>
-          <S.BannerContent>
-            <S.BannerTitle>
-              {displayTitle}
-              {isTodayStudyDay && <S.ActiveBadge>학습 중</S.ActiveBadge>}
-            </S.BannerTitle>
-            <S.BannerDesc>
-              {isTodayStudyDay
-                ? "오늘의 활성화된 학습 데이터입니다."
-                : "오늘 학습할 데이로 지정하고 대시보드에 연동합니다."}
-            </S.BannerDesc>
-          </S.BannerContent>
-          <S.BannerButton
-            $active={isTodayStudyDay}
-            onClick={isTodayStudyDay ? handleGoToLearn : handleSetStudyDay}
-          >
-            {isTodayStudyDay ? "학습하러 가기" : "학습일로 지정"}
-          </S.BannerButton>
-        </S.BannerContainer>
+        <Banner
+          displayTitle={displayTitle}
+          isTodayStudyDay={isTodayStudyDay}
+          handleGoToLearn={handleGoToLearn}
+          handleSetStudyDay={handleSetStudyDay}
+        />
       )}
       <Search keyword={keyword} setKeyword={setKeyword} />
       <Filter currentFilter={filterType} setFilterType={setFilterType} />
@@ -128,3 +108,6 @@ export const List = () => {
     </S.Wrapper>
   );
 };
+
+export const List = withSkeleton(ListComponent, SkeletonList);
+

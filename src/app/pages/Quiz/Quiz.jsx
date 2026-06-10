@@ -7,7 +7,8 @@ import { shuffleArray } from "@/utils/array";
 import { ProgressBar } from "./ProgressBar";
 import { Pannel } from "./Pannel";
 import { Complete } from "./Complete";
-import { Skeleton } from "@app/components";
+import { withSkeleton } from "@/app/components/HOC";
+import { SkeletonQuiz } from "@/app/components/Skeleton/templates";
 
 import { SpellingQuiz } from "./types/SpellingQuiz";
 import { POSQuiz } from "./types/POSQuiz";
@@ -15,7 +16,7 @@ import { SentenceQuiz } from "./types/SentenceQuiz";
 
 const LS_KEY = "myvoca_quiz_state";
 
-export const Quiz = () => {
+const QuizComponent = () => {
   const { vocaState, statsState } = useOutletContext();
   const { updateStatus, updateVocaBulk } = vocaState;
   const { profile } = statsState;
@@ -92,29 +93,6 @@ export const Quiz = () => {
     return quizWords.find((w) => w.id === currentId);
   }, [session, quizWords]);
 
-  if (!isLoaded || quizWords.length === 0) {
-    return (
-      <S.Wrapper style={{ padding: "20px" }}>
-        <div style={{ width: "100%", marginBottom: "20px" }}>
-          <Skeleton height="12px" width="100%" />
-          <div style={{ display: "flex", justifyContent: "center", marginTop: "12px" }}>
-            <Skeleton height="20px" width="200px" />
-          </div>
-        </div>
-
-        <S.Content style={{ display: "flex", flexDirection: "column", gap: "1.5rem", alignItems: "center", padding: "40px 20px" }}>
-          <Skeleton height="24px" width="150px" />
-          <Skeleton height="60px" width="100%" />
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", width: "100%", marginTop: "20px" }}>
-            <Skeleton height="50px" width="100%" />
-            <Skeleton height="50px" width="100%" />
-            <Skeleton height="50px" width="100%" />
-          </div>
-        </S.Content>
-      </S.Wrapper>
-    );
-  }
-
   // 만약 모든 단어를 다 통과해 세션이 완료 상태이거나 세션이 없는데 로드가 끝난 상태인 경우
   if (session && session.phase === "COMPLETE") {
     return <Complete />;
@@ -122,9 +100,9 @@ export const Quiz = () => {
 
   if (!session || !currentWord) {
     return (
-      <S.Wrapper style={{ justifyContent: "center", alignItems: "center" }}>
+      <S.NoQuizWrapper>
         <div>진행 가능한 퀴즈가 없습니다.</div>
-      </S.Wrapper>
+      </S.NoQuizWrapper>
     );
   }
 
@@ -272,23 +250,21 @@ export const Quiz = () => {
     <S.Wrapper key={`${session.phase}-${currentWord.id}`}>
       <div>
         <ProgressBar total={session.totalCount} done={session.doneCount} />
-        <div style={{
-          textAlign: "center",
-          fontWeight: "bold",
-          fontSize: "1.1rem",
-          color: "var(--color-brand, #4f46e5)"
-        }}>
+        <S.PhaseTitle>
           {getPhaseTitle(session.phase)}
-        </div>
+        </S.PhaseTitle>
       </div>
 
       <S.Content>
-        <div style={{ width: "100%", padding: "20px" }}>
+        <S.ContentInner>
           {renderQuizComponent()}
-        </div>
+        </S.ContentInner>
       </S.Content>
 
       {isAnswered && <Pannel onNext={handleNext} />}
     </S.Wrapper>
   );
 };
+
+export const Quiz = withSkeleton(QuizComponent, SkeletonQuiz);
+
