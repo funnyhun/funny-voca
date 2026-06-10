@@ -1,85 +1,124 @@
 ---
 category: "etc"
-description: "글래스모피즘 UI 가이드, 애니메이션 물리 법칙 및 아이콘 리소스 명세"
+description: "글래스모피즘 테마 HEX 코드 및 opacity 사양, 애니메이션 규칙 및 컬러 팔레트 가이드라인"
 ---
 
 # 디자인 가이드라인 명세서 (Design System & Interface Guidelines)
 
-본 문서는 MyVoca 서비스의 UI/UX 일관성과 시각적 우수성을 유지하기 위해 적용되는 글래스모피즘 디자인 규격, 인터랙션 마이크로 애니메이션 가이드라인, 그리고 공용 SVG 아이콘 바인딩 데이터셋을 정의합니다.
+본 문서는 MyVoca 서비스의 UI/UX 일관성을 위해 적용되는 글래스모피즘 테마 HEX 코드 및 opacity 규격, 표준 애니메이션 속성 정의, 그리고 공용 아이콘 모듈 및 3단계 컬러 팔레트의 세부 기술 규칙을 명세합니다.
 
 ---
 
-## 1. 글래스모피즘 UI 가이드 (Glassmorphism Specifications)
+## 1. 글래스모피즘 테마 규격 (Glassmorphism Specifications)
 
-MyVoca는 현대적이고 세련된 비주얼 경험을 구현하기 위해 글래스모피즘 테마를 코어 디자인 시스템으로 채택합니다.
+글래스모피즘 효과가 적용되는 영역은 다음의 스타일 규칙을 준수하여 구현합니다.
 
-### 1.1 배경 및 투명도 (Opacity & Blur)
-- 카드, 모달, 헤더 레이아웃 등의 투명 영역은 `rgba(255, 255, 255, 0.08)` ~ `rgba(255, 255, 255, 0.15)` 수준의 불투명도를 유지하여 뒤쪽 배경의 색상이 은은하게 투영되도록 보장합니다.
-- 배경 유리 질감 효과를 극대화하기 위해 `backdrop-filter: blur(12px) saturate(180%)` 속성을 명시적으로 결합 적용합니다.
+### 1.1 배경색 및 블러 규칙
+- **배경색 지정**: 투명 영역 배경색은 순수한 6자리 **HEX 코드**인 `#FFFFFF` 또는 테마 변수(`bg_main`)로 선언합니다.
+- **투명도 분리**: 불투명도(Alpha) 처리는 CSS의 `opacity: 0.08` ~ `opacity: 0.15` 속성을 별도로 결합하여 구현합니다.
+- **배경 필터 효과**: `backdrop-filter: blur(12px) saturate(180%)` 속성을 필수로 결합하여 선언합니다.
 
-### 1.2 보더 가이드 (Border Spec)
-- 모든 글래스모피즘 블록 테두리에는 `1px solid rgba(255, 255, 255, 0.12)` 값을 부여하여 유리의 미세한 가장자리 반사 질감을 정밀 묘사합니다.
-- 둥근 모서리(`border-radius`)는 UI 요소별로 `12px` ~ `20px` 값을 적용해 물리적이고 정돈된 카드 형태의 심미성을 확립합니다.
-
----
-
-## 2. 인터랙션 마이크로 애니메이션 가이드라인 (Micro-Animations)
-
-동작이 자연스럽고 반응 속도가 즉각적인 고품질의 트랜지션을 연출하기 위해 물리 역학에 기반한 마이크로 트랜지션 사양을 강제 규격화합니다.
-
-### 2.1 단어 및 청크 카드 토글 (Card Transition)
-- 사용자가 청크 카드를 탭하거나 완료 토글을 진행할 때, 렉 없는 부드러운 스케일 모션을 주기 위해 아래 사양의 cubic-bezier 값을 표준으로 선언합니다.
-  - `transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease`
-  - 탭 입력 시점에 `scale(0.96)`로 살짝 찌그러졌다가 튕겨 나오듯 원래 비율로 복원되는 탄성 모션을 주어 탭 피드백을 전달합니다.
-
-### 2.2 리스트 스와프 및 드롭다운 (List Swapping)
-- 학습 일정이 변경되거나 카테고리 순서 스왑이 완료될 때의 위치 전환 효과는 물리적인 관성 느낌을 주기 위해 `transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1)` 모션을 적용합니다.
+### 1.2 테두리 및 라운드 규칙
+- **테두리 선**: `border: 1px solid #FFFFFF`와 같이 6자리 HEX 코드를 결합하며, 필요한 경우 투명도 속성을 결합합니다.
+- **모서리 둥글기 (Border Radius)**: `0.75rem` (12px) ~ `1.25rem` (20px) 사이의 rem 단위를 활용해 구현합니다.
 
 ---
 
-## 3. 공용 아이콘 모듈 바인딩 명세 (`iconList`)
+## 2. 애니메이션 표준 규칙 (Animation Rules)
 
-UI 컴포넌트마다 직접 SVG 코드들을 난잡하게 인라인으로 집어넣어 파일 가독성이 저해되는 버그를 제거하기 위해, 공용 SVG 리소스를 `iconList` 객체 맵으로 단일 구조화하여 호출합니다.
+웹 UI에 적용되는 트랜지션 모션은 팝업, 슬라이드, 호버의 3가지 유형으로 분류하고 각각의 transition 및 cubic-bezier 속성값을 고정하여 적용합니다.
 
-### 3.1 아이콘 참조 가이드
-- 아이콘이 필요한 화면에서는 개별 SVG 마크업을 직접 쓰지 않고, `src/assets/icons/index.js`에 정의된 `iconList` 맵을 불러와 렌더링을 제어합니다.
-- 아이콘의 추가나 교체 시 해당 `iconList` 리소스 매핑 파일만 단독 수정하여 UI 전반의 레이아웃 유지보수 일관성을 확보합니다.
+### 2.1 팝업 애니메이션 (Popup Transition)
+- **적용 대상**: 단어 카드 뒤집기, 청크 토글 단추 및 완료 버튼 입력 탭 효과
+- **스타일 규칙**: 액티브 상태 시 `scale(0.96)`로 축소 후 탄성 복원 효과를 부여합니다.
+- **예제 코드**:
+```css
+transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease;
+
+&:active {
+  transform: scale(0.96);
+}
+```
+
+### 2.2 슬라이드 애니메이션 (Slide Transition)
+- **적용 대상**: 리스트 아이템 정렬 전환, 아코디언 컴포넌트, 드롭다운 목록
+- **스타일 규칙**: 상하/좌우 슬라이딩 및 위치 전환 시 적용합니다.
+- **예제 코드**:
+```css
+transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+```
+
+### 2.3 호버 애니메이션 (Hover Transition)
+- **적용 대상**: 클릭 가능한 일반 버튼, 카드 아이템, 텍스트 링크
+- **스타일 규칙**: 포인터 진입 시 미세한 상단 이동 효과를 부여합니다.
+- **예제 코드**:
+```css
+transition: transform 0.2s ease;
+
+&:hover {
+  transform: translateY(-0.125rem); /* -2px 상당 */
+}
+```
 
 ---
 
-## 4. 테마 및 3단계 표준 컬러 팔레트 가이드라인 (Theme & Color Scale Spec)
+## 3. 공용 아이콘 모듈 바인딩 규칙 (Icon Binding Rules)
 
-MyVoca는 런타임에 다크 모드와 라이트 모드를 매끄럽게 전환하고, 모든 색상군에 동일한 수준의 명도 강조 스케일을 보장하기 위해 단일 컬러 팔레트 및 동적 테마 연동 함수(`getTheme(mode)`) 구조를 채택합니다.
+- **아이콘 사용**: 컴포넌트 내부에 인라인 SVG 마크업을 직접 삽입하는 것을 금지합니다.
+- **아이콘 참조**: `src/assets/icons/index.js`에 매핑된 `iconList` 객체 데이터를 임포트하여 화면에 호출합니다.
 
-### 4.1 HSL 명도 기반 3단계 표준 규격 (Color Scaling Rule)
-모든 색상군(무채색 및 유채색)은 아래의 3단계 명도 비율 규칙을 엄격하게 준수하여 헥사 코드(Hex Code)로 선언합니다.
+---
 
-- **Lite**: 기본 명도 $L$을 상승시켜 밝고 연한 톤을 구성합니다 (명도 87% ~ 97%). 컴포넌트의 부드러운 배경색 등에 주로 사용됩니다.
-- **Base (1.0)**: 고유의 기본 상태 색상입니다 (명도 49% ~ 60%). 브랜드 메인 및 강한 상태 피드백 등에 사용됩니다.
-- **Hard**: 기본 명도 $L$을 하강시켜 어둡고 무거운 톤을 구성합니다 (명도 10% ~ 13%). 텍스트 가독성 및 다크모드 대비에 사용됩니다.
+## 4. 테마 및 3단계 표준 컬러 팔레트 규칙 (Color Palette Rules)
 
-### 4.2 컬러 팔레트 헥사 코드 맵 (Hex Code Map)
-| 색상군 | lite (밝은 버전) | base (기본 버전) | hard (어두운 버전) |
-| :--- | :--- | :--- | :--- |
-| **Gray** | `#F5F6F8` | `#8E8E93` | `#1C1C1E` |
-| **Blue** | `#C5DDF6` | `#137FEC` | `#051C33` |
-| **Green**| `#D3F4DB` | `#34C759` | `#0B2A13` |
-| **Red**  | `#FFE5E3` | `#FF3B30` | `#3B0A07` |
+런타임 다크 모드 및 라이트 모드 전환 정합성을 위해 단일 컬러 팔레트 규격을 6자리 HEX 코드로 고정하여 선언합니다.
 
-- **기본 상수**: 흰색 `#ffffff`, 검은색 `#000000`
+### 4.1 HSL 명도 기준 3단계 표준 HEX 코드 규격
+- **Lite**: 밝고 연한 배경 톤 (명도 87% ~ 97% 환산 레벨)
+- **Base (1.0)**: 브랜드 코어 및 핵심 상태 피드백 톤 (명도 49% ~ 60% 환산 레벨)
+- **Hard**: 텍스트 가독성 및 다크모드 대비용 어두운 톤 (명도 10% ~ 13% 환산 레벨)
 
-### 4.3 테마 변수 매핑 테이블 (Theme Variable Mapping)
-컴포넌트 단에서는 아래의 의미론적(Semantic) 테마 프로퍼티만 호출하여 사용하며, 런타임에 `getTheme(mode)`를 통해 해당 물리 색상으로 바인딩됩니다.
+### 4.2 컬러 팔레트 HEX 코드 상수 정의
+- **Gray**: lite `#F5F6F8`, base `#8E8E93`, hard `#1C1C1E`
+- **Blue**: lite `#C5DDF6`, base `#137FEC`, hard `#051C33`
+- **Green**: lite `#D3F4DB`, base `#34C759`, hard `#0B2A13`
+- **Red**: lite `#FFE5E3`, base `#FF3B30`, hard `#3B0A07`
+- **공통**: 흰색 `#FFFFFF`, 검은색 `#000000`
 
-- `bg_main`: 메인 영역 배경색 (White / Black)
-- `bg_inverse`: 반전 영역 배경색 (Black / White)
-- `bg_app`: 앱 전체 배경색 (`colors.gray_lite` / `colors.gray_hard`)
-- `text_main`: 기본 텍스트 색상 (`colors.gray_hard` / `colors.gray_lite`)
-- `text_sub`: 보조 텍스트 색상 (`colors.gray` / `colors.gray`)
-- `text_muted`: 비활성 텍스트 및 기본 아이콘 (`colors.gray_lite` / `colors.gray`)
-- `brand`: 브랜드 대표 색상 (`colors.blue` / `colors.blue`)
-- `brand_lite`: 브랜드 보조/연한 색상 (`colors.blue_lite` / `colors.blue_hard`)
-- `success`: 완료/성공 색상 (`colors.green` / `colors.green`)
-- `success_lite`: 완료/성공 보조/연한 색상 (`colors.green_lite` / `colors.green_lite`)
-- `danger`: 실패/에러 색상 (`colors.red` / `colors.red`)
+### 4.3 테마 변수 매핑 테이블
+컴포넌트는 styled-components의 `theme` 객체 프로퍼티로 변환되어 전달되는 의미론적 테마 변수만을 호출하여 스타일을 처리합니다.
+- `bg_main`: 메인 영역 배경색
+- `bg_inverse`: 반전 영역 배경색
+- `bg_app`: 앱 전역 바디 배경색
+- `text_main`: 메인 가독 텍스트 색상
+- `text_sub`: 서브 보조 텍스트 색상
+- `text_muted`: 비활성 텍스트 및 기본 아이콘 색상
+- `brand`: 브랜드 대표 색상
+- `brand_lite`: 브랜드 보조/연한 색상
+- `success`: 완료/성공 상태 색상
+- `success_lite`: 완료/성공 보조/연한 색상
+- `danger`: 실패/에러 상태 색상
 
+---
+
+## 5. 스타일 시스템 및 반응형 표준 규격 (Style System & Responsive Spec)
+
+### 5.1 rem 환산 표준 규격
+모든 스타일은 `1rem = 16px` 절대 비율을 기준으로 환산한 rem 단위를 적용합니다.
+- **환산 대조 가이드**:
+  - 12px = 0.75rem
+  - 14px = 0.875rem
+  - 16px = 1rem
+  - 20px = 1.25rem
+  - 24px = 1.5rem
+  - 32px = 2rem
+  - 40px = 2.5rem
+  - 50px = 3.125rem
+  - 60px = 3.75rem
+
+### 5.2 반응형 중단점 (Responsive Breakpoints)
+글로벌 레이아웃 폰트 스케일 조절을 위해 다음 3단계 브레이크포인트를 적용합니다.
+- **375px 미만**: 소형 모바일 디바이스 대응 (루트 font-size 14px)
+- **375px 이상**: 일반 모바일 디바이스 대응 (루트 font-size 16px)
+- **768px 이상**: 태블릿 디바이스 대응 (루트 font-size 18px)
+- **1024px 이상**: 데스크톱 디바이스 대응 (루트 font-size 20px)
